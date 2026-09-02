@@ -83,28 +83,63 @@ async function renderTemplate(name, pageGlobals) {
 
 // ---- pages to build ----
 const P = ctxBase.products, S = ctxBase.species, C = ctxBase.collections;
-const lm = P.find(p => p.handle === 'lions-mane-mushroom-tincture-50ml'); const pet = P.find(p => p.handle === 'elixir-for-pets-tincture-30ml');
-const page = (handle, title) => ({ handle, title, content: '', url: `/pages/${handle}` });
+const page = (handle, title, content = '') => ({ handle, title, content, url: `/pages/${handle}` });
+const SITE = 'https://justmushrooms.co.za';
+const req = (page_type) => ({ request: { page_type, locale: { iso_code: 'en' } } });
+
+// Every collection the navigation and product cards can link to, by handle.
+// (ctxBase.collections is array-like, so the named handles are listed explicitly.)
+const COLLECTIONS = ['all', 'single-species', 'blends', 'pets', 'combo-deals', 'botanicals', 'frontpage'];
+
+// Shopify serves /policies/* from store settings, not from a theme template. The copy is the
+// client's to supply and none has been, so these render through the generic page template
+// carrying the same "outstanding" note used for the other 48 gaps rather than invented text.
+const POLICIES = [
+  ['privacy-policy', 'Privacy policy'],
+  ['terms-of-service', 'Terms of service'],
+  ['refund-policy', 'Refund policy']
+];
+const policyNote = (title) => `<p><strong>${title} copy is outstanding.</strong> Shopify serves /policies/ from Settings &rarr; Policies rather than from the theme, so this page exists in the preview only to keep the footer navigable. The wording must be supplied by Just Mushrooms and reviewed against the CPA and POPIA before launch &mdash; see <code>docs/12-launch-checklist.md</code>.</p>`;
+
+// Three recommendations per product page: the next three in catalogue order, wrapping, never itself.
+const recsFor = (i) => Array.from({ length: 3 }, (_, k) => P[(i + k + 1) % P.length]);
+
 const jobs = [
-  ['index', 'index.html', { request: { page_type: 'index', locale: { iso_code: 'en' } }, canonical_url: 'https://justmushrooms.co.za/' }],
-  ['collection', 'collections/all.html', { request: { page_type: 'collection', locale: { iso_code: 'en' } }, collection: C.all, canonical_url: 'https://justmushrooms.co.za/collections/all' }],
-  ['collection', 'collections/single-species.html', { request: { page_type: 'collection', locale: { iso_code: 'en' } }, collection: C['single-species'], canonical_url: 'https://justmushrooms.co.za/collections/single-species' }],
-  ['collection', 'collections/blends.html', { request: { page_type: 'collection', locale: { iso_code: 'en' } }, collection: C.blends, canonical_url: 'https://justmushrooms.co.za/collections/blends' }],
-  ['collection', 'collections/pets.html', { request: { page_type: 'collection', locale: { iso_code: 'en' } }, collection: C.pets, canonical_url: 'https://justmushrooms.co.za/collections/pets' }],
-  ['product', 'products/lions-mane-mushroom-tincture-50ml.html', { request: { page_type: 'product', locale: { iso_code: 'en' } }, product: lm, recommendations: { performed: true, products_count: 3, products: P.slice(0, 3) }, canonical_url: 'https://justmushrooms.co.za' + lm.url }],
-  ['product', 'products/elixir-for-pets-tincture-30ml.html', { request: { page_type: 'product', locale: { iso_code: 'en' } }, product: pet, recommendations: { performed: true, products_count: 3, products: P.slice(3, 6) }, canonical_url: 'https://justmushrooms.co.za' + pet.url }],
-  ['metaobject/species', 'species/lions-mane.html', { request: { page_type: 'metaobject', locale: { iso_code: 'en' } }, metaobject: S.find(s => s.system.handle === 'lions-mane'), canonical_url: 'https://justmushrooms.co.za/species/lions-mane' }],
-  ['metaobject/species', 'species/sceletium.html', { request: { page_type: 'metaobject', locale: { iso_code: 'en' } }, metaobject: S.find(s => s.system.handle === 'sceletium'), canonical_url: 'https://justmushrooms.co.za/species/sceletium' }],
-  ['page.species-index', 'pages/species.html', { request: { page_type: 'page', locale: { iso_code: 'en' } }, page: page('species', 'Species Library'), canonical_url: 'https://justmushrooms.co.za/pages/species' }],
-  ['page.mushroom-finder', 'pages/mushroom-finder.html', { request: { page_type: 'page', locale: { iso_code: 'en' } }, page: page('mushroom-finder', 'Mushroom Finder'), canonical_url: 'https://justmushrooms.co.za/pages/mushroom-finder' }],
-  ['page.faq', 'pages/faq.html', { request: { page_type: 'page', locale: { iso_code: 'en' } }, page: page('faq', 'FAQ'), canonical_url: 'https://justmushrooms.co.za/pages/faq' }],
-  ['page.contact', 'pages/contact.html', { request: { page_type: 'page', locale: { iso_code: 'en' } }, page: page('contact', 'Contact'), canonical_url: 'https://justmushrooms.co.za/pages/contact' }],
-  ['page.about', 'pages/about.html', { request: { page_type: 'page', locale: { iso_code: 'en' } }, page: page('about', 'About'), canonical_url: 'https://justmushrooms.co.za/pages/about' }],
-  ['page.disclaimer', 'pages/disclaimer.html', { request: { page_type: 'page', locale: { iso_code: 'en' } }, page: page('disclaimer', 'Disclaimer'), canonical_url: 'https://justmushrooms.co.za/pages/disclaimer' }],
-  ['cart', 'cart.html', { request: { page_type: 'cart', locale: { iso_code: 'en' } }, page_title: 'Your cart', canonical_url: 'https://justmushrooms.co.za/cart' }],
-  ['search', 'search.html', { request: { page_type: 'search', locale: { iso_code: 'en' } }, page_title: 'Search', search: { performed: false, terms: '', results: [], results_count: 0 }, canonical_url: 'https://justmushrooms.co.za/search' }],
-  ['404', '404.html', { request: { page_type: '404', locale: { iso_code: 'en' } }, page_title: 'Page not found', canonical_url: 'https://justmushrooms.co.za/404' }],
-  ['blog', 'blogs/learn.html', { request: { page_type: 'blog', locale: { iso_code: 'en' } }, page_title: 'Learn', blog: { title: 'Learn', url: '/blogs/learn', articles: [] }, canonical_url: 'https://justmushrooms.co.za/blogs/learn' }]
+  ['index', 'index.html', { ...req('index'), canonical_url: SITE + '/' }],
+
+  ...COLLECTIONS.filter(h => C[h]).map(h => [
+    'collection', `collections/${h}.html`,
+    { ...req('collection'), collection: C[h], canonical_url: `${SITE}/collections/${h}` }
+  ]),
+
+  ...P.map((p, i) => [
+    'product', `products/${p.handle}.html`,
+    { ...req('product'), product: p, recommendations: { performed: true, products_count: 3, products: recsFor(i) }, canonical_url: SITE + p.url }
+  ]),
+
+  ...S.map(s => [
+    'metaobject/species', `species/${s.system.handle}.html`,
+    { ...req('metaobject'), metaobject: s, canonical_url: `${SITE}/species/${s.system.handle}` }
+  ]),
+
+  ['page.species-index', 'pages/species.html', { ...req('page'), page: page('species', 'Species Library'), canonical_url: SITE + '/pages/species' }],
+  ['page.mushroom-finder', 'pages/mushroom-finder.html', { ...req('page'), page: page('mushroom-finder', 'Mushroom Finder'), canonical_url: SITE + '/pages/mushroom-finder' }],
+  ['page.faq', 'pages/faq.html', { ...req('page'), page: page('faq', 'FAQ'), canonical_url: SITE + '/pages/faq' }],
+  ['page.contact', 'pages/contact.html', { ...req('page'), page: page('contact', 'Contact'), canonical_url: SITE + '/pages/contact' }],
+  ['page.about', 'pages/about.html', { ...req('page'), page: page('about', 'About'), canonical_url: SITE + '/pages/about' }],
+  ['page.disclaimer', 'pages/disclaimer.html', { ...req('page'), page: page('disclaimer', 'Disclaimer'), canonical_url: SITE + '/pages/disclaimer' }],
+  ['page.sourcing', 'pages/sourcing.html', { ...req('page'), page: page('sourcing', 'Sourcing'), canonical_url: SITE + '/pages/sourcing' }],
+  ['page.shipping-returns', 'pages/shipping-returns.html', { ...req('page'), page: page('shipping-returns', 'Shipping & returns'), canonical_url: SITE + '/pages/shipping-returns' }],
+
+  ...POLICIES.map(([h, title]) => [
+    'page', `policies/${h}.html`,
+    { ...req('page'), page: { handle: h, title, content: policyNote(title), url: `/policies/${h}` }, page_title: title, canonical_url: `${SITE}/policies/${h}` }
+  ]),
+
+  ['cart', 'cart.html', { ...req('cart'), page_title: 'Your cart', canonical_url: SITE + '/cart' }],
+  ['search', 'search.html', { ...req('search'), page_title: 'Search', search: { performed: false, terms: '', results: [], results_count: 0 }, canonical_url: SITE + '/search' }],
+  ['404', '404.html', { ...req('404'), page_title: 'Page not found', canonical_url: SITE + '/404' }],
+  ['blog', 'blogs/learn.html', { ...req('blog'), page_title: 'Learn', blog: { title: 'Learn', url: '/blogs/learn', articles: [] }, canonical_url: SITE + '/blogs/learn' }]
 ];
 fs.rmSync(DIST, { recursive: true, force: true }); fs.mkdirSync(DIST, { recursive: true });
 fs.cpSync(path.join(THEME, 'assets'), path.join(DIST, 'assets'), { recursive: true });

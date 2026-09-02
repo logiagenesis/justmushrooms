@@ -116,8 +116,12 @@ const BANNED = /(?<!\bno )\b(cures?|treats? (?!ment)|prevents? (?:cancer|disease
 for (const p of pages) {
   const h = read(p);
   const visible = h.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<style[\s\S]*?<\/style>/g, '');
-  // banned wording is permitted only inside "does not" panels and safety notes
-  const risky = visible.split(/<\/section>/).filter(sec => BANNED.test(sec) && !/do(es)? not|not a cure|not intended to|Safety|Warnings|disclaimer|Disclaimer|cannot be claimed/i.test(sec));
+  // Banned wording is permitted only where its own block negates it: a "does not" panel, a
+  // safety note, or an FAQ answer that opens "No.". Splitting on </details> as well as
+  // </section> keeps each question with its own answer, so an honest Q&A like
+  // "Does reishi treat cancer?" -> "No. A Cochrane review ..." is not read as a claim.
+  const NEGATED = /do(es)? not|not a cure|not intended to|not sufficient evidence|never replace|Safety|Warnings|disclaimer|Disclaimer|cannot be claimed|>\s*No[.,]/i;
+  const risky = visible.split(/<\/(?:section|details)>/).filter(sec => BANNED.test(sec) && !NEGATED.test(sec));
   ok(`compliance/${p} no disease claims in body copy`, risky.length === 0, risky.slice(0, 1).map(r => (BANNED.exec(r) || [])[0]).join(','));
 }
 ok('compliance/product page carries the SAHPRA disclaimer', /has not been evaluated by SAHPRA/.test(prod));
