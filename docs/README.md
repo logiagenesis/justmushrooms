@@ -20,6 +20,7 @@ Read in order. Every document states what is verified, what is assumed and what 
 | 18 | [Post-launch monitoring](18-post-launch-monitoring.md) | Daily, weekly, monthly and quarterly checks, and the one metric that matters |
 | 19 | [Image generation manifest](19-image-generation-manifest.md) | Every image the theme can render — 132 files named, sized and prompted, with the batch sheet at `data/image-manifest.csv` |
 | 20 | [Image prompt book](20-image-prompt-book.md) | The same 130 generated images with every prompt written out in full, ready to paste — Part A runs now, Part B needs bottle photographs |
+| 21 | [Image re-run sheet](21-image-rerun-sheet.md) | What is still outstanding after the first two generation batches — 7 missing, 4 to rename, 6 saved in a format that cannot do its job |
 
 ## Research
 
