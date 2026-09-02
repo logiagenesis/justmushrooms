@@ -1,0 +1,89 @@
+{%- liquid
+  assign species = product.metafields.jm.linked_species.value
+  assign m = product.metafields.jm
+  assign is_pet = false
+  if product.tags contains 'audience:pets'
+    assign is_pet = true
+  endif
+-%}
+<section class="pdp__section pdp__section--tight" id="details">
+  <div class="page-width">
+    <div class="grid-2">
+      <div class="reveal">
+        <p class="eyebrow">Key details</p>
+        <h2 class="h3">What is in the bottle</h2>
+        <table class="spec">
+          <tbody>
+            {%- if species.size > 0 -%}<tr><th scope="row">Species</th><td>{% for s in species %}<a href="{{ s.system.url }}">{{ s.common_name.value }}</a> (<span class="sci">{{ s.scientific_name.value }}</span>){% unless forloop.last %}<br>{% endunless %}{% endfor %}</td></tr>{%- endif -%}
+            <tr><th scope="row">Form</th><td>{{ m.form.value | default: 'Liquid tincture' }}</td></tr>
+            {%- if m.volume.value -%}<tr><th scope="row">Volume</th><td>{{ m.volume.value }}</td></tr>{%- endif -%}
+            <tr><th scope="row">Ingredients</th><td>{% if m.ingredients.value %}{{ m.ingredients | metafield_tag }}{% else %}<span class="muted">Follow product label</span>{% endif %}</td></tr>
+            {%- if m.alcohol_percent.value -%}<tr><th scope="row">Alcohol</th><td>Approximately {{ m.alcohol_percent.value }}% ethanol by volume</td></tr>{%- endif -%}
+            {%- if m.extraction_ratio.value -%}<tr><th scope="row">Declared strength</th><td>{{ m.extraction_ratio.value }} <span class="small muted">(manufacturer's input ratio, not an assayed potency)</span></td></tr>{%- endif -%}
+            <tr><th scope="row">Origin / sourcing</th><td>{% if m.origin.value %}{{ m.origin.value }}{% else %}<span class="muted">Sourcing documents not yet supplied. No origin claim is made.</span>{% endif %}</td></tr>
+            {%- if m.lab_report.value -%}<tr><th scope="row">Lab report</th><td><a href="{{ m.lab_report.value.url }}" rel="noopener" target="_blank">View certificate of analysis (PDF)</a></td></tr>{%- endif -%}
+            {%- if product.selected_or_first_available_variant.sku != blank -%}<tr><th scope="row">SKU</th><td>{{ product.selected_or_first_available_variant.sku }}</td></tr>{%- endif -%}
+          </tbody>
+        </table>
+      </div>
+      <div class="reveal">
+        <p class="eyebrow">How to use</p>
+        <h2 class="h3">Directions</h2>
+        <div class="rte">{% if m.usage_instructions.value %}{{ m.usage_instructions | metafield_tag }}{% else %}<p>Follow the directions printed on the product label.</p>{% endif %}</div>
+        <p class="eyebrow" style="margin-top:2rem">Warnings</p>
+        <div class="notice notice--warn">{% render 'icon', name: 'warn' %}<div class="rte">{% if m.warnings.value %}{{ m.warnings | metafield_tag }}{% else %}<p>Not for use if you are allergic to mushrooms or alcohol. Consult a healthcare professional before use if you are pregnant, breastfeeding, taking medication or have a medical condition. Keep out of reach of children.</p>{% endif %}</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pdp__section pdp__section--tight" id="evidence">
+  <div class="page-width">
+    <div class="split">
+      <div class="split__panel reveal">
+        <p class="eyebrow">Evidence-led</p>
+        <h2 class="h3">What the species research suggests</h2>
+        <div class="rte">{% if m.evidence_summary.value %}{{ m.evidence_summary | metafield_tag }}{% else %}<p>Read the graded evidence on the species page{% if species.size > 1 %}s{% endif %} linked below. We do not repeat claims here that the species pages do not support.</p>{% endif %}</div>
+        {%- if species.size > 0 -%}<div class="btn-row" style="margin-top:1rem">{% for s in species %}<a class="btn btn--secondary" href="{{ s.system.url }}#evidence">{{ s.common_name.value }} evidence</a>{% endfor %}</div>{%- endif -%}
+      </div>
+      <div class="split__panel split__panel--not reveal">
+        <p class="eyebrow">Plainly</p>
+        <h2 class="h3">What this product does not do</h2>
+        <ul>
+          <li>It does not cure, treat or prevent any disease{% if is_pet %} in animals{% endif %}.</li>
+          <li>It does not replace {% if is_pet %}veterinary{% else %}medical{% endif %} care or prescribed medicines.</li>
+          <li>It does not guarantee any result. Responses vary and the research is early.</li>
+          {%- if m.what_it_does_not_do.value -%}{{ m.what_it_does_not_do | metafield_tag | replace: '<ul>', '' | replace: '</ul>', '' }}{%- endif -%}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- if m.faq.value -%}
+<section class="pdp__section pdp__section--tight" id="product-faq">
+  <div class="page-width page-width--narrow">
+    <p class="eyebrow">Questions</p>
+    <h2 class="h3">About this product</h2>
+    {%- render 'faq-accordion', items: m.faq.value -%}
+  </div>
+</section>
+{%- endif -%}
+
+<section class="pdp__section pdp__section--tight">
+  <div class="page-width page-width--narrow">
+    <div class="acc">
+      <details class="acc__item"><summary>Shipping</summary><div class="acc__body rte">{{ section.settings.shipping_text }}</div></details>
+      <details class="acc__item"><summary>Returns and refunds</summary><div class="acc__body rte">{{ section.settings.returns_text }}</div></details>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Product details",
+  "settings": [
+    { "type": "richtext", "id": "shipping_text", "label": "Shipping text", "default": "<p>We ship by courier across South Africa from Plettenberg Bay. Rates and estimated delivery times are shown at checkout. NEEDS CLIENT INPUT: confirm carriers, rates, free-shipping threshold and dispatch days. <a href=\"/pages/shipping-returns\">Full shipping and returns policy</a>.</p>" },
+    { "type": "richtext", "id": "returns_text", "label": "Returns text", "default": "<p>Under the Consumer Protection Act you may return goods that are defective or not as described. For hygiene reasons opened tinctures cannot be returned unless faulty. Contact us within 7 days of delivery. <a href=\"/pages/shipping-returns\">Read the returns policy</a>.</p>" }
+  ]
+}
+{% endschema %}

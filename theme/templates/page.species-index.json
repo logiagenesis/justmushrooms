@@ -1,0 +1,1 @@
+{ "sections": { "index": { "type": "species-index" }, "compare": { "type": "compare-species" }, "finder": { "type": "finder-teaser" } }, "order": ["index", "compare", "finder"] }

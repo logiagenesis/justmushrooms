@@ -1,0 +1,28 @@
+{%- liquid
+  assign url = species.system.url
+  assign products = species.linked_products.value
+  assign shop_url = routes.all_products_collection_url
+  if products and products.size > 0
+    assign shop_url = products.first.url
+  endif
+  assign kingdom = species.kingdom.value | default: 'Fungi'
+-%}
+<article class="card card--species">
+  <div class="card__media">
+    <div class="card__badges">
+      {%- render 'badge-evidence', level: species.evidence_level.value -%}
+      {%- if kingdom == 'Plantae' -%}<span class="badge badge--botanical">Botanical</span>{%- endif -%}
+    </div>
+    {%- assign sp_alt = species.hero_image.value.alt | default: species.common_name.value -%}
+    {%- render 'image', image: species.hero_image.value, sizes: '(min-width:1024px) 30vw, (min-width:768px) 48vw, 100vw', alt: sp_alt -%}
+  </div>
+  <div class="card__body">
+    <h3 class="card__title"><a href="{{ url }}">{{ species.common_name.value }}</a></h3>
+    <p class="card__sub sci">{{ species.scientific_name.value }}</p>
+    <p class="card__text">{{ species.short_description.value }}</p>
+    <div class="card__actions">
+      <a class="btn btn--secondary" href="{{ url }}">Explore species</a>
+      <a class="btn btn--primary" href="{{ shop_url }}">Shop {{ species.common_name.value }}</a>
+    </div>
+  </div>
+</article>

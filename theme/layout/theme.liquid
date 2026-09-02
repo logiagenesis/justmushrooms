@@ -1,0 +1,87 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_ink }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
+    <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180, height: 180 }}">
+  {%- endif -%}
+
+  {%- render 'meta-tags' -%}
+
+  {%- comment -%} Fonts: preload only the two faces actually used above the fold {%- endcomment -%}
+  {{ settings.type_display_font | font_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+  {{ settings.type_body_font | font_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+  <style>
+    {{ settings.type_display_font | font_face: font_display: 'swap' }}
+    {{ settings.type_body_font | font_face: font_display: 'swap' }}
+    {%- render 'css-tokens' -%}
+  </style>
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  {{ 'grid.css' | asset_url | stylesheet_tag }}
+  {{ 'components.css' | asset_url | stylesheet_tag }}
+  {{ 'sections.css' | asset_url | stylesheet_tag }}
+
+  {%- comment -%} Consent Mode v2 defaults MUST load before GTM {%- endcomment -%}
+  {%- render 'consent-defaults' -%}
+  {%- render 'gtm-head' -%}
+  {%- render 'datalayer' -%}
+
+  <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+  {{ content_for_header }}
+</head>
+
+<body class="template-{{ request.page_type | handle }}{% if template.suffix %} template-{{ request.page_type | handle }}--{{ template.suffix | handle }}{% endif %}{% unless settings.enable_motion %} motion-off{% endunless %}">
+  {%- render 'gtm-body' -%}
+  <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
+
+  {%- sections 'header-group' -%}
+
+  <main id="MainContent" class="main" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  {%- sections 'footer-group' -%}
+
+  {%- if settings.cart_type == 'drawer' -%}
+    {%- render 'cart-drawer' -%}
+  {%- endif -%}
+  {%- if settings.consent_banner_enabled -%}
+    {%- render 'consent-banner' -%}
+  {%- endif -%}
+  {%- if settings.enable_easter_egg -%}
+    {%- render 'easter-egg' -%}
+  {%- endif -%}
+
+  <ul hidden>
+    <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
+    <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
+  </ul>
+  <script>
+    window.JM = window.JM || {};
+    window.JM.routes = {
+      cart_add_url: '{{ routes.cart_add_url }}',
+      cart_change_url: '{{ routes.cart_change_url }}',
+      cart_update_url: '{{ routes.cart_update_url }}',
+      cart_url: '{{ routes.cart_url }}',
+      predictive_search_url: '{{ routes.predictive_search_url }}',
+      recommendations_url: '{{ routes.product_recommendations_url }}'
+    };
+    window.JM.strings = {
+      add_to_cart: {{ 'products.product.add_to_cart' | t | json }},
+      sold_out: {{ 'products.product.sold_out' | t | json }},
+      unavailable: {{ 'products.product.unavailable' | t | json }},
+      cart_error: {{ 'sections.cart.cart_error' | t | json }},
+      quantity_error: {{ 'sections.cart.cart_quantity_error_html' | t: quantity: '[quantity]' | json }}
+    };
+    window.JM.currency = {{ cart.currency.iso_code | json }};
+    window.JM.motion = {{ settings.enable_motion | json }};
+  </script>
+</body>
+</html>

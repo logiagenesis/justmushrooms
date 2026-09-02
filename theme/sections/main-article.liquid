@@ -1,0 +1,21 @@
+<article class="section section--tight">
+  <div class="page-width">
+    <div class="article">
+      {%- render 'breadcrumbs' -%}
+      <p class="eyebrow">{{ blog.title }}</p>
+      <h1>{{ article.title }}</h1>
+      <p class="article__meta">{{ article.published_at | date: '%d %B %Y' }} · {{ article.content | strip_html | split: ' ' | size | divided_by: 200 | at_least: 1 }} min read</p>
+      {%- if article.image -%}<div class="article__hero">{{ article.image | image_url: width: 1600 | image_tag: widths: '720,1200,1600', sizes: '(min-width:900px) 760px, 100vw', loading: 'eager', alt: article.image.alt | default: article.title }}</div>{%- endif -%}
+      <div class="rte">{{ article.content }}</div>
+      {%- render 'disclaimer' -%}
+      {%- if article.metafields.jm.related_species.value -%}
+        <h2 class="h3" style="margin-top:3rem">Species mentioned</h2>
+        {%- render 'balanced-grid', items: article.metafields.jm.related_species.value, card: 'species', max: 3 -%}
+      {%- endif -%}
+    </div>
+  </div>
+</article>
+{%- render 'schema-article' -%}
+{% schema %}
+{ "name": "Article", "settings": [] }
+{% endschema %}

@@ -1,0 +1,9 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement": { "type": "announcement", "settings": { "text": "Small-batch mushroom tinctures, made in Plettenberg Bay. Courier delivery across South Africa.", "link": "/pages/shipping-returns" } },
+    "header": { "type": "header", "settings": { "menu": "main-menu", "sticky": true, "show_species_mega": true } }
+  },
+  "order": ["announcement", "header"]
+}

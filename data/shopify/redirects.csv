@@ -1,0 +1,21 @@
+Redirect from,Redirect to
+/species,/pages/species
+/shop,/collections/all
+/collections/frontpage,/collections/all
+/pages/combo-deals,/collections/combo-deals
+/pages/test,/
+/learn,/blogs/learn
+/blogs/news,/blogs/learn
+/mushroom-finder,/pages/mushroom-finder
+/about,/pages/about
+/contact,/pages/contact
+/faq,/pages/faq
+/products/lions-mane,/products/lions-mane-mushroom-tincture-30ml
+/products/reishi,/products/reishi-mushroom-tincture-30ml
+/products/chaga,/products/chaga-mushroom-tincture-30ml
+/products/cordyceps,/products/cordyceps-mushroom-tincture-30ml
+/products/turkey-tail,/products/turkey-tail-mushroom-tincture-30ml
+/products/tremella,/products/tremella-mushroom-tincture-30ml
+/product/lions-mane,/products/lions-mane-mushroom-tincture-30ml
+/wp-admin,/
+/wp-login.php,/

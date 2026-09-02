@@ -1,0 +1,31 @@
+{%- assign species = shop.metaobjects.species.values -%}
+<section class="section section--tight">
+  <div class="page-width">
+    {%- render 'breadcrumbs' -%}
+    <div class="section-header reveal">
+      <div>
+        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+        <h1>{{ section.settings.heading | default: page.title }}</h1>
+        <p class="lede">{{ section.settings.text }}</p>
+      </div>
+      <a class="btn btn--primary" href="/pages/mushroom-finder">Not sure? Try the finder</a>
+    </div>
+    {%- if species.size > 0 -%}
+      {%- render 'balanced-grid', items: species, card: 'species' -%}
+    {%- else -%}
+      <p class="notice">{% render 'icon', name: 'info' %} No species published yet. Import data/shopify/species-entries.json or create entries under Content → Metaobjects → Species.</p>
+    {%- endif -%}
+    <p class="disclaimer" style="margin-top:3rem">Evidence tiers: <strong>Strong human evidence</strong> = multiple well-run human trials; <strong>Limited human evidence</strong> = a few small or short human trials; <strong>Animal/in-vitro evidence</strong> = no meaningful human data; <strong>Traditional use</strong> = long culinary or cultural history without trials. {{ settings.disclaimer_short }}</p>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Species index",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Species library" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Eight organisms. Zero miracle claims." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Seven fungi and one South African succulent. Each page lays out identity, traditional use, what the human research actually shows, what it does not show, safety notes and the products that contain it." }
+  ],
+  "presets": [ { "name": "Species index" } ]
+}
+{% endschema %}

@@ -1,0 +1,22 @@
+{%- liquid
+  assign items = '' | split: ''
+  for c in collections
+    unless c.handle == 'frontpage' or c.products_count == 0
+      assign items = items | concat: c
+    endunless
+  endfor
+-%}
+<section class="section section--tight">
+  <div class="page-width">
+    <p class="eyebrow">Shop</p>
+    <h1>Collections</h1>
+    <ul class="bgrid" data-count="{{ items.size | at_most: 12 }}" data-odd="{% assign o = items.size | modulo: 2 %}{% if o == 1 %}true{% else %}false{% endif %}" role="list">
+      {%- for c in items -%}
+        <li><article class="card"><div class="card__media">{% render 'image', image: c.featured_image, alt: c.title %}</div><div class="card__body"><h2 class="card__title"><a href="{{ c.url }}">{{ c.title }}</a></h2><p class="card__sub">{{ c.products_count }} products</p></div></article></li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+{% schema %}
+{ "name": "Collections list", "settings": [] }
+{% endschema %}

@@ -1,0 +1,35 @@
+{
+  "current": {
+    "color_ink": "#0B0E0C",
+    "color_ink_2": "#131816",
+    "color_ink_3": "#1B221E",
+    "color_cream": "#F2EAD9",
+    "color_cream_2": "#B9AE97",
+    "color_spore": "#C9A24A",
+    "color_forest": "#2F5D46",
+    "color_myc": "#8FF7C8",
+    "color_danger": "#E07A5F",
+    "type_display_font": "playfair_display_n6",
+    "type_body_font": "work_sans_n4",
+    "type_scale": 100,
+    "page_width": 1360,
+    "card_radius": 18,
+    "four_item_layout": "4",
+    "twelve_item_layout": "3x4",
+    "enable_motion": true,
+    "enable_easter_egg": true,
+    "biz_address": "77 Hoof Road, Plettenberg Bay, Western Cape, 6603, South Africa",
+    "biz_email": "info@justmushrooms.co.za",
+    "biz_phone": "+27 61 548 1969",
+    "gtm_container_id": "",
+    "consent_banner_enabled": true,
+    "consent_default_analytics": "denied",
+    "privacy_policy_url": "/policies/privacy-policy",
+    "cart_type": "drawer",
+    "show_sticky_atc": true,
+    "sections": {
+      "header": { "type": "header", "settings": { "menu": "main-menu", "sticky": true } },
+      "footer": { "type": "footer", "settings": { "menu_shop": "footer", "menu_species": "species", "menu_policies": "policies" } }
+    }
+  }
+}

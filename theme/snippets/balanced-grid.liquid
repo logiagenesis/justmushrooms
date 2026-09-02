@@ -1,0 +1,46 @@
+{%- comment -%}
+  Balanced grid. Renders a <ul class="bgrid"> whose layout is chosen purely by item count (see grid.css).
+  Params:
+    items       — array (products, metaobjects, articles or hashes) — OR pass count + use {% render %} with a block? Liquid has no blocks,
+                  so this snippet renders cards itself via `card` (product|species|article|cta).
+    card        — 'product' | 'species' | 'article'
+    list_name   — analytics list name
+    fillers     — 'auto' to pad >12 items to a multiple of 3 with editorial CTA cards; blank to disable
+    species_slug — passed through to product cards for species_product_click tracking
+    max         — optional cap
+{%- endcomment -%}
+{%- liquid
+  assign n = items.size
+  if max and n > max
+    assign n = max
+  endif
+  assign fill = 0
+  if n > 12 and fillers == 'auto'
+    assign rem = n | modulo: 3
+    if rem > 0
+      assign fill = 3 | minus: rem
+    endif
+  endif
+  assign total = n | plus: fill
+  assign count_attr = total
+  if total > 12
+    assign count_attr = 'n3'
+  endif
+  assign odd = total | modulo: 2
+-%}
+<ul class="bgrid" data-count="{{ count_attr }}" data-total="{{ total }}" data-odd="{% if odd == 1 %}true{% else %}false{% endif %}" data-four="{{ settings.four_item_layout }}" data-twelve="{{ settings.twelve_item_layout }}" role="list">
+  {%- for item in items limit: n -%}
+    <li class="reveal" style="--i:{{ forloop.index0 }}">
+      {%- case card -%}
+        {%- when 'product' -%}{% render 'card-product', product: item, index: forloop.index0, list_name: list_name, species_slug: species_slug %}
+        {%- when 'species' -%}{% render 'card-species', species: item, index: forloop.index0 %}
+        {%- when 'article' -%}{% render 'card-article', article: item %}
+      {%- endcase -%}
+    </li>
+  {%- endfor -%}
+  {%- if fill > 0 -%}
+    {%- for i in (1..fill) -%}
+      <li class="reveal">{% render 'card-cta', variant: forloop.index %}</li>
+    {%- endfor -%}
+  {%- endif -%}
+</ul>

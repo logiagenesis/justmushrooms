@@ -1,0 +1,22 @@
+{%- layout none -%}
+{%- assign gc_value = gift_card.initial_value | money_without_trailing_zeros -%}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+  <title>{{ 'gift_cards.issued.title' | t: value: gc_value, shop: shop.name }}</title>
+  <style>{{ settings.type_display_font | font_face }}{{ settings.type_body_font | font_face }}{%- render 'css-tokens' -%}</style>
+  {{ 'base.css' | asset_url | stylesheet_tag }}{{ 'components.css' | asset_url | stylesheet_tag }}
+</head>
+<body class="template-gift-card">
+  <main class="page-width empty" role="main">
+    <h1 class="h2">{{ 'gift_cards.issued.title' | t: value: gc_value, shop: shop.name }}</h1>
+    <div class="auth">
+      <p class="eyebrow">{{ 'gift_cards.issued.gift_card_code' | t }}</p>
+      <p class="display" style="font-size:1.6rem;letter-spacing:.1em" id="GiftCardCode">{{ gift_card.code | format_code }}</p>
+      {%- if gift_card.expired -%}<p class="badge badge--soldout">{{ 'gift_cards.issued.expired' | t }}</p>{%- endif -%}
+      <a class="btn btn--primary" href="{{ shop.url }}">{{ 'gift_cards.issued.shop_link' | t }}</a>
+    </div>
+  </main>
+</body>
+</html>

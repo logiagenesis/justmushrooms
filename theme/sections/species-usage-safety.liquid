@@ -1,0 +1,23 @@
+{%- assign s = metaobject -%}
+<section class="section section--tight" id="safety">
+  <div class="page-width">
+    <div class="grid-2">
+      <div class="split__panel reveal">
+        <p class="eyebrow">How to use</p>
+        <h3 class="h3">Follow the product label</h3>
+        <div class="rte">{% if s.how_to_use.value %}{{ s.how_to_use | metafield_tag }}{% else %}<p>Dose and directions are printed on each bottle. We do not publish general dosing for a species because it depends on the product's concentration.</p>{% endif %}</div>
+      </div>
+      <div class="split__panel split__panel--not reveal">
+        <p class="eyebrow">Safety</p>
+        <h3 class="h3">Who should be cautious</h3>
+        <div class="rte">{{ s.safety_notes | metafield_tag }}</div>
+        {%- if s.contraindications.value -%}<h4>Contraindications and interactions</h4><div class="rte">{{ s.contraindications | metafield_tag }}</div>{%- endif -%}
+        <div class="notice notice--warn" style="margin-top:1rem">{% render 'icon', name: 'warn' %}<span>Consult a healthcare professional before use if you are pregnant or breastfeeding, take any medication, or have a medical condition. Stop and seek advice if you notice a reaction.</span></div>
+      </div>
+    </div>
+    {%- render 'disclaimer', alcohol: true -%}
+  </div>
+</section>
+{% schema %}
+{ "name": "Species: usage and safety", "settings": [], "presets": [ { "name": "Species: usage and safety" } ] }
+{% endschema %}

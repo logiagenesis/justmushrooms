@@ -1,0 +1,28 @@
+{%- assign s = metaobject -%}
+<section class="section" id="evidence">
+  <div class="page-width">
+    <div class="section-header reveal"><div><p class="eyebrow">Evidence</p><h2>What {{ s.common_name.value }} may support, and what it does not do</h2><p class="lede">Every line is graded. Where human trials are small, short or absent, we say so instead of rounding up.</p></div></div>
+    <div class="split">
+      <div class="split__panel reveal">
+        <h3 class="h3">May support</h3>
+        {%- if s.verified_benefits.value -%}
+          <ul class="tier-list">
+            {%- for b in s.verified_benefits.value -%}<li>{% render 'badge-evidence', level: b.tier %}<span>{{ b.text }}{% if b.ref %} <a class="small" href="#ref-{{ b.ref }}">[{{ b.ref }}]</a>{% endif %}</span></li>{%- endfor -%}
+          </ul>
+        {%- else -%}
+          <p class="muted">No claims are published for this species yet.</p>
+        {%- endif -%}
+      </div>
+      <div class="split__panel split__panel--not reveal">
+        <h3 class="h3">Does not do</h3>
+        <div class="rte">{{ s.what_it_does_not_do | metafield_tag }}</div>
+      </div>
+    </div>
+    {%- if s.human_evidence_summary.value -%}
+      <div class="rte reveal" style="margin-top:2.5rem"><h3>What the human research actually shows</h3>{{ s.human_evidence_summary | metafield_tag }}</div>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{ "name": "Species: evidence", "settings": [], "presets": [ { "name": "Species: evidence" } ] }
+{% endschema %}

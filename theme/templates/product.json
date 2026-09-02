@@ -1,0 +1,1 @@
+{ "sections": { "main": { "type": "main-product" }, "details": { "type": "product-details" }, "related": { "type": "related-products", "settings": { "limit": 3 } } }, "order": ["main", "details", "related"] }

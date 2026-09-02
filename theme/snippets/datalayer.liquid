@@ -1,0 +1,21 @@
+{%- comment -%} Page-level dataLayer pushes. Only approved parameters, no PII, no health-interest labels. {%- endcomment -%}
+<script>
+window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({ page_type: {{ request.page_type | json }}, template: {{ template | json }}, currency: {{ cart.currency.iso_code | json }} });
+{%- case request.page_type -%}
+{%- when 'product' -%}
+{%- assign v = product.selected_or_first_available_variant -%}
+window.dataLayer.push({ ecommerce: null });
+window.dataLayer.push({ event: 'view_item', ecommerce: { currency: {{ cart.currency.iso_code | json }}, value: {{ v.price | divided_by: 100.0 }}, items: [{ item_id: {{ v.id | json }}, item_name: {{ product.title | json }}, item_brand: 'Just Mushrooms', item_category: {{ product.type | json }}, {% if v.title != 'Default Title' %}item_variant: {{ v.title | json }},{% endif %} price: {{ v.price | divided_by: 100.0 }}, quantity: 1 }] } });
+{%- when 'collection' -%}
+window.dataLayer.push({ ecommerce: null });
+window.dataLayer.push({ event: 'view_item_list', ecommerce: { item_list_id: {{ collection.handle | json }}, item_list_name: {{ collection.title | json }}, items: [{% for p in collection.products limit: 24 %}{ item_id: {{ p.selected_or_first_available_variant.id | json }}, item_name: {{ p.title | json }}, item_brand: 'Just Mushrooms', price: {{ p.price | divided_by: 100.0 }}, index: {{ forloop.index0 }} }{% unless forloop.last %},{% endunless %}{% endfor %}] } });
+{%- when 'metaobject' -%}
+window.dataLayer.push({ event: 'view_species', species_slug: {{ metaobject.system.handle | json }}, species_name: {{ metaobject.common_name.value | json }}, evidence_level: {{ metaobject.evidence_level.value | json }} });
+{%- when 'search' -%}
+{%- if search.performed -%}window.dataLayer.push({ event: 'view_search_results', search_term: {{ search.terms | json }}, results: {{ search.results_count }} });{%- endif -%}
+{%- when 'cart' -%}
+window.dataLayer.push({ ecommerce: null });
+window.dataLayer.push({ event: 'view_cart', ecommerce: { currency: {{ cart.currency.iso_code | json }}, value: {{ cart.total_price | divided_by: 100.0 }}, items: [{% for it in cart.items %}{ item_id: {{ it.variant_id | json }}, item_name: {{ it.product.title | json }}, item_brand: 'Just Mushrooms', price: {{ it.final_price | divided_by: 100.0 }}, quantity: {{ it.quantity }} }{% unless forloop.last %},{% endunless %}{% endfor %}] } });
+{%- endcase -%}
+</script>

@@ -1,0 +1,14 @@
+{%- assign s = metaobject -%}
+{%- if s.references.value -%}
+<section class="section section--tight" id="references">
+  <div class="page-width">
+    <p class="eyebrow">References</p>
+    <h2 class="h3">Sources</h2>
+    <div class="refs reveal"><ol>{%- for r in s.references.value -%}<li id="ref-{{ forloop.index }}">{{ r.label }}{% if r.url %} — <a href="{{ r.url }}" rel="noopener nofollow" target="_blank">{{ r.url }}</a>{% endif %}</li>{%- endfor -%}</ol></div>
+    <p class="small muted" style="margin-top:1.5rem">Evidence reviewed {{ s.evidence_reviewed_on.value | default: 'September 2026' }}. We re-check sources annually or when new trials are published.</p>
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{ "name": "Species: references", "settings": [], "presets": [ { "name": "Species: references" } ] }
+{% endschema %}

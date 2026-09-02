@@ -1,0 +1,27 @@
+<section class="section section--tight">
+  <div class="page-width">
+    <div class="grid-2">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h1>{{ page.title | default: 'Contact' }}</h1>
+        <div class="rte">{{ page.content }}</div>
+        <p class="footer__biz" style="margin-top:1.5rem"><a href="mailto:{{ settings.biz_email }}">{{ settings.biz_email }}</a><br><a href="tel:{{ settings.biz_phone | remove: ' ' }}">{{ settings.biz_phone }}</a><br>{{ settings.biz_address }}{% if settings.biz_whatsapp != blank %}<br><a href="https://wa.me/{{ settings.biz_whatsapp }}" rel="noopener">WhatsApp</a>{% endif %}</p>
+      </div>
+      <div class="split__panel">
+        {%- form 'contact', class: 'contact', data-contact-form: true -%}
+          {%- if form.posted_successfully? -%}<p class="form-message form-message--success">{{ 'templates.contact.form.post_success' | t }}</p>{%- endif -%}
+          {%- if form.errors -%}<div class="form-message form-message--error">{{ 'templates.contact.form.error_heading' | t }} {{ form.errors | default_errors }}</div>{%- endif -%}
+          <div class="field"><label for="ContactName">{{ 'templates.contact.form.name' | t }}</label><input class="input" id="ContactName" type="text" name="contact[name]" autocomplete="name" required></div>
+          <div class="field"><label for="ContactEmail">{{ 'templates.contact.form.email' | t }}</label><input class="input" id="ContactEmail" type="email" name="contact[email]" autocomplete="email" required></div>
+          <div class="field"><label for="ContactPhone">{{ 'templates.contact.form.phone' | t }}</label><input class="input" id="ContactPhone" type="tel" name="contact[phone]" autocomplete="tel"></div>
+          <div class="field"><label for="ContactBody">{{ 'templates.contact.form.comment' | t }}</label><textarea class="input" id="ContactBody" name="contact[body]" required></textarea></div>
+          <p class="small muted">We use your details only to reply. See our <a href="{{ settings.privacy_policy_url }}">privacy policy</a>.</p>
+          <button class="btn btn--primary" type="submit">{{ 'templates.contact.form.send' | t }}</button>
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{ "name": "Contact form", "settings": [], "presets": [ { "name": "Contact form" } ] }
+{% endschema %}

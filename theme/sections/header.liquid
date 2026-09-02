@@ -1,0 +1,86 @@
+{%- liquid
+  assign menu = section.settings.menu
+  assign species = shop.metaobjects.species.values
+-%}
+<header class="header{% unless section.settings.sticky %} header--static{% endunless %}">
+  <div class="page-width header__inner">
+    <button class="icon-btn header__burger" type="button" data-open-drawer="MenuDrawer" aria-label="Open menu" aria-controls="MenuDrawer">{% render 'icon', name: 'menu' %}</button>
+    <nav class="header__nav" aria-label="Main">
+      {%- for link in menu.links -%}
+        {%- if link.title == 'Species' and section.settings.show_species_mega and species.size > 0 -%}
+          <details>
+            <summary aria-haspopup="true">{{ link.title }}</summary>
+            <div class="mega">
+              <div class="mega__col">
+                <h4>Species library</h4>
+                {%- for s in species -%}<a href="{{ s.system.url }}">{{ s.common_name.value }} <span class="sci">{{ s.scientific_name.value }}</span></a>{%- endfor -%}
+              </div>
+              <div class="mega__col">
+                <h4>Start here</h4>
+                <a href="/pages/species">All species</a>
+                <a href="/pages/mushroom-finder">Mushroom Finder</a>
+                <a href="/pages/species#compare">Compare species</a>
+                <a href="/blogs/learn">Learn</a>
+              </div>
+            </div>
+          </details>
+        {%- elsif link.links.size > 0 -%}
+          <details>
+            <summary aria-haspopup="true">{{ link.title }}</summary>
+            <div class="mega" style="grid-template-columns:1fr;min-width:260px">{%- for child in link.links -%}<a href="{{ child.url }}">{{ child.title }}</a>{%- endfor -%}</div>
+          </details>
+        {%- else -%}
+          <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    </nav>
+    <a class="header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }} home">
+      {%- if section.settings.logo -%}{{ section.settings.logo | image_url: width: 320 | image_tag: alt: shop.name, loading: 'eager', width: 160, height: 40 }}{%- else -%}<span>{{ shop.name }}</span>{%- endif -%}
+    </a>
+    <div class="header__actions">
+      <button class="icon-btn" type="button" data-open-drawer="SearchPanel" aria-label="Search">{% render 'icon', name: 'search' %}</button>
+      {%- if shop.customer_accounts_enabled -%}<a class="icon-btn" href="{{ routes.account_url }}" aria-label="Account">{% render 'icon', name: 'account' %}</a>{%- endif -%}
+      <a class="icon-btn" href="{{ routes.cart_url }}" {% if settings.cart_type == 'drawer' %}data-open-drawer="CartDrawer"{% endif %} aria-label="Cart">{% render 'icon', name: 'cart' %}<span class="count-bubble" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span></a>
+    </div>
+  </div>
+</header>
+
+<div class="drawer menu-drawer" id="MenuDrawer" aria-hidden="true" role="dialog" aria-label="Menu">
+  <div class="drawer__scrim" data-close-drawer="MenuDrawer"></div>
+  <div class="drawer__panel">
+    <div class="drawer__head"><span class="display">{{ shop.name }}</span><button class="icon-btn" type="button" data-close-drawer="MenuDrawer" aria-label="Close menu" data-autofocus>{% render 'icon', name: 'close' %}</button></div>
+    <nav class="drawer__body" aria-label="Mobile">
+      {%- for link in menu.links -%}
+        {%- if link.title == 'Species' and species.size > 0 -%}
+          <details><summary>{{ link.title }}</summary><div class="sub"><a href="/pages/species">All species</a>{%- for s in species -%}<a href="{{ s.system.url }}">{{ s.common_name.value }}</a>{%- endfor -%}<a href="/pages/mushroom-finder">Mushroom Finder</a></div></details>
+        {%- elsif link.links.size > 0 -%}
+          <details><summary>{{ link.title }}</summary><div class="sub">{%- for c in link.links -%}<a href="{{ c.url }}">{{ c.title }}</a>{%- endfor -%}</div></details>
+        {%- else -%}
+          <a href="{{ link.url }}">{{ link.title }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    </nav>
+    <div class="drawer__foot small muted">{{ settings.biz_email }} · {{ settings.biz_phone }}</div>
+  </div>
+</div>
+
+<div class="search-panel drawer" id="SearchPanel" aria-hidden="true" role="dialog" aria-label="Search">
+  <button class="icon-btn" type="button" data-close-drawer="SearchPanel" aria-label="Close search" style="position:absolute;top:16px;right:16px">{% render 'icon', name: 'close' %}</button>
+  <form action="{{ routes.search_url }}" method="get" role="search">
+    <input class="input" type="search" name="q" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.search' | t }}" data-autofocus autocomplete="off">
+    <button class="btn btn--primary" type="submit">{{ 'general.search.search' | t }}</button>
+  </form>
+  <div class="search-results" aria-live="polite"></div>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo (SVG or PNG, 320px wide)" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "checkbox", "id": "sticky", "label": "Sticky header", "default": true },
+    { "type": "checkbox", "id": "show_species_mega", "label": "Show species mega-menu under a 'Species' menu item", "default": true }
+  ]
+}
+{% endschema %}

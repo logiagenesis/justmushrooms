@@ -1,0 +1,1 @@
+{ "sections": { "hero": { "type": "page-hero", "settings": { "eyebrow": "Mushroom Finder", "heading": "Find a sensible starting point", "text": "Four questions about preferences, not symptoms. You get three species pages to read, with the safety notes up front." } }, "finder": { "type": "mushroom-finder" } }, "order": ["hero", "finder"] }

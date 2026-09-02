@@ -1,0 +1,44 @@
+{%- liquid
+  assign v = product.selected_or_first_available_variant
+  assign species = product.metafields.jm.linked_species.value
+  assign is_pet = false
+  if product.tags contains 'audience:pets'
+    assign is_pet = true
+  endif
+-%}
+<article class="card card--product" data-item-id="{{ v.id }}" data-item-name="{{ product.title | escape }}" data-item-price="{{ v.price | divided_by: 100.0 }}" data-item-category="{{ product.type | escape }}" data-item-index="{{ index }}" data-list-name="{{ list_name | default: 'grid' | escape }}" {% if species_slug %}data-species-click="{{ species_slug }}"{% endif %}>
+  <div class="card__media">
+    <div class="card__badges">
+      {%- if v.compare_at_price > v.price -%}<span class="badge badge--sale">Sale</span>{%- endif -%}
+      {%- unless v.available -%}<span class="badge badge--soldout">Sold out</span>{%- endunless -%}
+      {%- if is_pet -%}<span class="badge badge--pets">For pets</span>{%- endif -%}
+      {%- if product.tags contains 'kingdom:plant' -%}<span class="badge badge--botanical">Botanical</span>{%- endif -%}
+    </div>
+    {%- assign prod_alt = product.featured_image.alt | default: product.title -%}
+    {%- render 'image', image: product.featured_image, sizes: '(min-width:1024px) 30vw, (min-width:768px) 48vw, 100vw', alt: prod_alt -%}
+  </div>
+  <div class="card__body">
+    <h3 class="card__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+    {%- if species and species.size > 0 -%}
+      <p class="card__sub">
+        {%- for s in species limit: 3 -%}<span class="sci">{{ s.scientific_name.value }}</span>{% unless forloop.last %} · {% endunless %}{%- endfor -%}{% if species.size > 3 %} · +{{ species.size | minus: 3 }}{% endif %}
+      </p>
+    {%- endif -%}
+    {%- if product.metafields.jm.product_promise.value -%}<p class="card__text">{{ product.metafields.jm.product_promise.value }}</p>{%- endif -%}
+    <div class="card__meta">
+      {%- render 'price', product: product -%}
+      {%- if product.metafields.jm.form.value -%}<span class="small muted">{{ product.metafields.jm.form.value }}</span>{%- endif -%}
+    </div>
+    <div class="card__actions">
+      {%- if v.available and product.variants.size == 1 -%}
+        <form method="post" action="{{ routes.cart_add_url }}" data-product-form {% if species_slug %}data-species-click="{{ species_slug }}"{% endif %} style="display:contents">
+          <input type="hidden" name="id" value="{{ v.id }}"><input type="hidden" name="quantity" value="1">
+          <button type="submit" class="btn btn--primary"><span>{{ 'products.product.add_to_cart' | t }}</span></button>
+          <p class="form-message" data-form-message hidden></p>
+        </form>
+      {%- else -%}
+        <a class="btn btn--primary" href="{{ product.url }}">{% if v.available %}Choose options{% else %}View product{% endif %}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

@@ -1,0 +1,24 @@
+{
+  "sections": {
+    "hero": { "type": "hero", "settings": { "eyebrow": "Functional mushroom tinctures · Plettenberg Bay", "heading": "The underground, bottled.", "text": "Small-batch tinctures from seven mushrooms and one South African botanical. Every species page shows what the evidence says, and what it does not.", "cta_1_label": "Shop mushrooms", "cta_1_url": "/collections/all", "cta_2_label": "Explore species", "cta_2_url": "/pages/species" } },
+    "trust": { "type": "trust-strip", "blocks": {
+      "t1": { "type": "item", "settings": { "icon": "truck", "title": "Delivered across South Africa", "text": "Courier from Plettenberg Bay. Rates shown at checkout." } },
+      "t2": { "type": "item", "settings": { "icon": "lock", "title": "Secure Shopify checkout", "text": "Cards, instant EFT and more. We never see your card details." } },
+      "t3": { "type": "item", "settings": { "icon": "flask", "title": "Label-declared, evidence-tiered", "text": "Every claim is graded. No cures, no miracles." } },
+      "t4": { "type": "item", "settings": { "icon": "leaf", "title": "Small-batch tinctures", "text": "Spring water and 30% ethanol extraction. Made in the Western Cape." } } }, "block_order": ["t1","t2","t3","t4"] },
+    "species": { "type": "featured-species", "settings": { "limit": 6 } },
+    "finder": { "type": "finder-teaser" },
+    "products": { "type": "featured-products", "settings": { "collection": "frontpage", "limit": 6 } },
+    "education": { "type": "education-block", "blocks": {
+      "m1": { "type": "may", "settings": { "text": "Aspects of cognitive performance in small, short trials of Lion's Mane extract.", "tier": "Limited human evidence" } },
+      "m2": { "type": "may", "settings": { "text": "Exercise tolerance in older adults in small trials of Cordyceps preparations.", "tier": "Limited human evidence" } },
+      "m3": { "type": "may", "settings": { "text": "A long history of culinary and traditional use for Reishi, Turkey Tail, Chaga and Tremella.", "tier": "Traditional use" } },
+      "n1": { "type": "not", "settings": { "text": "They do not cure, treat or prevent any disease, including cancer, dementia, depression, anxiety or diabetes." } },
+      "n2": { "type": "not", "settings": { "text": "They are not a replacement for medical care or prescribed medicines." } },
+      "n3": { "type": "not", "settings": { "text": "They do not guarantee results. Responses vary and most studies are small." } },
+      "n4": { "type": "not", "settings": { "text": "They are not suitable for everyone: pregnancy, breastfeeding, mushroom allergy and several medicines call for caution." } } }, "block_order": ["m1","m2","m3","n1","n2","n3","n4"] },
+    "sourcing": { "type": "image-with-text" },
+    "reviews": { "type": "reviews" }
+  },
+  "order": ["hero", "trust", "species", "finder", "products", "education", "sourcing", "reviews"]
+}

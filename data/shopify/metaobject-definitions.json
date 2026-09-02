@@ -1,0 +1,59 @@
+{
+  "_comment": "Shopify Admin GraphQL metaobjectDefinitionCreate payloads. type 'species' is web-page enabled so entries render at /species/<handle> via theme/templates/metaobject/species.json. Import with scripts/shopify/import-species.mjs.",
+  "definitions": [
+    {
+      "type": "species",
+      "name": "Species",
+      "description": "One entry per verified organism sold in a product. Powers /species/<handle> pages, cards, the Finder and the Easter egg.",
+      "access": { "storefront": "PUBLIC_READ", "admin": "MERCHANT_READ_WRITE" },
+      "capabilities": { "publishable": { "enabled": true }, "translatable": { "enabled": false }, "onlineStore": { "enabled": true, "urlHandle": "species", "createRedirects": true }, "renderable": { "enabled": true, "data": { "metaTitleKey": "seo_title", "metaDescriptionKey": "seo_description" } } },
+      "displayNameKey": "common_name",
+      "fieldDefinitions": [
+        { "key": "common_name", "name": "Common name", "type": "single_line_text_field", "required": true },
+        { "key": "scientific_name", "name": "Scientific name", "type": "single_line_text_field", "required": true },
+        { "key": "kingdom", "name": "Kingdom", "type": "single_line_text_field", "validations": [ { "name": "choices", "value": "[\"Fungi\",\"Plantae\"]" } ] },
+        { "key": "short_description", "name": "Short description (card + hero, ≤ 220 chars)", "type": "multi_line_text_field", "required": true },
+        { "key": "hero_image", "name": "Hero image (2400×1350)", "type": "file_reference", "validations": [ { "name": "file_type_options", "value": "[\"Image\"]" } ] },
+        { "key": "macro_editorial_image", "name": "Macro editorial image (1200×1500)", "type": "file_reference", "validations": [ { "name": "file_type_options", "value": "[\"Image\"]" } ] },
+        { "key": "og_image", "name": "OG image (1200×630)", "type": "file_reference", "validations": [ { "name": "file_type_options", "value": "[\"Image\"]" } ] },
+        { "key": "taxonomy", "name": "Taxonomy (family / order, with source)", "type": "multi_line_text_field" },
+        { "key": "form_sold", "name": "Form sold", "type": "single_line_text_field" },
+        { "key": "flavour_profile", "name": "Flavour / profile", "type": "single_line_text_field" },
+        { "key": "traditional_use_short", "name": "Traditional use (one line)", "type": "single_line_text_field" },
+        { "key": "traditional_uses", "name": "Traditional uses (cited)", "type": "rich_text_field" },
+        { "key": "evidence_level", "name": "Evidence level", "type": "single_line_text_field", "required": true, "validations": [ { "name": "choices", "value": "[\"Strong human evidence\",\"Limited human evidence\",\"Animal/in-vitro evidence\",\"Traditional use\",\"Unverified — do not publish\"]" } ] },
+        { "key": "verified_benefits", "name": "May support (JSON: [{text, tier, ref}])", "type": "json" },
+        { "key": "human_evidence_summary", "name": "Human evidence summary", "type": "rich_text_field" },
+        { "key": "what_it_does_not_do", "name": "What it does not do", "type": "rich_text_field", "required": true },
+        { "key": "active_compounds", "name": "Compounds (JSON: [{name, text, solubility}])", "type": "json" },
+        { "key": "how_to_use", "name": "How to use", "type": "rich_text_field" },
+        { "key": "safety_notes", "name": "Safety notes", "type": "rich_text_field", "required": true },
+        { "key": "contraindications", "name": "Contraindications and interactions", "type": "rich_text_field" },
+        { "key": "key_cautions", "name": "Key cautions (one line for compare table)", "type": "single_line_text_field" },
+        { "key": "references", "name": "References (JSON: [{label, url}])", "type": "json" },
+        { "key": "evidence_reviewed_on", "name": "Evidence reviewed on", "type": "single_line_text_field" },
+        { "key": "linked_products", "name": "Linked products", "type": "list.product_reference" },
+        { "key": "faq", "name": "FAQ (JSON: [{question, answer}])", "type": "json" },
+        { "key": "fun_facts", "name": "Verified fun facts (JSON: [{text, source, url}])", "type": "json" },
+        { "key": "seo_title", "name": "SEO title (≤ 60)", "type": "single_line_text_field" },
+        { "key": "seo_description", "name": "SEO description (≤ 155)", "type": "single_line_text_field" }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Review (verified orders only)",
+      "description": "Manually entered reviews from verified orders. The theme renders nothing if there are no entries. Never enter sample reviews.",
+      "access": { "storefront": "PUBLIC_READ", "admin": "MERCHANT_READ_WRITE" },
+      "displayNameKey": "author",
+      "fieldDefinitions": [
+        { "key": "author", "name": "Author (first name + initial)", "type": "single_line_text_field", "required": true },
+        { "key": "body", "name": "Review", "type": "multi_line_text_field", "required": true },
+        { "key": "rating", "name": "Rating 1–5", "type": "number_integer" },
+        { "key": "verified", "name": "Verified order", "type": "boolean" },
+        { "key": "order_name", "name": "Order number (internal)", "type": "single_line_text_field" },
+        { "key": "product", "name": "Product", "type": "product_reference" },
+        { "key": "consent", "name": "Customer consented to publication", "type": "boolean" }
+      ]
+    }
+  ]
+}
