@@ -18,6 +18,7 @@ Read in order. Every document states what is verified, what is assumed and what 
 | 15 | [QA results](15-qa-results.md) | The triple audit, with results and the seven defects found and fixed |
 | 17 | [Launch checklist](17-launch-checklist.md) | Blockers, deployment, analytics, verification, and the "do not launch if" list |
 | 18 | [Post-launch monitoring](18-post-launch-monitoring.md) | Daily, weekly, monthly and quarterly checks, and the one metric that matters |
+| 19 | [Image generation manifest](19-image-generation-manifest.md) | Every image the theme can render — 132 files named, sized and prompted, with the batch sheet at `data/image-manifest.csv` |
 
 ## Research
 
