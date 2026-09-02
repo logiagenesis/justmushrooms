@@ -397,7 +397,13 @@ Every non-decorative image needs alt text written at upload. Describe what is in
 
 **Run the 59 AI-native files first.** They need nothing from anyone and they are the images that carry the site's character — the species set alone is 24 of them. The 71 product plates are blocked until someone photographs the 23 bottles, which is an afternoon's work with a phone (§5.2) and the highest-leverage hour on this whole list.
 
-### 9.1 Batch sheet
+### 9.1 Ready-to-paste prompts
+
+[`20-image-prompt-book.md`](20-image-prompt-book.md) is this manifest with every prompt written out
+whole — style, palette and exclusions already folded into each block, nothing to assemble. Part A is
+the 59 images that can run immediately; Part B is the 71 that need a reference photograph first.
+
+### 9.2 Batch sheet
 
 The machine-readable version of every row above is [`data/image-manifest.csv`](../data/image-manifest.csv) — 130 rows, columns:
 

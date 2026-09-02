@@ -1,6 +1,35 @@
 import fs from 'node:fs';
 
-const EXCLUSIONS = 'Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.';
+// Exclusions are composed per image, not pasted blindly: a product plate must keep its own label,
+// and the scale plate must keep its hand, so those clauses are swapped rather than contradicted.
+const EX = {
+  realism: 'Photographic realism only - not an illustration, 3D render or CGI.',
+  palette: 'Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade.',
+  noText: 'The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements.',
+  keepLabel: "Apart from the product's own printed label, which must be reproduced exactly as it appears in the reference image, the frame must contain no added text, watermark, signature or logo, and no borders, frames, vignette or interface elements.",
+  allowText: 'The frame must contain no watermark, signature or stray lettering beyond the wordmark described above, and no borders, frames, vignette or interface elements.',
+  medical: 'Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs.',
+  noPeople: 'No people, faces or hands.',
+  handOnly: 'One hand only, rendered naturally with correct fingers; no face and no other person in frame.',
+  anatomy: 'Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth.',
+  stock: 'Avoid a generic stock-photograph look.',
+};
+// Two independent axes, so they can combine: what may carry text, and who may be in frame.
+// Flags are '+'-separated - e.g. 'product+hand' is the scale plate, which shows both a label and a hand.
+//   product  the bottle's own label must survive     hand  one hand is allowed in frame
+//   text     a wordmark is being set deliberately
+const exclusionsFor = (mode = '') => {
+  const f = new Set(String(mode).split('+').filter(Boolean));
+  return [
+    EX.realism,
+    EX.palette,
+    f.has('product') ? EX.keepLabel : f.has('text') ? EX.allowText : EX.noText,
+    EX.medical,
+    f.has('hand') ? EX.handOnly : EX.noPeople,
+    EX.anatomy,
+    EX.stock,
+  ].join(' ');
+};
 
 const SPECIES_STEM = (subject, atmos = 'fine spore dust suspended in the light beam, damp organic texture') =>
   `Photograph, in ultra-detailed cinematic macro, ${subject}. Render the morphology with scientific accuracy. Shoot it as if on a medium-format camera with a 100mm macro lens at f/5.6, lit by a single soft key at 45 degrees with a cool rim light for separation, against a deep charcoal near-black background of #0B0E0C, with warm amber highlights, ${atmos}, and extremely sharp focus on the specimen falling off naturally into shadow. The mood is a premium editorial botanical campaign: muted natural colour, matte finish, no gloss.`;
@@ -74,16 +103,19 @@ const products = [
   ['elixir-for-pets-tincture-30ml', 'a worn leather collar out of focus and dry grass in warm domestic light, with no animal in frame', 'amber'],
   ['pet-elixer-of-life-combo-50ml-30ml', 'both bottles side by side with a worn leather collar and dry grass, no animal in frame', 'amber'],
 ];
+const TITLES = JSON.parse(fs.readFileSync(new URL('../data/shopify/products-metafields.json', import.meta.url), 'utf8'))
+  .products.reduce((m, p) => (m[p.handle] = p.title, m), {});
 for (const [h, cue, fill] of products) {
-  const pretty = h.replace(/-/g, ' ');
-  add({ file: `product-${h}.jpg`, group: 'product', ratio: '4:5', size: '4K', slot: `product ${h} - gallery image 1`, alt: `Amber dropper bottle of ${pretty} on dark slate.`, prompt: PRODUCT_STEM(cue) });
-  add({ file: `product-${h}-macro.jpg`, group: 'product', ratio: '4:5', size: '4K', slot: `product ${h} - gallery image 2`, alt: `A drop of ${pretty} falling from a glass dropper.`, prompt: `Photograph, in extreme macro, a single drop of ${fill} tincture falling from a glass dropper pipette against a near-black background. Catch the drop mid-fall and render it sharp, with internal refraction and a warm specular highlight, fine mist and dust in the beam. Shoot it with a high-speed capture look, premium and editorial, with no bottle label visible in frame.` });
-  add({ file: `product-${h}-scene.jpg`, group: 'product', ratio: '4:5', size: '4K', slot: `product ${h} - gallery image 3`, alt: `${pretty} bottle staged with its botanical.`, prompt: PRODUCT_STEM(cue) + ' Compose wider, giving the botanical material more of the frame than the bottle.' });
+  const pretty = TITLES[h] || h.replace(/-/g, ' ');
+  if (!TITLES[h]) throw new Error('no title for product handle: ' + h);
+  add({ file: `product-${h}.jpg`, group: 'product', ratio: '4:5', size: '4K', mode: 'product', slot: `product ${h} - gallery image 1`, alt: `Amber dropper bottle of ${pretty} on dark slate.`, prompt: PRODUCT_STEM(cue) });
+  add({ file: `product-${h}-macro.jpg`, group: 'product', ratio: '4:5', size: '4K', slot: `product ${h} - gallery image 2`, alt: `A drop of ${pretty} tincture falling from a glass dropper.`, prompt: `Photograph, in extreme macro, a single drop of ${fill} tincture falling from a glass dropper pipette against a near-black background. Catch the drop mid-fall and render it sharp, with internal refraction and a warm specular highlight, fine mist and dust in the beam. Shoot it with a high-speed capture look, premium and editorial, with no bottle label visible in frame.` });
+  add({ file: `product-${h}-scene.jpg`, group: 'product', ratio: '4:5', size: '4K', mode: 'product', slot: `product ${h} - gallery image 3`, alt: `${pretty} bottle staged with its botanical.`, prompt: PRODUCT_STEM(cue) + ' Compose wider, giving the botanical material more of the frame than the bottle.' });
 }
 
 // ---- scale plates
-add({ file: 'product-scale-hand.jpg', group: 'product', ratio: '4:5', size: '4K', slot: 'shared gallery - scale reference', alt: 'A hand holding an amber dropper bottle, showing its size.', prompt: 'Photograph a hand holding an amber glass dropper bottle at chest height in natural window light from the left, wearing a neutral linen sleeve, against a plain warm-grey wall. Render the skin naturally with visible texture, no jewellery and no nail polish, as an honest domestic scale reference. Editorial lifestyle, muted colour. HANDS ARE PERMITTED IN THIS FRAME - remove the no-hands constraint.' });
-add({ file: 'product-scale-dropper.jpg', group: 'product', ratio: '4:5', size: '4K', slot: 'shared gallery - scale reference', alt: 'An amber dropper bottle beside its glass pipette on wet slate.', prompt: 'Photograph an amber glass dropper bottle lying beside its glass pipette on wet dark slate, lit overhead at three-quarters, with water beading on the stone. A clean scale reference, premium still life, no hands.' });
+add({ file: 'product-scale-hand.jpg', group: 'product', ratio: '4:5', size: '4K', mode: 'product+hand', slot: 'shared gallery - scale reference', alt: 'A hand holding an amber dropper bottle, showing its size.', prompt: 'Photograph a hand holding an amber glass dropper bottle at chest height in natural window light from the left, wearing a neutral linen sleeve, against a plain warm-grey wall. Render the skin naturally with visible texture, no jewellery and no nail polish, as an honest domestic scale reference. Editorial lifestyle, muted colour.' });
+add({ file: 'product-scale-dropper.jpg', group: 'product', ratio: '4:5', size: '4K', mode: 'product', slot: 'shared gallery - scale reference', alt: 'An amber dropper bottle beside its glass pipette on wet slate.', prompt: 'Photograph an amber glass dropper bottle lying beside its glass pipette on wet dark slate, lit overhead at three-quarters, with water beading on the stone. A clean scale reference, premium still life, no hands.' });
 
 // ---- home
 add({ file: 'hero-forest.jpg', group: 'home', ratio: '16:9', size: '4K', slot: 'index > hero.image', alt: 'Mist threading between yellowwood trunks in Afromontane forest at first light.', prompt: 'Photograph, wide and cinematic, the floor of a Southern Cape Afromontane forest at first light: yellowwood and stinkwood trunks, tree ferns, deep leaf litter, and low sea mist threading between the trunks. A single shaft of warm light strikes damp ground where pale fungal fruiting bodies emerge, with faint mycelial threads visible in the litter. Hold the shadows near-black and the palette to muted green and amber. Leave a large uncluttered dark area across the left two-thirds of the frame for overlaid text. Atmospheric and restrained.' });
@@ -138,7 +170,7 @@ for (const [n, title, subj] of articles) {
 // ---- brand
 add({ file: 'brand-favicon.png', group: 'brand', ratio: '1:1', size: '2K', slot: 'favicon source - redraw as vector', alt: '', prompt: 'Design a single simplified mycelium-node glyph: one central node with three or four branching threads, rendered in flat gold #C9A24A on a near-black #0B0E0C ground. It must stay legible when reduced to 16 pixels, so keep strokes thick and even and the silhouette simple. Flat graphic mark, centred, generous margin, no text.' });
 add({ file: 'brand-apple-touch.png', group: 'brand', ratio: '1:1', size: '2K', slot: 'apple-touch-icon source - redraw as vector', alt: '', prompt: 'Design the same simplified mycelium-node glyph in flat gold #C9A24A, full-bleed on a near-black #0B0E0C ground with a tighter margin. Flat graphic mark, no text.' });
-add({ file: 'brand-og-default.jpg', group: 'brand', ratio: '3:2', size: '2K', slot: 'default og:image (crop to 1200x630)', alt: '', prompt: 'Photograph the Southern Cape forest floor at first light with mist between the trunks and a shaft of warm light on damp ground. Compose it very wide with the whole left half dark and empty for an overlaid wordmark. Muted green and amber, near-black shadows. TEXT IS PERMITTED IN THIS FRAME only if rendering the words "JUST MUSHROOMS" in a fine serif; otherwise leave the space empty.' });
+add({ file: 'brand-og-default.jpg', group: 'brand', ratio: '3:2', size: '2K', mode: 'text', slot: 'default og:image (crop to 1200x630)', alt: '', prompt: 'Photograph the Southern Cape forest floor at first light with mist between the trunks and a shaft of warm light on damp ground. Compose it very wide with the whole left half dark and empty for an overlaid wordmark. Muted green and amber, near-black shadows. Set the words "JUST MUSHROOMS" into that empty half in a fine serif, in cream, small and widely letterspaced.' });
 add({ file: 'brand-og-home.jpg', group: 'brand', ratio: '3:2', size: '2K', slot: 'home og:image (crop to 1200x630)', alt: '', prompt: 'Photograph an arc of amber dropper bottles receding into near-black shadow at shallow depth of field, warm rim light on the glass shoulders. Compose wide with the left third empty and dark for an overlaid wordmark.' });
 
 // ---- textures
@@ -157,9 +189,106 @@ const esc = (s) => '"' + String(s).replace(/"/g, '""') + '"';
 const header = ['filename', 'group', 'aspect_ratio', 'image_size', 'theme_slot', 'alt_text', 'prompt', 'exclusions'];
 const lines = [header.join(',')];
 for (const r of rows) {
-  lines.push([r.file, r.group, r.ratio, r.size, r.slot, r.alt, r.prompt, EXCLUSIONS].map(esc).join(','));
+  lines.push([r.file, r.group, r.ratio, r.size, r.slot, r.alt, r.prompt, exclusionsFor(r.mode)].map(esc).join(','));
 }
 fs.writeFileSync(new URL('../data/image-manifest.csv', import.meta.url), lines.join('\n') + '\n');
+
+// ---- write the prompt book
+// Every prompt is emitted whole, with the shared exclusions already appended, so each block
+// is copy-paste ready on its own and nothing has to be assembled by hand.
+const GROUP_TITLES = {
+  species: 'Species', home: 'Home page', collection: 'Collection social cards',
+  page: 'Static pages', blog: 'Blog', brand: 'Brand and system', texture: 'Textures',
+  product: 'Products',
+};
+const READY = ['species', 'home', 'page', 'collection', 'blog', 'brand', 'texture'];
+
+const book = [];
+const w = (s = '') => book.push(s);
+
+w('# 20 — Image prompt book');
+w();
+w('**Every prompt, written out in full and ready to paste.** Nothing here needs assembling: the shared');
+w('style, the palette and the exclusions are already baked into each block. Work top to bottom.');
+w();
+w('Generated from `scripts/build-image-manifest.mjs`. The reasoning behind each choice — sizing maths,');
+w('anatomy rules, the compliance argument — is in [`19-image-generation-manifest.md`](19-image-generation-manifest.md);');
+w('the spreadsheet version is [`data/image-manifest.csv`](../data/image-manifest.csv).');
+w();
+w('## Before you start');
+w();
+w('**Model:** Nano Banana 2 (`gemini-3.1-flash-image`). Set the ratio and size per image from the line');
+w('above each prompt — they are not suggestions, they are what the theme requests:');
+w();
+w('```json');
+w('"generationConfig": { "imageConfig": { "aspectRatio": "16:9", "imageSize": "4K" } }');
+w('```');
+w();
+w('The `K` must be uppercase. `4K` is still a preview capability — if it is not enabled on your account,');
+w('generate those at `2K` and upscale, or move them to Nano Banana Pro (`gemini-3-pro-image`).');
+w();
+w('**Two rules that decide whether the output is usable:**');
+w();
+w('1. **Check anatomy before you accept a species image.** A Lion\'s Mane with gills or a chaga growing');
+w('   from the ground undoes the credibility the cited copy is built on. The rejection table is §7 of the');
+w('   manifest. Sceletium is the trap — it is a succulent, and the model will hand you a mushroom.');
+w('2. **Part B needs reference photographs.** Do not run those from the text alone.');
+w();
+w('**Filenames are load-bearing.** They match the handles the theme and the Shopify metaobjects expect.');
+w('Save each file exactly as named or it will not appear in its slot.');
+w();
+w('---');
+w();
+w(`## Part A — ready to generate now (${rows.filter(r => READY.includes(r.group)).length} images)`);
+w();
+w('Nothing blocks these. The species set is the highest-value work on the list.');
+w();
+
+let n = 0;
+const emit = (r) => {
+  n++;
+  w(`### ${n}. \`${r.file}\``);
+  w();
+  w(`**Slot:** ${r.slot} · **Ratio:** \`${r.ratio}\` · **Size:** \`${r.size}\``);
+  if (r.alt) w(`**Alt text:** ${r.alt}`);
+  w();
+  w('```text');
+  w(r.prompt + ' ' + exclusionsFor(r.mode));
+  w('```');
+  w();
+};
+
+for (const g of READY) {
+  const group = rows.filter((r) => r.group === g);
+  if (!group.length) continue;
+  w(`### ${GROUP_TITLES[g]} — ${group.length} images`);
+  w();
+  for (const r of group) emit(r);
+}
+
+w('---');
+w();
+const prod = rows.filter((r) => r.group === 'product');
+w(`## Part B — needs a reference photograph first (${prod.length} images)`);
+w();
+w('**Stop.** These prompts all begin "Restage the amber glass dropper bottle from the reference image"');
+w('because they are meant to be run with a photograph of the real bottle attached. Run them without one');
+w('and the model invents a bottle: wrong label, wrong cap, wrong fill colour, wrong volume. Publishing');
+w('that is a misrepresentation of a product under the CPA, and it is trivially disproved by a photograph');
+w('of the actual bottle.');
+w();
+w('**What to do first:** photograph each of the 23 products once — flat, in daylight, against a plain');
+w('wall. A phone is fine. It is about an afternoon\'s work and it unblocks all 71 images below.');
+w();
+w('Nano Banana 2 holds the fidelity of up to 14 reference objects, so attaching that photo and letting');
+w('it restage the real bottle is the supported path, not a workaround. Two things still need a human:');
+w('the model has no seed or hard consistency lock, and its text rendering degrades on small dense type —');
+w('which is exactly what a tincture label is. Compare every result against the real bottle before it');
+w('goes live, or composite the real label in afterwards.');
+w();
+for (const r of prod) emit(r);
+
+fs.writeFileSync(new URL('../docs/20-image-prompt-book.md', import.meta.url), book.join('\n') + '\n');
 
 const byGroup = {};
 for (const r of rows) byGroup[r.group] = (byGroup[r.group] || 0) + 1;
@@ -167,3 +296,4 @@ console.log('rows:', rows.length);
 console.log(byGroup);
 const dupes = rows.map(r => r.file).filter((f, i, a) => a.indexOf(f) !== i);
 console.log('duplicate filenames:', dupes.length ? dupes : 'none');
+console.log('prompt book entries:', n);
