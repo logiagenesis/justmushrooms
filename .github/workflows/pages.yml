@@ -23,6 +23,7 @@ jobs:
         run: |
           npm install
           node render.mjs
+          node pages-rewrite.mjs
       - name: Stage Pages root
         run: |
           mkdir -p _site
