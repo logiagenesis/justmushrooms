@@ -7,6 +7,7 @@ http.createServer((req, res) => {
   const m = /^\/img\/(.+)-(\d+)x(\d+)\.svg$/.exec(url);
   if (m) { res.writeHead(200, { 'Content-Type': 'image/svg+xml', 'Cache-Control': 'public, max-age=31536000' }); return res.end(placeholderSvg(Number(m[2]), Number(m[3]), m[1])); }
   if (url.endsWith('.js') && url.startsWith('/cart')) { res.writeHead(200, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ item_count: 0, items: [], total_price: 0 })); }
+  if (url === '/favicon.ico') { res.writeHead(200, { 'Content-Type': 'image/svg+xml' }); return res.end('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="#0B0E0C"/><path d="M4 16a12 12 0 0 1 24 0z" fill="#C9A24A"/></svg>'); }
   if (url.startsWith('/cart?section_id=')) { res.writeHead(200, { 'Content-Type': 'text/html' }); return res.end('<div id="CartDrawer"><div class="drawer__panel"></div></div>'); }
   let f = path.join(DIST, url === '/' ? 'index.html' : url);
   if (!path.extname(f)) f += '.html';

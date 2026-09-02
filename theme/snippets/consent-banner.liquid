@@ -1,9 +1,9 @@
 <div class="consent" id="ConsentBanner" role="dialog" aria-live="polite" aria-label="Cookie preferences" hidden>
   <p><strong>Cookies, honestly.</strong> We use essential cookies to run the shop and, with your permission, analytics and advertising cookies to understand what works. You can change this any time via “Cookie settings” in the footer. <a href="{{ settings.privacy_policy_url }}">Privacy policy</a>.</p>
   <div class="consent__prefs" id="ConsentPrefs" hidden>
-    <label><input type="checkbox" checked disabled> Essential (always on)</label>
-    <label><input type="checkbox" id="ConsentAnalytics"> Analytics (Google Analytics 4)</label>
-    <label><input type="checkbox" id="ConsentAds"> Advertising and remarketing (Google Ads)</label>
+    <div><input type="checkbox" id="ConsentEssential" checked disabled><label for="ConsentEssential">Essential (always on)</label></div>
+    <div><input type="checkbox" id="ConsentAnalytics"><label for="ConsentAnalytics">Analytics (Google Analytics 4)</label></div>
+    <div><input type="checkbox" id="ConsentAds"><label for="ConsentAds">Advertising and remarketing (Google Ads)</label></div>
   </div>
   <div class="consent__actions">
     <button class="btn btn--primary" type="button" data-consent="all">Accept all</button>

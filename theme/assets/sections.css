@@ -13,7 +13,7 @@
 .header__nav .mega{position:absolute;top:calc(100% + 10px);left:0;min-width:560px;background:var(--c-ink-2);border:1px solid var(--c-line-strong);border-radius:var(--radius);padding:1.4rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem 2rem;box-shadow:0 30px 60px -30px rgba(0,0,0,.9)}
 .mega a{display:block;padding:.4em 0;font-size:.95rem}
 .mega .sci{display:block;font-size:.8rem}
-.mega__col h4{margin:0 0 .5rem;color:var(--c-cream-2);font-size:.78rem;text-transform:uppercase;letter-spacing:.12em}
+.mega__col .label{margin:0 0 .5rem;color:var(--c-cream-2);font-size:.78rem;text-transform:uppercase;letter-spacing:.12em}
 .header__actions{display:flex;gap:.2rem;justify-self:end;align-items:center}
 .header__burger{display:none}
 @media (max-width:1023px){.header__nav{display:none}.header__burger{display:inline-grid}.header__inner{grid-template-columns:auto 1fr auto}.header__logo{justify-self:center}}
@@ -87,7 +87,7 @@
 .footer__grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2rem}
 @media (max-width:1023px){.footer__grid{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.footer__grid{grid-template-columns:1fr}}
-.footer h4{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--c-cream-2);margin:0 0 1rem}
+.footer .label{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--c-cream-2);margin:0 0 1rem}
 .footer ul{list-style:none;padding:0;margin:0}
 .footer li{margin:.45rem 0}
 .footer a{text-decoration:none;color:var(--c-cream-2)}
@@ -127,7 +127,7 @@
 @media (max-width:1023px){.glance{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:560px){.glance{grid-template-columns:1fr}}
 .glance__item{padding:1.3rem;background:var(--c-ink-3);border:1px solid var(--c-line);border-radius:var(--radius-sm)}
-.glance__item h4{margin:0 0 .4rem;font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--c-cream-2)}
+.glance__item .label, .glance__item .glance__name{margin:0 0 .4rem;font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--c-cream-2)}
 .glance__item p{margin:0}
 .compounds{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
 @media (max-width:900px){.compounds{grid-template-columns:1fr}}
@@ -158,7 +158,7 @@
 .cart-summary__total{font-size:1.3rem;font-weight:600;border-top:1px solid var(--c-line);margin-top:.5rem;padding-top:1rem}
 /* 404 / empty */
 .empty{text-align:center;padding-block:var(--section-pad)}
-.empty h1{font-size:clamp(3rem,10vw,7rem);color:var(--c-ink-3);-webkit-text-stroke:1px var(--c-cream-2)}
+.empty h1{font-size:clamp(3rem,10vw,7rem);color:var(--c-cream-2)}
 /* customer */
 .account{display:grid;grid-template-columns:1fr 2fr;gap:3rem}
 @media (max-width:900px){.account{grid-template-columns:1fr}}

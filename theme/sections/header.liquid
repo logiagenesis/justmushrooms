@@ -12,11 +12,11 @@
             <summary aria-haspopup="true">{{ link.title }}</summary>
             <div class="mega">
               <div class="mega__col">
-                <h4>Species library</h4>
+                <p class="label">Species library</p>
                 {%- for s in species -%}<a href="{{ s.system.url }}">{{ s.common_name.value }} <span class="sci">{{ s.scientific_name.value }}</span></a>{%- endfor -%}
               </div>
               <div class="mega__col">
-                <h4>Start here</h4>
+                <p class="label">Start here</p>
                 <a href="/pages/species">All species</a>
                 <a href="/pages/mushroom-finder">Mushroom Finder</a>
                 <a href="/pages/species#compare">Compare species</a>

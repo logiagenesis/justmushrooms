@@ -11,6 +11,7 @@
       {%- else -%}
         <p class="muted">{{ 'general.search.results_with_count' | t: count: search.results_count }}</p>
         {%- paginate search.results by 12 -%}
+          <h2 class="visually-hidden">Results</h2>
           <ul class="bgrid" data-count="{{ search.results.size | at_most: 12 }}" data-odd="{% assign o = search.results.size | modulo: 2 %}{% if o == 1 %}true{% else %}false{% endif %}" role="list">
             {%- for item in search.results -%}
               <li>

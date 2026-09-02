@@ -11,6 +11,7 @@
       <a class="btn btn--primary" href="/pages/mushroom-finder">Not sure? Try the finder</a>
     </div>
     {%- if species.size > 0 -%}
+      <h2 class="visually-hidden">All species</h2>
       {%- render 'balanced-grid', items: species, card: 'species' -%}
     {%- else -%}
       <p class="notice">{% render 'icon', name: 'info' %} No species published yet. Import data/shopify/species-entries.json or create entries under Content → Metaobjects → Species.</p>

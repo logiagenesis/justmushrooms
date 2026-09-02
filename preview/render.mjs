@@ -64,7 +64,8 @@ async function renderSection(id, type, settingsIn, blocksIn, order, globals) {
   const blockDefs = Object.fromEntries((schema.blocks || []).map(b => [b.type, b]));
   const blocks = (order || Object.keys(blocksIn || {})).map(bid => { const b = blocksIn[bid]; const bd = blockDefs[b.type] || { settings: [] }; const bs = {}; for (const d of bd.settings || []) if (d.id) bs[d.id] = resolveSetting(d, (b.settings || {})[d.id]); return { id: bid, type: b.type, settings: bs, shopify_attributes: '' }; });
   const section = { id, settings, blocks, index: 0, location: 'template' };
-  const html = await engine.render(tpl, { ...globals, section });
+  const scope = { ...globals, section };
+  const html = await engine.render(tpl, scope, { globals: scope });
   return `<div id="shopify-section-${id}" class="shopify-section">${html}</div>`;
 }
 async function renderGroup(name, globals) {
@@ -73,10 +74,11 @@ async function renderGroup(name, globals) {
 }
 async function renderTemplate(name, pageGlobals) {
   const t = JSON.parse(read(path.join(THEME, 'templates', name + '.json')));
-  const globals = { ...ctxBase, ...pageGlobals, content_for_header: '', powered_by_link: '', current_page: 1, all_country_option_tags: '', template: { name: name.split('.')[0], suffix: name.split('.')[1] || '' }, page_title: pageGlobals.page_title || 'Just Mushrooms', page_description: '', page_image: null };
+  const globals = { ...ctxBase, ...pageGlobals, content_for_header: '', powered_by_link: '', current_page: 1, all_country_option_tags: '', template: { name: name.split('.')[0], suffix: name.split('.')[1] || '' }, page_title: pageGlobals.page_title || 'Just Mushrooms', page_description: '', page_image: pageGlobals.page_image || (pageGlobals.product && pageGlobals.product.featured_image) || (pageGlobals.metaobject && pageGlobals.metaobject.hero_image.value) || (pageGlobals.collection && pageGlobals.collection.featured_image) || ctxBase.heroImage };
   let body = ''; for (const id of t.order) { const s = t.sections[id]; body += await renderSection(id, s.type, s.settings || {}, s.blocks || {}, s.block_order, globals); }
   const layout = engine.parse(read(path.join(THEME, 'layout', (t.layout || 'theme') + '.liquid')));
-  return engine.render(layout, { ...globals, content_for_layout: body });
+  const scope = { ...globals, content_for_layout: body };
+  return engine.render(layout, scope, { globals: scope });
 }
 
 // ---- pages to build ----
@@ -99,10 +101,10 @@ const jobs = [
   ['page.contact', 'pages/contact.html', { request: { page_type: 'page', locale: { iso_code: 'en' } }, page: page('contact', 'Contact'), canonical_url: 'https://justmushrooms.co.za/pages/contact' }],
   ['page.about', 'pages/about.html', { request: { page_type: 'page', locale: { iso_code: 'en' } }, page: page('about', 'About'), canonical_url: 'https://justmushrooms.co.za/pages/about' }],
   ['page.disclaimer', 'pages/disclaimer.html', { request: { page_type: 'page', locale: { iso_code: 'en' } }, page: page('disclaimer', 'Disclaimer'), canonical_url: 'https://justmushrooms.co.za/pages/disclaimer' }],
-  ['cart', 'cart.html', { request: { page_type: 'cart', locale: { iso_code: 'en' } }, canonical_url: 'https://justmushrooms.co.za/cart' }],
-  ['search', 'search.html', { request: { page_type: 'search', locale: { iso_code: 'en' } }, search: { performed: false, terms: '', results: [], results_count: 0 }, canonical_url: 'https://justmushrooms.co.za/search' }],
-  ['404', '404.html', { request: { page_type: '404', locale: { iso_code: 'en' } }, canonical_url: 'https://justmushrooms.co.za/404' }],
-  ['blog', 'blogs/learn.html', { request: { page_type: 'blog', locale: { iso_code: 'en' } }, blog: { title: 'Learn', url: '/blogs/learn', articles: [] }, canonical_url: 'https://justmushrooms.co.za/blogs/learn' }]
+  ['cart', 'cart.html', { request: { page_type: 'cart', locale: { iso_code: 'en' } }, page_title: 'Your cart', canonical_url: 'https://justmushrooms.co.za/cart' }],
+  ['search', 'search.html', { request: { page_type: 'search', locale: { iso_code: 'en' } }, page_title: 'Search', search: { performed: false, terms: '', results: [], results_count: 0 }, canonical_url: 'https://justmushrooms.co.za/search' }],
+  ['404', '404.html', { request: { page_type: '404', locale: { iso_code: 'en' } }, page_title: 'Page not found', canonical_url: 'https://justmushrooms.co.za/404' }],
+  ['blog', 'blogs/learn.html', { request: { page_type: 'blog', locale: { iso_code: 'en' } }, page_title: 'Learn', blog: { title: 'Learn', url: '/blogs/learn', articles: [] }, canonical_url: 'https://justmushrooms.co.za/blogs/learn' }]
 ];
 fs.rmSync(DIST, { recursive: true, force: true }); fs.mkdirSync(DIST, { recursive: true });
 fs.cpSync(path.join(THEME, 'assets'), path.join(DIST, 'assets'), { recursive: true });
@@ -115,10 +117,12 @@ for (const [tpl, out, g] of jobs) {
 let grid = '';
 for (const n of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 23]) {
   const items = Array.from({ length: n }, (_, i) => P[i % P.length]);
-  const html = await engine.parseAndRender(`{% render 'balanced-grid', items: items, card: 'product', fillers: 'auto' %}`, { ...ctxBase, items, request: { page_type: 'index' }, template: { suffix: '' } });
+  const gscope = { ...ctxBase, items, request: { page_type: 'index', locale: { iso_code: 'en' } }, template: { suffix: '' } };
+  const html = await engine.parseAndRender(`{% render 'balanced-grid', items: items, card: 'product', fillers: 'auto' %}`, gscope, { globals: gscope });
   grid += `<section class="section section--tight" data-grid-test="${n}"><div class="page-width"><h2 class="h3">${n} items</h2>${html}</div></section>`;
 }
-const gridPage = await engine.render(engine.parse(read(path.join(THEME, 'layout/theme.liquid'))), { ...ctxBase, request: { page_type: 'page', locale: { iso_code: 'en' } }, page: page('grid-test', 'Grid test'), template: { name: 'page', suffix: 'grid-test' }, content_for_header: '', powered_by_link: '', current_page: 1, page_title: 'Grid test', canonical_url: 'https://justmushrooms.co.za/grid-test', content_for_layout: grid });
+const gridScope = { ...ctxBase, request: { page_type: 'page', locale: { iso_code: 'en' } }, page: page('grid-test', 'Grid test'), template: { name: 'page', suffix: 'grid-test' }, content_for_header: '', powered_by_link: '', current_page: 1, page_title: 'Grid test', canonical_url: 'https://justmushrooms.co.za/grid-test', content_for_layout: grid };
+const gridPage = await engine.render(engine.parse(read(path.join(THEME, 'layout/theme.liquid'))), gridScope, { globals: gridScope });
 fs.writeFileSync(path.join(DIST, 'grid-test.html'), gridPage);
 // placeholder images on demand are served by serve.mjs; pre-generate none.
 console.log(failures ? `DONE with ${failures} failures` : 'DONE, all templates rendered');

@@ -39,11 +39,11 @@
         </div>
       </div>
       <nav aria-label="Shop">
-        <h4>Shop</h4>
+        <h2 class="label">Shop</h2>
         <ul>{%- for link in section.settings.menu_shop.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}</ul>
       </nav>
       <nav aria-label="Species">
-        <h4>Species</h4>
+        <h2 class="label">Species</h2>
         <ul>
           {%- for s in species -%}<li><a href="{{ s.system.url }}">{{ s.common_name.value }}</a></li>{%- endfor -%}
           <li><a href="/pages/species">All species</a></li>
@@ -51,7 +51,7 @@
         </ul>
       </nav>
       <nav aria-label="Help and policies">
-        <h4>Help</h4>
+        <h2 class="label">Help</h2>
         <ul>
           {%- for link in section.settings.menu_policies.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
           <li><a href="#" data-open-consent>Cookie settings</a></li>

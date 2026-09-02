@@ -4,6 +4,7 @@
     <div class="section-header reveal"><div><p class="eyebrow">Learn</p><h1>{{ blog.title }}</h1><p class="lede">{{ section.settings.text }}</p></div></div>
     {%- paginate blog.articles by 12 -%}
       {%- if blog.articles.size > 0 -%}
+        <h2 class="visually-hidden">Articles</h2>
         {%- render 'balanced-grid', items: blog.articles, card: 'article', fillers: 'auto' -%}
       {%- else -%}
         <p class="notice">{% render 'icon', name: 'info' %} Articles are on the way. Twelve briefs are ready in docs/research/seo-keyword-research.md.</p>

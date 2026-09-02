@@ -28,8 +28,34 @@
     "cart_type": "drawer",
     "show_sticky_atc": true,
     "sections": {
-      "header": { "type": "header", "settings": { "menu": "main-menu", "sticky": true } },
-      "footer": { "type": "footer", "settings": { "menu_shop": "footer", "menu_species": "species", "menu_policies": "policies" } }
-    }
+      "header": {
+        "type": "header",
+        "settings": {
+          "menu": "main-menu",
+          "sticky": true
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "menu_shop": "footer",
+          "menu_species": "species",
+          "menu_policies": "policies"
+        }
+      }
+    },
+    "disclaimer_short": "This product is a complementary health product. It has not been evaluated by SAHPRA and is not intended to diagnose, treat, cure or prevent any disease. Consult a healthcare professional before use, especially if you are pregnant, breastfeeding, taking medication or have a medical condition.",
+    "disclaimer_pets": "For animal use only. Not evaluated by any regulator for safety or efficacy in animals. Consult your veterinarian before use, and do not use as a substitute for veterinary care.",
+    "alcohol_notice": "Contains approximately 30% ethanol by volume. Not suitable for people avoiding alcohol.",
+    "shipping_summary": "Courier delivery across South Africa. Rates and times shown at checkout.",
+    "biz_whatsapp": "",
+    "biz_legal_name": "",
+    "biz_reg_number": "",
+    "biz_vat_number": "",
+    "biz_info_officer": "",
+    "social_instagram": "",
+    "social_facebook": "",
+    "social_tiktok": "",
+    "social_youtube": ""
   }
 }

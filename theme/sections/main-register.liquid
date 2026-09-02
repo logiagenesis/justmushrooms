@@ -6,7 +6,7 @@
     <div class="field"><label for="RegisterLast">{{ 'customer.register.last_name' | t }}</label><input class="input" id="RegisterLast" type="text" name="customer[last_name]" autocomplete="family-name"></div>
     <div class="field"><label for="RegisterEmail">{{ 'customer.register.email' | t }}</label><input class="input" id="RegisterEmail" type="email" name="customer[email]" autocomplete="email" required></div>
     <div class="field"><label for="RegisterPassword">{{ 'customer.register.password' | t }}</label><input class="input" id="RegisterPassword" type="password" name="customer[password]" autocomplete="new-password" required></div>
-    <label class="small" style="display:flex;gap:.6rem;margin-bottom:1rem"><input type="checkbox" name="customer[accepts_marketing]"> Email me field notes (POPIA: you can opt out any time)</label>
+    <div class="small" style="display:flex;gap:.6rem;margin-bottom:1rem"><input type="checkbox" id="RegisterMarketing" name="customer[accepts_marketing]"><label for="RegisterMarketing">Email me field notes (POPIA: you can opt out any time)</label></div>
     <button class="btn btn--primary btn--block" type="submit">{{ 'customer.register.submit' | t }}</button>
   {%- endform -%}
 </div></div></section>

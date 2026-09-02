@@ -7,6 +7,7 @@ export function registerFilters(engine, ctx) {
   const locale = ctx.locale;
   const t = (key, ...args) => { const o = kw(args); let s = key.split('.').reduce((a, k) => (a && a[k] !== undefined ? a[k] : undefined), locale); if (s && typeof s === 'object') s = s.other || s.one || ''; if (s === undefined) return key; return String(s).replace(/\{\{\s*(\w+)\s*\}\}/g, (_, k) => o[k] ?? ''); };
   engine.registerFilter('t', t);
+  engine.registerFilter('json', (v) => JSON.stringify(v === undefined ? null : v));
   engine.registerFilter('money', money);
   engine.registerFilter('money_without_currency', (c) => (Number(c || 0) / 100).toFixed(2));
   engine.registerFilter('money_without_trailing_zeros', (c) => 'R ' + Math.round(Number(c || 0) / 100));

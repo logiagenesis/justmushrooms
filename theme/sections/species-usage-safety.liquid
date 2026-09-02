@@ -11,7 +11,7 @@
         <p class="eyebrow">Safety</p>
         <h3 class="h3">Who should be cautious</h3>
         <div class="rte">{{ s.safety_notes | metafield_tag }}</div>
-        {%- if s.contraindications.value -%}<h4>Contraindications and interactions</h4><div class="rte">{{ s.contraindications | metafield_tag }}</div>{%- endif -%}
+        {%- if s.contraindications.value -%}<h4 class="h4">Contraindications and interactions</h4><div class="rte">{{ s.contraindications | metafield_tag }}</div>{%- endif -%}
         <div class="notice notice--warn" style="margin-top:1rem">{% render 'icon', name: 'warn' %}<span>Consult a healthcare professional before use if you are pregnant or breastfeeding, take any medication, or have a medical condition. Stop and seek advice if you notice a reaction.</span></div>
       </div>
     </div>

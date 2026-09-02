@@ -125,7 +125,7 @@ textarea.input{min-height:140px;resize:vertical}
 .consent__actions{display:flex;flex-wrap:wrap;gap:.6rem}
 .consent__actions .btn{min-height:42px;font-size:.86rem}
 .consent__prefs{display:grid;gap:.5rem;margin:0 0 1rem;font-size:.9rem}
-.consent__prefs label{display:flex;gap:.6rem;align-items:center}
+.consent__prefs div{display:flex;gap:.6rem;align-items:center}
 /* sticky ATC */
 .sticky-atc{position:fixed;left:0;right:0;bottom:0;z-index:800;background:rgba(19,24,22,.94);backdrop-filter:blur(10px);border-top:1px solid var(--c-line);transform:translateY(110%);transition:transform var(--dur) var(--ease)}
 .sticky-atc.is-visible{transform:none}

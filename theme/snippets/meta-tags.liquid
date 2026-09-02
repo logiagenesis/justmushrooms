@@ -13,14 +13,21 @@
       assign t = collection.title | append: ' — Buy Online in South Africa'
       assign d = collection.description | strip_html | default: default_desc | truncate: 155
     when 'metaobject'
-      assign t = metaobject.seo_title.value | default: metaobject.common_name.value | append: ' (' | append: metaobject.scientific_name.value | append: ') — What the Evidence Says'
+      if metaobject.seo_title.value != blank
+        assign t = metaobject.seo_title.value
+      else
+        assign t = metaobject.common_name.value | append: ' (' | append: metaobject.scientific_name.value | append: ') — What the Evidence Says'
+      endif
       assign d = metaobject.seo_description.value | default: metaobject.short_description.value | truncate: 155
     when 'article'
       assign t = article.title
       assign d = article.excerpt_or_content | strip_html | truncate: 155
     when 'page'
       assign t = page.title
-      assign d = page.content | strip_html | truncate: 155
+      assign d = page.metafields.jm.seo_description.value | default: page.content | strip_html | truncate: 155
+      if d == blank
+        assign d = default_desc
+      endif
     else
       assign t = page_title
       assign d = page_description | default: default_desc

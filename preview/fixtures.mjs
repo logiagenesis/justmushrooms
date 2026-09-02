@@ -11,11 +11,13 @@ const mf = (v) => (v === undefined || v === null ? { value: null } : { value: v 
 export function buildContext() {
   const settingsData = JSON.parse(read('theme/config/settings_data.json')).current;
   const settings = { ...settingsData }; delete settings.sections;
+  // schema defaults the harness needs (Shopify applies these itself)
+  settings.four_item_layout = settings.four_item_layout || '4'; settings.twelve_item_layout = settings.twelve_item_layout || '3x4';
   settings.type_display_font = { family: 'Georgia', fallback_families: 'serif', weight: 600 };
   settings.type_body_font = { family: 'system-ui', fallback_families: 'sans-serif', weight: 400 };
   settings.favicon = null; settings.gtm_container_id = ''; settings.biz_whatsapp = '27615481969'; settings.social_instagram = 'https://www.instagram.com/justmushroomsza';
   const live = JSON.parse(read('data/live-snapshot/products.json')).products;
-  const cleanup = read('data/shopify/products-cleanup.csv').split('\n').filter(Boolean);
+  const cleanup = read('data/shopify/products-cleanup.csv').replace(/\r/g, '').split('\n').filter(Boolean);
   const hdr = cleanup[0].split(','); const cells = (l) => l.match(/("([^"]|"")*"|[^,]*)/g).filter((_, i) => i % 2 === 0).map(c => c.replace(/^"|"$/g, '').replace(/""/g, '"'));
   const clean = Object.fromEntries(cleanup.slice(1).map(l => { const c = cells(l); return [c[hdr.indexOf('Handle')], Object.fromEntries(hdr.map((h, i) => [h, c[i]]))]; }));
   const pm = exists('data/shopify/products-metafields.json') ? Object.fromEntries(JSON.parse(read('data/shopify/products-metafields.json')).products.map(p => [p.handle, p.metafields])) : {};
