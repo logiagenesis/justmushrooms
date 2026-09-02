@@ -50,7 +50,7 @@ const LOWRES = [
   ['page-sourcing-detail.jpg', '3.3 MB', ''],
   ['page-species-hero.jpg', '3.0 MB', ''],
   ['page-mushroom-finder-hero.jpg', '3.1 MB', ''],
-  ['page-disclaimer-hero.jpg', '3.2 MB', ''],
+  ['page-disclaimer-hero.jpg', '3.2 MB', '**Confirmed 2K by the generator** - the 4K redo was blocked by a credit run-out.'],
   ['species-sceletium-hero.jpg', '3.0 MB', 'Regenerated in batch 3 but still in the small cohort; batch 1 and 2 held byte-identical copies.'],
 ];
 
@@ -65,6 +65,12 @@ w('What is left is a format problem, a resolution question, and one check nobody
 w();
 w('Full context: [`19-image-generation-manifest.md`](19-image-generation-manifest.md).');
 w('The complete prompt book: [`20-image-prompt-book.md`](20-image-prompt-book.md).');
+w();
+w('Generated in **Genspark** on **Nano Banana 2 Flash** (`gemini-3.1-flash-image`) — the model §2.1 of');
+w('the manifest targets, so the prompts and the `aspectRatio`/`imageSize` guidance apply as written.');
+w('Note that image generation there is rate-limited in five-hour windows, which is worth planning');
+w('re-runs around: a batch that runs out of credit mid-way silently falls back to a lower tier rather');
+w('than failing, which is how `page-disclaimer-hero` ended up at 2K.');
 w();
 w('## Where the three batches landed');
 w();
@@ -136,6 +142,10 @@ w('are 8–11 MB. A consistent 3× gap across a whole cohort suggests the gap-fi
 w('rest used `4K`. File size is not proof — JPEG quality settings move it too — so **check the pixel');
 w('dimensions rather than taking this as fact.**');
 w();
+w('The generator has confirmed one of these outright: `page-disclaimer-hero` is a 2K render, because the');
+w('4K redo hit a credit limit. For the rest it said only \'the latest 4K or 2K version\' — which is not a');
+w('statement that they are 4K, so the dimensions still need checking one by one.');
+w();
 w('It matters most for the first row. Per §2.1 of the manifest, `2K` at 16:9 is roughly 2668 × 1500,');
 w('which is *smaller than the 3000 × 1688 variant the theme requests* — so the browser would upscale the');
 w('home hero, and it will look soft on a retina screen.');
@@ -163,7 +173,13 @@ w('cordyceps emerging from an insect, and above all **Sceletium rendered as a mu
 w('succulent it is.**');
 w();
 w('To unblock it, put downsampled copies somewhere in the shared folder — 1024 px on the long edge is');
-w('plenty:');
+w('plenty. The images are being generated in Genspark, whose AI Drive can do this without a local');
+w('download; ask it to:');
+w();
+w('> Resize every image in /mycelia-bundle/species to 1024 px on the long edge, keep the filenames');
+w('> unchanged, write them to /mycelia-bundle/previews, and sync that folder to the shared Drive.');
+w();
+w('Locally it is one line either way:');
 w();
 w('```bash');
 w('# ImageMagick');
