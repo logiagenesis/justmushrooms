@@ -16,13 +16,15 @@ The resolution question in §2 of the re-run sheet is settled rather than suspec
 feared, though: the 4:5 images come out at 1856 × 2304 and comfortably exceed what their slots ask for,
 so only the landscape heroes need re-running.
 
-**Two images fail.** `page-species-hero.jpg` is the worse of the two and the most consequential miss
-found: the Species Library header shows a cicada, a stag beetle, a damselfly, a trilobite and a pine
-cone, with one generic mushroom among eight items. `hero-forest-mobile.jpg` puts the brightest, busiest
-part of the frame exactly where the overlaid heading goes, and is a different forest in a different
-grade from the desktop hero it is supposed to match.
+**Three images fail.** `page-species-hero.jpg` is the worst and most consequential: the Species Library
+header shows a cicada, a stag beetle, a damselfly, a trilobite and a pine cone, with one generic
+mushroom among eight items. `hero-forest-mobile.jpg` puts the brightest, busiest part of the frame
+exactly where the overlaid heading goes, and is a different forest in a different grade from the
+desktop hero it should match. `collection-botanicals-og.jpg` has the right subject under a bright
+overcast sky that belongs to no other image on the site.
 
-Thirteen images inspected so far: eleven pass, two fail.
+Seventeen images inspected: **fourteen pass, three fail**. The failures are not random — they split by
+mode, not subject, and the pattern is set out below.
 
 ## How these were checked
 
@@ -180,12 +182,77 @@ cheapest way to close it is to have the generator itself report on its own outpu
 the files are already in its AI Drive — or to place copies of the batch 3 heroes under about 4 MB
 anywhere in the shared Drive, at which point they can be checked here directly.
 
-## Verdicts — page heroes (batch 3)
+## The pattern behind the failures
+
+Across seventeen images the results split cleanly by **mode**, not by subject, and this is the most
+useful thing the inspection turned up.
+
+**Still life and macro on a dark ground — consistently excellent.** Every species hero, the process
+image, the pets card, the fruit-body comparison and the mycelium network are strong: correct anatomy,
+brand palette, clean negative space where the type goes. Nine of nine.
+
+**Wide environmental and landscape scenes — consistently drift.** They come back brighter, cooler and
+more generic than the art direction asks for, and they lose the dark area the overlaid type needs.
+`hero-forest-mobile` and `collection-botanicals-og` fail outright on this; the turkey tail and shiitake
+heroes show a milder version of the same drift with busier green backgrounds.
+
+**Briefs that name a category rather than a list — fail outright.** `page-species-hero` asked for
+"eight distinct specimens… museum-like" and got a natural-history cabinet. The model filled an
+unspecified slot with its own prior.
+
+The practical rule for any re-run: **name every object in the frame, and state the tonal target as a
+constraint rather than an adjective.** "Near-black ground, deep shadow, no sky in frame" survives; a
+mood word like "atmospheric" does not.
+
+## Verdicts — page heroes, collections and articles
 
 | File | Dimensions | Verdict |
 |---|---|---|
-| `page-mushroom-finder-hero.jpg` | 2752 × 1536 | **PASS** — one of the best in the set |
-| `page-species-hero.jpg` | 2752 × 1536 | **FAIL — wrong subject entirely** |
+| `page-mushroom-finder-hero.jpg` (b3) | 2752 × 1536 | **PASS** — one of the best in the set |
+| `page-sourcing-hero.jpg` (b3) | 2752 × 1536 | **PASS** — inoculation holes visible |
+| `page-species-hero.jpg` (b3) | 2752 × 1536 | **FAIL — wrong subject entirely** |
+| `article-fruit-body-vs-mycelium.jpg` (b1) | 2752 × 1536 | **PASS** — the best educational image |
+| `collection-pets-og.jpg` (b1) | 2528 × 1696 | **PASS** — exemplary |
+| `collection-botanicals-og.jpg` (b1) | 2528 × 1696 | Subject **PASS**, palette **FAIL** |
+
+### `page-sourcing-hero.jpg` — PASS
+
+Stacked hardwood logs in dappled forest shade with **drilled inoculation holes in rows** along each
+log and small fruit bodies emerging from them. The holes are the detail that makes it read as real log
+cultivation rather than a stock forest photograph, and they are there.
+
+### `article-fruit-body-vs-mycelium.jpg` — PASS
+
+The strongest educational image produced. A whole fruit body on the left, gills and substrate still on
+the stipe base; a **grain spawn bag** on the right, colonised oats bound by white mycelium with
+condensation on the plastic. That is exactly what the article is about, and it is rendered accurately
+enough that anyone in the industry would recognise it at a glance.
+
+Worth noting: the bag is technically "packaging", which the global exclusions ban. Here the packaging
+*is* the subject, and the model was right to keep it. A reminder that blanket exclusions need reading
+against the brief, not applied mechanically.
+
+### `collection-pets-og.jpg` — PASS
+
+A worn leather collar with a brass buckle beside an amber bottle on sunlit floorboards, deep shadow
+behind, **no animal in frame** as required, and generous dark negative space on the right exactly where
+the wordmark goes. Textbook execution of the brief.
+
+One forward-looking note: the bottle is a generic corked apothecary bottle, not a dropper bottle like
+the real products. On a collection card rather than a product plate that is defensible — it is
+editorial, unlabelled, and claims nothing. But once the real bottles are photographed, re-shooting this
+card with the actual product would be both stronger and safer.
+
+### `collection-botanicals-og.jpg` — subject PASS, palette FAIL
+
+The subject is right and regionally accurate: a sprawling *Sceletium tortuosum* succulent in quartz
+gravel with Cape fold mountains behind. No mushroom anywhere.
+
+The grade is wrong. This is bright, flat, overcast daylight with a pale grey sky across the top third —
+the opposite of the near-black, warm, deeply shadowed direction every other image follows. Beside the
+other collection cards it will look as though it came from a different site, and the mid-tone gravel
+leaves no dark area for the overlaid wordmark. Re-run with the sky excluded and the tonal target stated
+as a hard constraint.
 
 ### `page-mushroom-finder-hero.jpg` — PASS
 
@@ -227,6 +294,6 @@ acorns, no oak leaves and no ferns. Muted natural colour, matte finish, near-bla
 
 ## Still unchecked
 
-The 16 species macro and OG files, eight of the ten page heroes, seven collection cards, seven article
+The 16 species macro and OG files, seven of the ten page heroes, five collection cards, six article
 images and the three remaining textures. The same method works for any of them under roughly 4 MB, which
 covers all the batch 1 copies and the smaller batch 3 page heroes.
