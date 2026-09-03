@@ -34,8 +34,33 @@ const exclusionsFor = (mode = '') => {
 const SPECIES_STEM = (subject, atmos = 'fine spore dust suspended in the light beam, damp organic texture') =>
   `Photograph, in ultra-detailed cinematic macro, ${subject}. Render the morphology with scientific accuracy. Shoot it as if on a medium-format camera with a 100mm macro lens at f/5.6, lit by a single soft key at 45 degrees with a cool rim light for separation, against a deep charcoal near-black background of #0B0E0C, with warm amber highlights, ${atmos}, and extremely sharp focus on the specimen falling off naturally into shadow. The mood is a premium editorial botanical campaign: muted natural colour, matte finish, no gloss.`;
 
-const PRODUCT_STEM = (cue) =>
-  `Restage the amber glass dropper bottle from the reference image, preserving its exact label artwork, cap type, glass colour and proportions, as a premium product still life. Place it at a three-quarter angle standing on wet dark slate, lit by a single soft key at 45 degrees from camera left with a cool rim light raking the glass shoulder, against a near-black #0B0E0C background falling to pure shadow, with warm amber transmission through the glass and fine dust in the light beam. Arrange ${cue} sparsely in the mid-ground, softly out of focus. Light it like a spirits campaign: matte, muted natural colour, extremely sharp on the bottle, medium-format look. Do not alter, redraw or re-letter the label.`;
+const PRODUCT_STEM = (cue, only = '') =>
+  `Restage the amber glass dropper bottle from the reference image, preserving its exact label artwork, cap type, glass colour and proportions, as a premium product still life. Place it at a three-quarter angle standing on wet dark slate, lit by a single soft key at 45 degrees from camera left with a cool rim light raking the glass shoulder, against a near-black #0B0E0C background falling to pure shadow, with warm amber transmission through the glass and fine dust in the light beam. Arrange ${cue} sparsely in the mid-ground, softly out of focus. Light it like a spirits campaign: matte, muted natural colour, extremely sharp on the bottle, medium-format look. Do not alter, redraw or re-letter the label.` + only;
+
+// A prompt that names a *category* - "eight distinct specimens", "several mushroom specimens" -
+// leaves the choice of species to the model, and it reaches for the mushrooms of its training set
+// rather than ours. That is how an Amanita (warted cap, basal volva) landed in the single-species
+// card and a Sulphur Tuft lookalike in the blends card. Every group shot now enumerates the species
+// by name and closes the door behind them.
+const SP = {
+  lionsMane: "Lion's Mane (Hericium erinaceus), a white cushion of long hanging spines with no cap, no gills and no stem",
+  reishi: 'Reishi (Ganoderma lucidum), a kidney-shaped bracket with a lacquered red-brown cap, concentric zoning and a pale cream margin',
+  chaga: 'Chaga (Inonotus obliquus), a black cracked charcoal-like conk with rusty orange showing in the fissures',
+  cordyceps: 'Cordyceps militaris, a cluster of bright orange club-shaped fruiting bodies with no insect anywhere in frame',
+  turkeyTail: 'Turkey Tail (Trametes versicolor), thin overlapping brackets banded in brown, ochre, cream and slate, showing a white pore surface and no gills',
+  tremella: 'Tremella fuciformis, a translucent white gelatinous frill of wavy lobes',
+  shiitake: 'Shiitake (Lentinula edodes), a brown umbrella cap with white cracking across it and cream gills beneath',
+  sceletium: 'Sceletium tortuosum, a fleshy green succulent plant with raised translucent bladder cells and one small pale star-shaped flower - a plant, not a fungus',
+};
+const ALL_EIGHT = [SP.lionsMane, SP.reishi, SP.chaga, SP.cordyceps, SP.turkeyTail, SP.tremella, SP.shiitake, SP.sceletium];
+const listOf = (items) => items.slice(0, -1).join('; ') + '; and ' + items[items.length - 1];
+// Named at the end of the prompt, where it reads as a constraint on everything above it.
+const ONLY_THESE =
+  ' These are the only organisms permitted in the frame, and each must be rendered exactly as described. No other'
+  + ' mushroom of any kind may appear - specifically no Amanita, no warted, spotted or red-and-white cap,'
+  + ' no ring and no basal volva, no porcini, chanterelle, morel, parasol, shaggy ink cap, milkcap or fly'
+  + ' agaric, and no small brown or yellow-green gilled toadstool of any sort. No insects, no fossils, no'
+  + ' shells and no foliage beyond what is described above.';
 
 const rows = [];
 const add = (r) => rows.push(r);
@@ -80,7 +105,7 @@ for (const [h, heroSubj, macroSubj, alt] of species) {
 // ---- products: 23 x 3
 const products = [
   ['lions-mane-mushroom-tincture-30ml', "a single white spined Lion's Mane specimen and a chip of dead hardwood", 'amber'],
-  ['lions-mane-mushroom-tincture-50ml', "two white spined Lion's Mane specimens in a wider set with more negative space", 'amber'],
+  ['lions-mane-mushroom-tincture-50ml', `two Lion's Mane specimens (Hericium erinaceus), white cushions of long hanging spines with no cap, no gills and no stem, in a wider set with more negative space`, 'amber', ONLY_THESE],
   ['lions-mane-mushroom-elixir-combo-50ml-30ml', "both bottles side by side, 50 ml and 30 ml, with a Lion's Mane specimen behind", 'amber'],
   ['reishi-mushroom-tincture-30ml', 'a varnished red-brown reishi bracket and dark bark', 'deep brown'],
   ['reishi-mushroom-elixir-combo-50ml-30ml', 'both bottles side by side with a reishi bracket propped behind', 'deep brown'],
@@ -92,8 +117,8 @@ const products = [
   ['turkey-tail-mushroom-elixir-combo-50ml-30ml', 'both bottles side by side with a turkey tail rosette behind', 'amber'],
   ['tremella-mushroom-tincture-30ml', 'translucent white tremella lobes, glistening', 'pale golden'],
   ['tremella-mushroom-elixir-combo-50ml-30ml', 'both bottles side by side with tremella lobes catching the rim light', 'pale golden'],
-  ['elixir-of-life-6-mushroom-blend-50ml', 'six distinct mushroom specimens arranged in a shallow arc with none dominant', 'deep brown'],
-  ['new-general-maintenance-50ml', 'a restrained mixed group of specimens and dried bracken in morning light', 'amber'],
+  ['elixir-of-life-6-mushroom-blend-50ml', `the six species in this blend in a shallow arc with none dominant - ${listOf([SP.reishi, SP.lionsMane, SP.cordyceps, SP.chaga, SP.turkeyTail, SP.tremella])}`, 'deep brown', ONLY_THESE],
+  ['new-general-maintenance-50ml', `the three species in this blend with dried bracken in morning light - ${listOf([SP.turkeyTail, SP.lionsMane, SP.cordyceps])}`, 'amber', ONLY_THESE],
   ['the-workaholic', "a slate desk edge, a cold coffee ring and a single Lion's Mane specimen", 'amber'],
   ['relax-no-stress-50ml', 'a soft fabric fold and a reishi bracket in low warm dusk light', 'deep brown'],
   ['menopause-50ml', 'warm cream linen and a dried fynbos sprig in soft diffused light', 'amber'],
@@ -105,12 +130,12 @@ const products = [
 ];
 const TITLES = JSON.parse(fs.readFileSync(new URL('../data/shopify/products-metafields.json', import.meta.url), 'utf8'))
   .products.reduce((m, p) => (m[p.handle] = p.title, m), {});
-for (const [h, cue, fill] of products) {
+for (const [h, cue, fill, only = ''] of products) {
   const pretty = TITLES[h] || h.replace(/-/g, ' ');
   if (!TITLES[h]) throw new Error('no title for product handle: ' + h);
-  add({ file: `product-${h}.jpg`, group: 'product', ratio: '4:5', size: '4K', mode: 'product', slot: `product ${h} - gallery image 1`, alt: `Amber dropper bottle of ${pretty} on dark slate.`, prompt: PRODUCT_STEM(cue) });
+  add({ file: `product-${h}.jpg`, group: 'product', ratio: '4:5', size: '4K', mode: 'product', slot: `product ${h} - gallery image 1`, alt: `Amber dropper bottle of ${pretty} on dark slate.`, prompt: PRODUCT_STEM(cue, only) });
   add({ file: `product-${h}-macro.jpg`, group: 'product', ratio: '4:5', size: '4K', slot: `product ${h} - gallery image 2`, alt: `A drop of ${pretty} tincture falling from a glass dropper.`, prompt: `Photograph, in extreme macro, a single drop of ${fill} tincture falling from a glass dropper pipette against a near-black background. Catch the drop mid-fall and render it sharp, with internal refraction and a warm specular highlight, fine mist and dust in the beam. Shoot it with a high-speed capture look, premium and editorial, with no bottle label visible in frame.` });
-  add({ file: `product-${h}-scene.jpg`, group: 'product', ratio: '4:5', size: '4K', mode: 'product', slot: `product ${h} - gallery image 3`, alt: `${pretty} bottle staged with its botanical.`, prompt: PRODUCT_STEM(cue) + ' Compose wider, giving the botanical material more of the frame than the bottle.' });
+  add({ file: `product-${h}-scene.jpg`, group: 'product', ratio: '4:5', size: '4K', mode: 'product', slot: `product ${h} - gallery image 3`, alt: `${pretty} bottle staged with its botanical.`, prompt: PRODUCT_STEM(cue, only) + ' Compose wider, giving the botanical material more of the frame than the bottle.' });
 }
 
 // ---- scale plates
@@ -125,15 +150,15 @@ add({ file: 'page-index-process.jpg', group: 'home', ratio: '4:5', size: '2K', s
 // ---- collections
 const collections = [
   ['all', 'Shop all', 'an arc of amber bottles receding into shadow at shallow depth of field'],
-  ['single-species', 'Single-species tinctures', 'eight distinct mushroom specimens laid out in an even grid on dark slate, taxonomic and evenly lit'],
-  ['blends', 'Blends', 'several mushroom specimens overlapping and merging into one another in a warmer grade'],
+  ['single-species', 'Single-species tinctures', `the eight Just Mushrooms species laid out in an even grid on dark slate, taxonomic and evenly lit - ${listOf(ALL_EIGHT)}`, ONLY_THESE],
+  ['blends', 'Blends', `six named specimens overlapping and merging into one another in a warmer grade - ${listOf([SP.reishi, SP.lionsMane, SP.cordyceps, SP.chaga, SP.turkeyTail, SP.tremella])}`, ONLY_THESE],
   ['pets', 'For pets', 'a worn leather collar and an amber bottle on a sunlit floorboard, with no animal in frame'],
   ['combo-deals', 'Combo deals', 'paired amber bottles, one taller and one shorter, repeated in receding rows'],
   ['botanicals', 'Botanicals', 'a sceletium succulent in Karoo quartz grit, wide and arid - a plant, not a fungus'],
   ['frontpage', 'Home page', 'the Southern Cape forest floor at first light with mist between the trunks'],
 ];
-for (const [h, title, subj] of collections) {
-  add({ file: `collection-${h}-og.jpg`, group: 'collection', ratio: '3:2', size: '2K', slot: `collection ${h} - featured_image (crop to 1200x630)`, alt: `${title} collection.`, prompt: `Photograph ${subj}, lit with a single soft key at 45 degrees against a near-black #0B0E0C ground, in muted natural greens, ambers and near-blacks. Compose wide with generous negative space on one third of the frame for an overlaid wordmark. Premium editorial, matte, medium-format look.` });
+for (const [h, title, subj, only = ''] of collections) {
+  add({ file: `collection-${h}-og.jpg`, group: 'collection', ratio: '3:2', size: '2K', slot: `collection ${h} - featured_image (crop to 1200x630)`, alt: `${title} collection.`, prompt: `Photograph ${subj}, lit with a single soft key at 45 degrees against a near-black #0B0E0C ground, in muted natural greens, ambers and near-blacks. Compose wide with generous negative space on one third of the frame for an overlaid wordmark. Premium editorial, matte, medium-format look.` + only });
 }
 
 // ---- pages
@@ -142,20 +167,20 @@ const pages = [
   ['about-story', '4:5', '2K', 'page.about > image-with-text.image', 'Handwritten batch notes and a scale on a workbench.', 'a workbench detail - handwritten batch notes, a balance scale and amber glass in late light, with no faces and no branding'],
   ['sourcing-hero', '16:9', '4K', 'page.sourcing > page-hero.image', 'Inoculated hardwood logs stacked in dappled forest shade.', 'inoculated hardwood logs stacked in dappled forest shade, damp and orderly, reading as real cultivation'],
   ['sourcing-detail', '4:5', '2K', 'page.sourcing > image-with-text.image', 'A wax-sealed inoculation point on an oak log.', 'a close detail of a drilled and wax-sealed inoculation point on an oak log, with sawdust spawn visible in the hole'],
-  ['species-hero', '16:9', '4K', 'page.species-index > page-hero.image', 'Eight mushroom and plant specimens laid out on dark slate.', 'a flat-lay taxonomy plate of eight distinct specimens arranged in an even grid on dark slate, evenly lit and museum-like'],
+  ['species-hero', '16:9', '4K', 'page.species-index > page-hero.image', 'Eight mushroom and plant specimens laid out on dark slate.', `a flat-lay taxonomy plate of the eight Just Mushrooms species arranged in an even grid on dark slate, evenly lit and museum-like - ${listOf(ALL_EIGHT)}`, ONLY_THESE],
   ['mushroom-finder-hero', '16:9', '4K', 'page.mushroom-finder > page-hero.image', 'A branching mycelial network against near-black.', 'a branching mycelial network glowing very faintly against near-black, abstract but organic, suggesting a decision tree. Keep the pale green accent under five percent of the frame'],
   ['faq-hero', '16:9', '4K', 'page.faq > page-hero.image', 'Layered bracket fungi in quiet macro.', 'layered bracket fungi in quiet macro, calm and neutral, with heavy negative space'],
   ['contact-hero', '16:9', '4K', 'page.contact > page-hero.image', 'The Garden Route coast road in soft morning light.', 'the Garden Route coast road in soft morning light, giving a sense of place, with no signage and no vehicles'],
   ['disclaimer-hero', '16:9', '4K', 'page.disclaimer > page-hero.image', 'Wet dark slate under a single raking light.', 'wet dark slate texture under a single raking light, deliberately plain, with no specimen in frame - sober and quiet'],
   ['shipping-returns-hero', '16:9', '4K', 'page.shipping-returns > page-hero.image', 'An unbranded kraft parcel on a timber bench.', 'an unbranded kraft parcel and paper packing material on a timber bench, honest and practical, with no courier branding and no logos'],
 ];
-for (const [n, ratio, size, slot, alt, subj] of pages) {
-  add({ file: `page-${n}.jpg`, group: 'page', ratio, size, slot, alt, prompt: `Photograph ${subj}. Light it with a single soft key at 45 degrees and a cool rim, against near-black shadows, in muted natural greens, ambers and near-blacks. Premium editorial, matte finish, medium-format look. Leave uncluttered darker area for overlaid text.` });
+for (const [n, ratio, size, slot, alt, subj, only = ''] of pages) {
+  add({ file: `page-${n}.jpg`, group: 'page', ratio, size, slot, alt, prompt: `Photograph ${subj}. Light it with a single soft key at 45 degrees and a cool rim, against near-black shadows, in muted natural greens, ambers and near-blacks. Premium editorial, matte finish, medium-format look. Leave uncluttered darker area for overlaid text.` + only });
 }
 
 // ---- blog
 const articles = [
-  ['blog-hero', 'Blog index banner', 'an open field notebook with pressed specimens beside it on a timber desk'],
+  ['blog-hero', 'Blog index banner', `an open field notebook on a timber desk with three dried specimens laid beside it - ${listOf([SP.turkeyTail, SP.reishi, SP.sceletium])}`, ONLY_THESE],
   ['what-is-a-tincture', 'What a dual extraction actually is', 'a glass vessel of spring water, a measure of clear ethanol and dried mushroom material arranged on dark slate'],
   ['fruit-body-vs-mycelium', 'Fruit body against grain-grown mycelium', 'a whole mushroom fruit body on the left and a block of pale grain-grown mycelium on the right, side by side on dark slate for comparison'],
   ['reading-evidence-grades', 'How to read the evidence grades', 'a stack of printed journal papers on dark slate, annotated in pencil, with reading glasses beside them'],
@@ -163,8 +188,8 @@ const articles = [
   ['storage-and-shelf-life', 'Storage and shelf life', 'amber bottles standing in a dark cupboard with light falling across the shelf edge'],
   ['sa-regulations-explained', 'South African regulation, explained', 'plain printed documents and a pen on a timber desk, sober and unbranded'],
 ];
-for (const [n, title, subj] of articles) {
-  add({ file: `article-${n}.jpg`, group: 'blog', ratio: '16:9', size: '2K', slot: `article card - ${title}`, alt: `${title}.`, prompt: `Photograph ${subj}, lit by a single soft key at 45 degrees against near-black shadows, in muted natural greens, ambers and near-blacks. Premium editorial, matte, medium-format look.` });
+for (const [n, title, subj, only = ''] of articles) {
+  add({ file: `article-${n}.jpg`, group: 'blog', ratio: '16:9', size: '2K', slot: `article card - ${title}`, alt: `${title}.`, prompt: `Photograph ${subj}, lit by a single soft key at 45 degrees against near-black shadows, in muted natural greens, ambers and near-blacks. Premium editorial, matte, medium-format look.` + only });
 }
 
 // ---- brand

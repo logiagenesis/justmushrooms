@@ -16,15 +16,20 @@ The resolution question in §2 of the re-run sheet is settled rather than suspec
 feared, though: the 4:5 images come out at 1856 × 2304 and comfortably exceed what their slots ask for,
 so only the landscape heroes need re-running.
 
-**Three images fail.** `page-species-hero.jpg` is the worst and most consequential: the Species Library
-header shows a cicada, a stag beetle, a damselfly, a trilobite and a pine cone, with one generic
-mushroom among eight items. `hero-forest-mobile.jpg` puts the brightest, busiest part of the frame
-exactly where the overlaid heading goes, and is a different forest in a different grade from the
-desktop hero it should match. `collection-botanicals-og.jpg` has the right subject under a bright
-overcast sky that belongs to no other image on the site.
+**Five images fail, and three of them fail the same way.** `page-species-hero.jpg` is the worst and
+most consequential: the Species Library header shows a cicada, a stag beetle, a damselfly, a trilobite
+and a pine cone, with one generic mushroom among eight items. `collection-single-species-og.jpg` shows
+eight mushrooms of which **none** are ours, including an **Amanita** with a warted cap and a basal
+volva. `collection-blends-og.jpg` shows a dense cluster reading as **Sulphur Tuft**, which is toxic.
+Separately, `hero-forest-mobile.jpg` puts the brightest, busiest part of the frame exactly where the
+overlaid heading goes, and is a different forest in a different grade from the desktop hero it should
+match; `collection-botanicals-og.jpg` has the right subject under a bright overcast sky that belongs
+to no other image on the site.
 
-Nineteen images inspected: **sixteen pass, three fail**. The failures are not random and not about
-subject matter — they track how much bright sky is in the frame. The pattern is set out below.
+Twenty-one images inspected: **sixteen pass, five fail**. The two failure families are separate and
+both are now fixed at source — the composition failures track bright sky (set out below), and the
+three subject failures all come from one prompt defect, corrected across ten prompts in
+[`§ The category defect`](#the-category-defect-fixed-at-source).
 
 ## How these were checked
 
@@ -323,8 +328,96 @@ must be one of these eight. No insects, no beetles, no dragonflies, no fossils, 
 acorns, no oak leaves and no ferns. Muted natural colour, matte finish, near-black ground.
 ```
 
+### `collection-single-species-og.jpg` — FAIL, and a brand-safety problem
+
+**2528 × 1696.** The Single-species collection card. Format, craft and grade are all correct: eight
+mushrooms in an even grid on dark slate, museum lighting, muted palette, negative space on the right
+third for the wordmark. Everything except the mushrooms.
+
+None of the eight is a species this brand sells. Working left to right, top to bottom:
+
+| Position | What is actually there | Why it matters |
+|---|---|---|
+| Top left | **Amanita** — pale warted cap, ring on the stem, swollen basal volva | The genus that contains the death cap and destroying angel. On a card advertising ingestible tinctures |
+| Top centre | Porcini (*Boletus*), pored underside | Edible, but not ours |
+| Top right | Parasol, scaly cap with a movable ring | Not ours |
+| Middle left | Chanterelle, false gills, funnel form | Not ours |
+| Middle centre | A milkcap or brittlegill | Not ours |
+| Middle right | Small greenish-yellow gilled caps | Reads as a *Hypholoma*-type toadstool |
+| Bottom left | Shaggy ink cap | Not ours |
+| Bottom right | Morel, pitted conical head | Not ours |
+
+The Amanita is the one that cannot ship. A functional-mushroom brand selling a consumable in South
+Africa, under the CPA's misleading-representation provisions, putting a warted-and-volva'd Amanita on
+the header of its single-species range is a foreseeable harm and an obvious reputational one. Nothing
+about the image is *illegal*; it is simply the single worst mushroom to have chosen.
+
+### `collection-blends-og.jpg` — FAIL
+
+**2528 × 1696.** A dense clustered mass of small greenish-yellow gilled caps on rotting wood, warm
+grade, heavy shadow. Attractive, well-lit, and a textbook rendering of **Sulphur Tuft**
+(*Hypholoma fasciculare*) — clustered habit on dead wood, sulphur-yellow cap fading rust at the centre,
+greenish gills. It is toxic and, in Europe, one of the commonest causes of mushroom poisoning.
+
+The blend products contain reishi, Lion's Mane, cordyceps, chaga, turkey tail and tremella. Not one is
+gilled. A single gilled cluster on the Blends card contradicts the ingredient lists on every product it
+links to.
+
+<a id="the-category-defect-fixed-at-source"></a>
+
+## The category defect — fixed at source
+
+Three failures, one cause. Each of these prompts asked for a **category** and left the choice of
+species to the model:
+
+| Prompt asked for | What came back |
+|---|---|
+| "a flat-lay taxonomy plate of eight **distinct specimens**" | A cicada, a stag beetle, a trilobite, a pine cone |
+| "**eight distinct mushroom specimens** laid out in an even grid" | An Amanita, a porcini, a parasol, a morel |
+| "**several mushroom specimens** overlapping and merging" | A Sulphur Tuft cluster |
+
+The generator did nothing wrong in any of the three. Asked for "specimens", it produced the specimens
+of its training distribution — which are the field-guide mushrooms of the northern hemisphere, not a
+South African functional-mushroom range. The craft was fine every time; only the census was wrong.
+
+Rather than re-run the three, I looked for every prompt with the same shape. `data/image-manifest.csv`
+had **ten**, and six of them had not been generated yet — they would have failed identically:
+
+| File | Category phrasing | State |
+|---|---|---|
+| `page-species-hero.jpg` | "eight distinct specimens" | Generated, **failed** |
+| `collection-single-species-og.jpg` | "eight distinct mushroom specimens" | Generated, **failed** |
+| `collection-blends-og.jpg` | "several mushroom specimens" | Generated, **failed** |
+| `article-blog-hero.jpg` | "pressed specimens" | Generated, unchecked |
+| `product-elixir-of-life-6-mushroom-blend-50ml.jpg` | "six distinct mushroom specimens" | Not yet run |
+| `product-elixir-of-life-6-mushroom-blend-50ml-scene.jpg` | same | Not yet run |
+| `product-new-general-maintenance-50ml.jpg` | "a restrained mixed group of specimens" | Not yet run |
+| `product-new-general-maintenance-50ml-scene.jpg` | same | Not yet run |
+| `product-lions-mane-mushroom-tincture-50ml.jpg` | "two white spined specimens" — named, but thinly | Not yet run |
+| `product-lions-mane-mushroom-tincture-50ml-scene.jpg` | same | Not yet run |
+
+`scripts/build-image-manifest.mjs` now carries an `SP` roster of the eight species with a one-line
+morphological description of each, and every group shot enumerates the species that belong in it. The
+list is followed by a closing clause naming the specific wrong answers the model has already given:
+
+```text
+These are the only organisms permitted in the frame, and each must be rendered exactly as described.
+No other mushroom of any kind may appear - specifically no Amanita, no warted, spotted or
+red-and-white cap, no ring and no basal volva, no porcini, chanterelle, morel, parasol, shaggy ink
+cap, milkcap or fly agaric, and no small brown or yellow-green gilled toadstool of any sort. No
+insects, no fossils, no shells and no foliage beyond what is described above.
+```
+
+Naming the failures matters more than a generic "only these species". A negative constraint the model
+can check against a concrete image ("no basal volva") is enforceable; "no other mushroom" alone is an
+abstraction it can satisfy while still producing a porcini. All ten prompts in `data/image-manifest.csv`
+and [`20-image-prompt-book.md`](20-image-prompt-book.md) are regenerated and ready to run.
+
+Three of the ten need re-running from the corrected prompts; six have not been run at all and will now
+run correctly first time; `article-blog-hero.jpg` should be re-checked before deciding.
+
 ## Still unchecked
 
-The 16 species macro and OG files, five of the ten page heroes, five collection cards, six article
+The 16 species macro and OG files, five of the ten page heroes, three collection cards, six article
 images and the three remaining textures. The same method works for any of them under roughly 4 MB, which
 covers all the batch 1 copies and the smaller batch 3 page heroes.
