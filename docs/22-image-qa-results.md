@@ -46,6 +46,60 @@ theme that does. `species-hero.liquid` and `page-hero.liquid` top out at 2400w, 
 snippet at 2000w, the product gallery at 1600w. At 2752 px every one of those is oversupplied. Only
 **`hero-forest.jpg`**, the home page hero, is genuinely upscaled.
 
+## Round 2 — the re-runs, 03/09/2026
+
+The 18 failures were re-run from the corrected prompts and looked at again. **Fourteen cleared.**
+
+This is the part worth recording: every one of those fourteen failed on a prompt that named a
+*category*, and every one was fixed by naming the *thing*. Not one was fixed by re-rolling the dice.
+The cleanest case is `collection-all-og` — the only change was describing the bottle (amber glass,
+black ribbed screw cap, glass pipette, 30 ml and 50 ml) and the cork-stoppered spirit bottles became
+the right product first time. `brand-og-home` had said "dropper" all along and had been right all
+along. One word, twice confirmed.
+
+| File | Round 1 | Round 2 |
+|---|---|---|
+| `collection-single-species-og.jpg` | An **Amanita**, a porcini, a parasol, a morel | **PASS** — all eight species, correct and identifiable |
+| `collection-blends-og.jpg` | A **Sulphur Tuft** cluster | **PASS** — the six blend species, one turkey tail showing its pores |
+| `page-species-hero.jpg` | A cicada, a stag beetle, a trilobite | **PASS** on subject; renders as eight tiles, so place the title over the row gap |
+| `article-blog-hero.jpg` | Oak and bracken, legible gibberish | **PASS** on both — the three named species, and no word resolves |
+| `collection-all-og.jpg` | Cork-stoppered spirit bottles | **PASS** — the right vessel, correctly scaled |
+| `page-about-story.jpg` | A batch record naming nettle and valerian | **PASS** — every label blank, notebook closed and untitled |
+| `article-storage-and-shelf-life.jpg` | Bottles labelled ARNICA, VALERIAN | **PASS** — unlabelled, clean rather than dusty |
+| `collection-frontpage-og.jpg` | A hard vertical seam | **PASS** — natural falloff into mist |
+| `brand-og-default.jpg` | The same seam | **PASS** — and the best image in the set |
+| `hero-forest-mobile.jpg` | Bright where the heading goes | **PASS** — cluster in the lower third, top half clean, grade matches desktop |
+| `collection-botanicals-og.jpg` | Bright overcast sky | **PASS** — near-black sky, palette back in range |
+| `texture-spores.jpg` | 1024 px, wrong format | **PASS** — 2048 px, warm dust on true black |
+| `texture-mycelium-lines.jpg` | A **painted chequerboard** | **PASS** — sage hairlines on true black |
+| `texture-paper-grain.jpg` | A floral damask wallpaper | **PASS** on motif — but off-white, so composite with `multiply` rather than `screen` |
+| `collection-combo-deals-og.jpg` | Cork-stoppered apothecary bottles | **Vessel fixed, brief missed** — ~25 identical bottles, no pairing, mossy ground |
+| `article-reading-evidence-grades.jpg` | A paper on Holocene climate | **Text fixed, register missed** — an aged deckle-edged folio on mossy ground |
+| `brand-favicon.png` | A **snowflake** | **Reference-grade** — asymmetric and hypha-like, but hairpoint tips die at 16 px |
+| `brand-apple-touch.png` | A molecule diagram | **Not generated** |
+
+### The two that swapped one defect for another
+
+Both are instructive rather than annoying. `collection-combo-deals-og` got the bottle right and lost
+the *point*: about twenty-five near-identical bottles with no visible pairing, so nothing says "a 50 ml
+and a 30 ml together", staged on mossy forest floor where the prompt asked for a near-black ground.
+`article-reading-evidence-grades` got the illegibility exactly right — nothing resolves at any zoom —
+and returned an **aged, deckle-edged antique folio**. On an article about reading *modern* evidence
+(small, short, recent trials) an ancient manuscript argues the opposite of the copy.
+
+Three images in this round drifted to mossy woodland where the prompt said slate. That is worth
+watching: it is the same failure shape one level down — "dark ground" is a category too.
+
+### The one that did not move
+
+`hero-forest.jpg` came back **2752 × 1536 again**. Its content is now a clear pass — tree ferns, sea
+mist, a warm shaft on damp ground, pale fruiting bodies and visible mycelial threads in the litter,
+with the left two-thirds dark for the heading — but the `4K` did not take for the second time.
+
+Do not "fix" this in the theme. `sections/hero.liquid` offers a 3000w candidate and it is the only
+slot in the theme that does; dropping it would cap the hero at 2400 px even once a larger file exists.
+The shortfall is in the asset. Until it is regenerated at 4K the cost is roughly 9% on one image.
+
 ## How these were checked
 
 `drive.google.com` is blocked by this environment's egress proxy — a 403 on CONNECT, which the proxy
@@ -598,10 +652,11 @@ Both prompts now describe the glyph in full, in identical words, and demand asym
 | | Files |
 |---|---|
 | Part A generated | 59 |
-| **Inspected** | **59** |
-| Pass | 41 |
-| Fail | 18 |
-| Of the passes, needing a 4K re-run for size only | 1 (`hero-forest`) |
+| **Inspected** | **59**, twice |
+| Passing after round 2 | **54** |
+| Still to re-run | 3 (`collection-combo-deals-og`, `article-reading-evidence-grades`, `brand-apple-touch`) |
+| Re-run for size only | 1 (`hero-forest`) |
+| Generate as a vector reference | 1 (`brand-favicon`) |
 
 Species imagery — the part with real regulatory exposure and the part hardest to get right — is
 **complete and correct at 24 of 24**. Everything that failed did so on a prompt I wrote, and all of

@@ -40,9 +40,10 @@ Each one is marked:
 | ✅ | **Approved. Do not regenerate.** It passed. A re-run of a good image is a coin flip you do not need to take |
 | 🔁 | **Re-run.** The block says what came back last time and why it failed. The prompt is already corrected |
 | 📐 | **Re-run for size only.** The prompt is unchanged — just set `4K` |
+| ✏️ | **Reference only.** Generate it, then redraw the final as vector from it |
 | 📷 | **Blocked.** Needs a photograph of the real bottle attached |
 
-**18 to re-run, 1 for size, and 40 already approved.** Work the 🔁 and 📐 blocks; skip every ✅.
+**3 to re-run, 1 for size, 1 as a reference, and 54 already approved.** Work the 🔁, 📐 and ✏️ blocks; skip every ✅.
 
 ---
 
@@ -298,17 +299,17 @@ Photograph, in ultra-detailed cinematic macro, a succulent plant and not a fungu
 
 **Slot:** index > hero.image · **Ratio:** `16:9` · **Size:** `4K`
 **Alt text:** Mist threading between yellowwood trunks in Afromontane forest at first light.
-**Re-run for size only.** Content passes. But it came back 2752 x 1536, and `sections/hero.liquid` requests a **3000w** variant - the only place in the theme that does - so the browser upscales the home hero. Re-run at `4K`, prompt unchanged.
+**Re-run for size only.** Content is a clear pass in round 2 - tree ferns, sea mist, a warm shaft on damp ground, pale fruiting bodies and visible mycelial threads in the litter, with the left two-thirds dark for the heading. But it came back **2752 x 1536 again**: the `4K` did not take. `sections/hero.liquid` offers a 3000w candidate and this is the only slot in the theme that does, so this is the one file where it matters. Re-run at `4K` in a fresh credit window, or take this single file to Nano Banana Pro.
 
 ```text
 Photograph, wide and cinematic, the floor of a Southern Cape Afromontane forest at first light: yellowwood and stinkwood trunks, tree ferns, deep leaf litter, and low sea mist threading between the trunks. A single shaft of warm light strikes damp ground where pale fungal fruiting bodies emerge, with faint mycelial threads visible in the litter. Hold the shadows near-black and the palette to muted green and amber. Leave a large uncluttered dark area across the left two-thirds of the frame for overlaid text. Atmospheric and restrained. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
 ```
 
-### 26. 🔁 `hero-forest-mobile.jpg`
+### 26. ✅ `hero-forest-mobile.jpg`
 
 **Slot:** index > hero.image_mobile · **Ratio:** `4:5` · **Size:** `4K`
 **Alt text:** Mist threading between yellowwood trunks in Afromontane forest at first light.
-**Re-run — what came back last time:** The brightest, busiest part of the frame sits exactly where the overlaid heading goes, and it is a different forest in a different grade from the desktop hero. **Attach the approved `hero-forest.jpg` as a reference so the two match.**
+**Approved — do not regenerate.** This one passed the visual QA and is already in the set.
 
 ```text
 Photograph the same Southern Cape Afromontane forest scene recomposed vertically: the light shaft and fungal cluster sit in the lower third, canopy and sea mist above. Keep the grade identical - muted green and amber, near-black shadows - and leave clear dark space across the top half of the frame for overlaid text. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
@@ -336,11 +337,11 @@ Photograph a small-batch extraction still life: amber glass demijohns on a scarr
 Photograph the Plettenberg Bay coastline at dawn seen from the forest edge, with mist lying over the Tsitsikamma, restrained and very wide. Light it with a single soft key at 45 degrees and a cool rim, against near-black shadows, in muted natural greens, ambers and near-blacks. Premium editorial, matte finish, medium-format look. Leave uncluttered darker area for overlaid text. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
 ```
 
-### 29. 🔁 `page-about-story.jpg`
+### 29. ✅ `page-about-story.jpg`
 
 **Slot:** page.about > image-with-text.image · **Ratio:** `4:5` · **Size:** `2K`
 **Alt text:** Handwritten batch notes and a scale on a workbench.
-**Re-run — what came back last time:** A legible batch record listing **nettle 40 g, cedar leaf 15 g, dandelion root 20 g, valerian 15 g** - a herbal recipe this company does not make, on the About page.
+**Approved — do not regenerate.** This one passed the visual QA and is already in the set.
 
 ```text
 Photograph a workbench detail - a brass balance scale, amber glass and a closed notebook in late light, with no faces and no branding. Light it with a single soft key at 45 degrees and a cool rim, against near-black shadows, in muted natural greens, ambers and near-blacks. Premium editorial, matte finish, medium-format look. Leave uncluttered darker area for overlaid text. No word anywhere in the frame may be legible. Any paper, page, notebook, label or spine must be blank, or turned far enough from the camera that the writing reads only as a soft grey rhythm. Do not invent titles, headings, ingredient lists, author names, dates or product names, and do not render lorem-ipsum or pseudo-words that look like language at a glance. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
@@ -366,11 +367,11 @@ Photograph inoculated hardwood logs stacked in dappled forest shade, damp and or
 Photograph a close detail of a drilled and wax-sealed inoculation point on an oak log, with sawdust spawn visible in the hole. Light it with a single soft key at 45 degrees and a cool rim, against near-black shadows, in muted natural greens, ambers and near-blacks. Premium editorial, matte finish, medium-format look. Leave uncluttered darker area for overlaid text. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
 ```
 
-### 32. 🔁 `page-species-hero.jpg`
+### 32. ✅ `page-species-hero.jpg`
 
 **Slot:** page.species-index > page-hero.image · **Ratio:** `16:9` · **Size:** `4K`
 **Alt text:** Eight mushroom and plant specimens laid out on dark slate.
-**Re-run — what came back last time:** A cicada, a stag beetle, a damselfly, a trilobite and a pine cone. One of the eight items was a fungus, and not one of ours.
+**Approved — do not regenerate.** This one passed the visual QA and is already in the set.
 
 ```text
 Photograph a flat-lay taxonomy plate of the eight Just Mushrooms species arranged in an even grid on dark slate, evenly lit and museum-like - Lion's Mane (Hericium erinaceus), a white cushion of long hanging spines with no cap, no gills and no stem; Reishi (Ganoderma lucidum), a kidney-shaped bracket with a lacquered red-brown cap, concentric zoning and a pale cream margin; Chaga (Inonotus obliquus), a black cracked charcoal-like conk with rusty orange showing in the fissures; Cordyceps militaris, a cluster of bright orange club-shaped fruiting bodies with no insect anywhere in frame; Turkey Tail (Trametes versicolor), thin overlapping brackets banded in brown, ochre, cream and slate, showing a white pore surface and no gills; Tremella fuciformis, a translucent white gelatinous frill of wavy lobes; Shiitake (Lentinula edodes), a brown umbrella cap with white cracking across it and cream gills beneath; and Sceletium tortuosum, a fleshy green succulent plant with raised translucent bladder cells and one small pale star-shaped flower - a plant, not a fungus. Light it with a single soft key at 45 degrees and a cool rim, against near-black shadows, in muted natural greens, ambers and near-blacks. Premium editorial, matte finish, medium-format look. Leave uncluttered darker area for overlaid text. These are the only organisms permitted in the frame, and each must be rendered exactly as described. No other mushroom of any kind may appear - specifically no Amanita, no warted, spotted or red-and-white cap, no ring and no basal volva, no porcini, chanterelle, morel, parasol, shaggy ink cap, milkcap or fly agaric, and no small brown or yellow-green gilled toadstool of any sort. No insects, no fossils, no shells and no foliage beyond what is described above. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
@@ -428,31 +429,31 @@ Photograph an unbranded kraft parcel and paper packing material on a timber benc
 
 ### Collection social cards — 7 images
 
-### 38. 🔁 `collection-all-og.jpg`
+### 38. ✅ `collection-all-og.jpg`
 
 **Slot:** collection all - featured_image (crop to 1200x630) · **Ratio:** `3:2` · **Size:** `2K`
 **Alt text:** Shop all collection.
-**Re-run — what came back last time:** Cork-stoppered spirit bottles, several times 50 ml. Composition and light were exemplary; only the vessel was wrong.
+**Approved — do not regenerate.** This one passed the visual QA and is already in the set.
 
 ```text
 Photograph an arc of amber glass dropper bottles in the 30 ml and 50 ml apothecary sizes, each with a black ribbed screw cap holding a glass pipette - not cork stoppers, not glass stoppers, not spirit or wine bottles, and nothing larger than 50 ml, receding into shadow at shallow depth of field, lit with a single soft key at 45 degrees against a near-black #0B0E0C ground, in muted natural greens, ambers and near-blacks. Compose wide with generous negative space on one third of the frame for an overlaid wordmark. That space must fall away naturally in the scene itself - no hard edge, no seam, no pasted panel, no overlaid gradient, band or vignette, and no visible join anywhere in the frame. Premium editorial, matte, medium-format look. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
 ```
 
-### 39. 🔁 `collection-single-species-og.jpg`
+### 39. ✅ `collection-single-species-og.jpg`
 
 **Slot:** collection single-species - featured_image (crop to 1200x630) · **Ratio:** `3:2` · **Size:** `2K`
 **Alt text:** Single-species tinctures collection.
-**Re-run — what came back last time:** Eight mushrooms, none ours, led by an **Amanita** - warted cap, ring, basal volva - on the header of a range of ingestible tinctures. Also a porcini, a parasol, a chanterelle, a milkcap, a shaggy ink cap and a morel.
+**Approved — do not regenerate.** This one passed the visual QA and is already in the set.
 
 ```text
 Photograph the eight Just Mushrooms species laid out in an even grid on dark slate, taxonomic and evenly lit - Lion's Mane (Hericium erinaceus), a white cushion of long hanging spines with no cap, no gills and no stem; Reishi (Ganoderma lucidum), a kidney-shaped bracket with a lacquered red-brown cap, concentric zoning and a pale cream margin; Chaga (Inonotus obliquus), a black cracked charcoal-like conk with rusty orange showing in the fissures; Cordyceps militaris, a cluster of bright orange club-shaped fruiting bodies with no insect anywhere in frame; Turkey Tail (Trametes versicolor), thin overlapping brackets banded in brown, ochre, cream and slate, showing a white pore surface and no gills; Tremella fuciformis, a translucent white gelatinous frill of wavy lobes; Shiitake (Lentinula edodes), a brown umbrella cap with white cracking across it and cream gills beneath; and Sceletium tortuosum, a fleshy green succulent plant with raised translucent bladder cells and one small pale star-shaped flower - a plant, not a fungus, lit with a single soft key at 45 degrees against a near-black #0B0E0C ground, in muted natural greens, ambers and near-blacks. Compose wide with generous negative space on one third of the frame for an overlaid wordmark. That space must fall away naturally in the scene itself - no hard edge, no seam, no pasted panel, no overlaid gradient, band or vignette, and no visible join anywhere in the frame. Premium editorial, matte, medium-format look. These are the only organisms permitted in the frame, and each must be rendered exactly as described. No other mushroom of any kind may appear - specifically no Amanita, no warted, spotted or red-and-white cap, no ring and no basal volva, no porcini, chanterelle, morel, parasol, shaggy ink cap, milkcap or fly agaric, and no small brown or yellow-green gilled toadstool of any sort. No insects, no fossils, no shells and no foliage beyond what is described above. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
 ```
 
-### 40. 🔁 `collection-blends-og.jpg`
+### 40. ✅ `collection-blends-og.jpg`
 
 **Slot:** collection blends - featured_image (crop to 1200x630) · **Ratio:** `3:2` · **Size:** `2K`
 **Alt text:** Blends collection.
-**Re-run — what came back last time:** A clustered mass of greenish-yellow gilled caps on dead wood, reading as **Sulphur Tuft** (*Hypholoma fasciculare*). Toxic, and gilled, while not one of the six species in the blends has gills.
+**Approved — do not regenerate.** This one passed the visual QA and is already in the set.
 
 ```text
 Photograph six named specimens overlapping and merging into one another in a warmer grade - Reishi (Ganoderma lucidum), a kidney-shaped bracket with a lacquered red-brown cap, concentric zoning and a pale cream margin; Lion's Mane (Hericium erinaceus), a white cushion of long hanging spines with no cap, no gills and no stem; Cordyceps militaris, a cluster of bright orange club-shaped fruiting bodies with no insect anywhere in frame; Chaga (Inonotus obliquus), a black cracked charcoal-like conk with rusty orange showing in the fissures; Turkey Tail (Trametes versicolor), thin overlapping brackets banded in brown, ochre, cream and slate, showing a white pore surface and no gills; and Tremella fuciformis, a translucent white gelatinous frill of wavy lobes, lit with a single soft key at 45 degrees against a near-black #0B0E0C ground, in muted natural greens, ambers and near-blacks. Compose wide with generous negative space on one third of the frame for an overlaid wordmark. That space must fall away naturally in the scene itself - no hard edge, no seam, no pasted panel, no overlaid gradient, band or vignette, and no visible join anywhere in the frame. Premium editorial, matte, medium-format look. These are the only organisms permitted in the frame, and each must be rendered exactly as described. No other mushroom of any kind may appear - specifically no Amanita, no warted, spotted or red-and-white cap, no ring and no basal volva, no porcini, chanterelle, morel, parasol, shaggy ink cap, milkcap or fly agaric, and no small brown or yellow-green gilled toadstool of any sort. No insects, no fossils, no shells and no foliage beyond what is described above. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
@@ -472,27 +473,27 @@ Photograph a worn leather collar and an amber bottle on a sunlit floorboard, wit
 
 **Slot:** collection combo-deals - featured_image (crop to 1200x630) · **Ratio:** `3:2` · **Size:** `2K`
 **Alt text:** Combo deals collection.
-**Re-run — what came back last time:** The same cork-stoppered apothecary bottles, correctly paired tall and short in receding rows.
+**Re-run — what came back last time:** Round 2 fixed the vessel - correct amber dropper bottles - but lost the point of the card. Roughly 25 near-identical bottles with no visible pairing, so nothing reads as "a 50 ml and a 30 ml together", and it is staged on mossy forest floor rather than the near-black ground, leaving the wordmark nowhere dark to sit. Emphasise **two** bottles of clearly different heights, and the dark ground.
 
 ```text
 Photograph paired amber glass dropper bottles in the 30 ml and 50 ml apothecary sizes, each with a black ribbed screw cap holding a glass pipette - not cork stoppers, not glass stoppers, not spirit or wine bottles, and nothing larger than 50 ml, one 50 ml and one 30 ml, repeated in receding rows, lit with a single soft key at 45 degrees against a near-black #0B0E0C ground, in muted natural greens, ambers and near-blacks. Compose wide with generous negative space on one third of the frame for an overlaid wordmark. That space must fall away naturally in the scene itself - no hard edge, no seam, no pasted panel, no overlaid gradient, band or vignette, and no visible join anywhere in the frame. Premium editorial, matte, medium-format look. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
 ```
 
-### 43. 🔁 `collection-botanicals-og.jpg`
+### 43. ✅ `collection-botanicals-og.jpg`
 
 **Slot:** collection botanicals - featured_image (crop to 1200x630) · **Ratio:** `3:2` · **Size:** `2K`
 **Alt text:** Botanicals collection.
-**Re-run — what came back last time:** Right subject, but under a bright overcast sky that belongs to no other image on the site.
+**Approved — do not regenerate.** This one passed the visual QA and is already in the set.
 
 ```text
 Photograph a sceletium succulent in Karoo quartz grit, wide and arid - a plant, not a fungus, lit with a single soft key at 45 degrees against a near-black #0B0E0C ground, in muted natural greens, ambers and near-blacks. Compose wide with generous negative space on one third of the frame for an overlaid wordmark. That space must fall away naturally in the scene itself - no hard edge, no seam, no pasted panel, no overlaid gradient, band or vignette, and no visible join anywhere in the frame. Premium editorial, matte, medium-format look. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
 ```
 
-### 44. 🔁 `collection-frontpage-og.jpg`
+### 44. ✅ `collection-frontpage-og.jpg`
 
 **Slot:** collection frontpage - featured_image (crop to 1200x630) · **Ratio:** `3:2` · **Size:** `2K`
 **Alt text:** Home page collection.
-**Re-run — what came back last time:** A hard vertical seam two-thirds across - the model answered "negative space on one third" by pasting a darkened panel over the right third.
+**Approved — do not regenerate.** This one passed the visual QA and is already in the set.
 
 ```text
 Photograph the Southern Cape forest floor at first light with mist between the trunks, lit with a single soft key at 45 degrees against a near-black #0B0E0C ground, in muted natural greens, ambers and near-blacks. Compose wide with generous negative space on one third of the frame for an overlaid wordmark. That space must fall away naturally in the scene itself - no hard edge, no seam, no pasted panel, no overlaid gradient, band or vignette, and no visible join anywhere in the frame. Premium editorial, matte, medium-format look. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
@@ -500,11 +501,11 @@ Photograph the Southern Cape forest floor at first light with mist between the t
 
 ### Blog — 7 images
 
-### 45. 🔁 `article-blog-hero.jpg`
+### 45. ✅ `article-blog-hero.jpg`
 
 **Slot:** article card - Blog index banner · **Ratio:** `16:9` · **Size:** `2K`
 **Alt text:** Blog index banner.
-**Re-run — what came back last time:** Pressed *Quercus robur* and *Pteridium aquilinum* - oak and bracken - with no fungus at all, plus two pages of legible gibberish.
+**Approved — do not regenerate.** This one passed the visual QA and is already in the set.
 
 ```text
 Photograph an open field notebook on a timber desk with three dried specimens laid beside it - Turkey Tail (Trametes versicolor), thin overlapping brackets banded in brown, ochre, cream and slate, showing a white pore surface and no gills; Reishi (Ganoderma lucidum), a kidney-shaped bracket with a lacquered red-brown cap, concentric zoning and a pale cream margin; and Sceletium tortuosum, a fleshy green succulent plant with raised translucent bladder cells and one small pale star-shaped flower - a plant, not a fungus, lit by a single soft key at 45 degrees against near-black shadows, in muted natural greens, ambers and near-blacks. Premium editorial, matte, medium-format look. These are the only organisms permitted in the frame, and each must be rendered exactly as described. No other mushroom of any kind may appear - specifically no Amanita, no warted, spotted or red-and-white cap, no ring and no basal volva, no porcini, chanterelle, morel, parasol, shaggy ink cap, milkcap or fly agaric, and no small brown or yellow-green gilled toadstool of any sort. No insects, no fossils, no shells and no foliage beyond what is described above. No word anywhere in the frame may be legible. Any paper, page, notebook, label or spine must be blank, or turned far enough from the camera that the writing reads only as a soft grey rhythm. Do not invent titles, headings, ingredient lists, author names, dates or product names, and do not render lorem-ipsum or pseudo-words that look like language at a glance. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
@@ -534,7 +535,7 @@ Photograph a whole mushroom fruit body on the left and a block of pale grain-gro
 
 **Slot:** article card - How to read the evidence grades · **Ratio:** `16:9` · **Size:** `2K`
 **Alt text:** How to read the evidence grades.
-**Re-run — what came back last time:** A legible journal paper titled *The Role of Holocene Climate Variability...*, its body dissolving into pseudo-words, illustrating an article about mycology evidence.
+**Re-run — what came back last time:** Round 2 fixed the text - the print is now an unresolvable grey rhythm with no legible word - but returned an **aged, deckle-edged antique folio** on mossy ground. On an article about reading *modern* evidence (small, short, recent trials) an ancient manuscript argues the opposite. Ask for plain modern printed A4 on dry dark slate, no foliage, no parchment, nothing aged.
 
 ```text
 Photograph a stack of printed papers on dark slate seen at a shallow oblique angle so the print reads only as texture, with reading glasses and a pencil beside them, lit by a single soft key at 45 degrees against near-black shadows, in muted natural greens, ambers and near-blacks. Premium editorial, matte, medium-format look. No word anywhere in the frame may be legible. Any paper, page, notebook, label or spine must be blank, or turned far enough from the camera that the writing reads only as a soft grey rhythm. Do not invent titles, headings, ingredient lists, author names, dates or product names, and do not render lorem-ipsum or pseudo-words that look like language at a glance. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
@@ -550,11 +551,11 @@ Photograph a stack of printed papers on dark slate seen at a shallow oblique ang
 Photograph a glass dropper pipette held in one hand over a plain glass of water on a breakfast table in morning light, lit by a single soft key at 45 degrees against near-black shadows, in muted natural greens, ambers and near-blacks. Premium editorial, matte, medium-format look. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. One hand only, rendered naturally with correct fingers; no face and no other person in frame. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
 ```
 
-### 50. 🔁 `article-storage-and-shelf-life.jpg`
+### 50. ✅ `article-storage-and-shelf-life.jpg`
 
 **Slot:** article card - Storage and shelf life · **Ratio:** `16:9` · **Size:** `2K`
 **Alt text:** Storage and shelf life.
-**Re-run — what came back last time:** Bottles clearly labelled **ARNICA**, **TINCTURE No. 4** and **VALERIAN**, dusty and half-empty. Wrong products, wrong vessel, and the wrong subtext for a shelf-life article.
+**Approved — do not regenerate.** This one passed the visual QA and is already in the set.
 
 ```text
 Photograph amber glass dropper bottles in the 30 ml and 50 ml apothecary sizes, each with a black ribbed screw cap holding a glass pipette - not cork stoppers, not glass stoppers, not spirit or wine bottles, and nothing larger than 50 ml, unlabelled and clean rather than antique or dusty, standing in a dark cupboard with light falling across the shelf edge, lit by a single soft key at 45 degrees against near-black shadows, in muted natural greens, ambers and near-blacks. Premium editorial, matte, medium-format look. No word anywhere in the frame may be legible. Any paper, page, notebook, label or spine must be blank, or turned far enough from the camera that the writing reads only as a soft grey rhythm. Do not invent titles, headings, ingredient lists, author names, dates or product names, and do not render lorem-ipsum or pseudo-words that look like language at a glance. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
@@ -572,10 +573,10 @@ Photograph plain unmarked sheets of paper and a pen on a timber desk, sober and 
 
 ### Brand and system — 4 images
 
-### 52. 🔁 `brand-favicon.png`
+### 52. ✏️ `brand-favicon.png`
 
 **Slot:** favicon source - redraw as vector · **Ratio:** `1:1` · **Size:** `2K`
-**Re-run — what came back last time:** A **snowflake**. Technically clean, but four symmetric branching arms around a ring read as an ice crystal. Generate this only as a reference for a vector redraw.
+**Generate as a reference, then redraw as vector.** Round 2 killed the snowflake: the mark is now genuinely asymmetric, three threads at different angles and lengths, each forking once. It reads as a hypha. It is still not a favicon - the tips taper to hairpoints that vanish at 16 px, and it sits off-centre with an empty bottom-right quadrant. Redraw it as vector from this reference: centred, uniform stroke weight, blunt tips, tested at 16 px.
 
 ```text
 Design a single mycelial node with exactly three threads branching from it, each thread a different length and leaving at a different angle, each forking once and tapering slightly towards its tip. The mark must be deliberately asymmetric and off-balance, the way a real hypha grows: no radial symmetry, no rotational repetition, no evenly spaced arms, no ball-tipped terminals, and no lattice of interconnected nodes. It must not read as a snowflake, an asterisk, a star, a molecule diagram or a network graph. Render it in flat gold #C9A24A on a near-black #0B0E0C ground. It will be read at 16 pixels, so keep the strokes thick and even, the branch count to three, and the silhouette simple enough to survive at that size. Flat graphic mark, centred, generous margin, no text. A flat graphic or textural render, not a photograph, 3D render or CGI, and with no depth of field or lens effects. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
@@ -584,16 +585,16 @@ Design a single mycelial node with exactly three threads branching from it, each
 ### 53. 🔁 `brand-apple-touch.png`
 
 **Slot:** apple-touch-icon source - redraw as vector · **Ratio:** `1:1` · **Size:** `2K`
-**Re-run — what came back last time:** A different mark from the favicon entirely: sixteen ball-tipped spokes and four hubs, reading as a molecule diagram, and hopeless at 180 px. Generate only as a reference.
+**Re-run — what came back last time:** Not generated in the second round. Still outstanding. Generate only as a reference for the vector redraw.
 
 ```text
 Design a single mycelial node with exactly three threads branching from it, each thread a different length and leaving at a different angle, each forking once and tapering slightly towards its tip. The mark must be deliberately asymmetric and off-balance, the way a real hypha grows: no radial symmetry, no rotational repetition, no evenly spaced arms, no ball-tipped terminals, and no lattice of interconnected nodes. It must not read as a snowflake, an asterisk, a star, a molecule diagram or a network graph. Render it in flat gold #C9A24A on a near-black #0B0E0C ground. Fill the frame with it, edge to edge, leaving only a narrow margin - it is a home-screen icon read at 180 pixels, so keep the strokes thick, the branch count to three and the silhouette simple. Flat graphic mark, no text. A flat graphic or textural render, not a photograph, 3D render or CGI, and with no depth of field or lens effects. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
 ```
 
-### 54. 🔁 `brand-og-default.jpg`
+### 54. ✅ `brand-og-default.jpg`
 
 **Slot:** default og:image (crop to 1200x630) · **Ratio:** `3:2` · **Size:** `2K`
-**Re-run — what came back last time:** The same seam, at the halfway point. The wordmark itself was set correctly. This is the default share card for every page on the site.
+**Approved — do not regenerate.** This one passed the visual QA and is already in the set.
 
 ```text
 Photograph the Southern Cape forest floor at first light with mist between the trunks and a shaft of warm light on damp ground. Compose it very wide with the left half falling away into deep natural shadow so a wordmark can sit there. That space must fall away naturally in the scene itself - no hard edge, no seam, no pasted panel, no overlaid gradient, band or vignette, and no visible join anywhere in the frame. Muted green and amber, near-black shadows. Set the words "JUST MUSHROOMS" into that empty half in a fine serif, in cream, small and widely letterspaced. Photographic realism only - not an illustration, 3D render or CGI. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no watermark, signature or stray lettering beyond the wordmark described above, and no borders, frames, vignette or interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
@@ -610,28 +611,28 @@ Photograph an arc of amber dropper bottles receding into near-black shadow at sh
 
 ### Textures — 4 images
 
-### 56. 🔁 `texture-spores.jpg`
+### 56. ✅ `texture-spores.jpg`
 
 **Slot:** decorative overlay - aria-hidden · **Ratio:** `1:1` · **Size:** `2K`
-**Re-run — what came back last time:** 1024 x 1024 against the 2048 x 2048 specified, and a JPEG carrying a `.png` name.
+**Approved — do not regenerate.** This one passed the visual QA and is already in the set.
 
 ```text
 Render fine suspended spore dust particles in warm white, scattered unevenly and at varying softness as if caught in a beam. It is a decorative texture, so keep it even across the frame, with no focal subject and no composition. Fill the entire background with pure flat black #000000, edge to edge, because the black will be dropped out in CSS. Do not draw a chequerboard, a grid of grey and white squares, or any other depiction of transparency; do not add a border, a frame or a page edge. Save it as an ordinary opaque JPEG - no alpha channel is wanted or possible. A flat graphic or textural render, not a photograph, 3D render or CGI, and with no depth of field or lens effects. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
 ```
 
-### 57. 🔁 `texture-mycelium-lines.jpg`
+### 57. ✅ `texture-mycelium-lines.jpg`
 
 **Slot:** decorative overlay - aria-hidden · **Ratio:** `1:1` · **Size:** `2K`
-**Re-run — what came back last time:** Flat mint linework over a **hand-painted grey-and-white transparency chequerboard**. The old prompt asked for a transparent background; a model cannot export alpha, so it painted a picture of one.
+**Approved — do not regenerate.** This one passed the visual QA and is already in the set.
 
 ```text
 Render delicate branching mycelial linework at a single consistent hairline stroke weight, in a muted sage green #A8BFA5 - a soft natural green, not mint, spring green, neon or any saturated cyan-leaning colour. It is a decorative texture, so keep it even across the frame, with no focal subject and no composition. Fill the entire background with pure flat black #000000, edge to edge, because the black will be dropped out in CSS. Do not draw a chequerboard, a grid of grey and white squares, or any other depiction of transparency; do not add a border, a frame or a page edge. Save it as an ordinary opaque JPEG - no alpha channel is wanted or possible. A flat graphic or textural render, not a photograph, 3D render or CGI, and with no depth of field or lens effects. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
 ```
 
-### 58. 🔁 `texture-paper-grain.jpg`
+### 58. ✅ `texture-paper-grain.jpg`
 
 **Slot:** decorative overlay - aria-hidden · **Ratio:** `1:1` · **Size:** `2K`
-**Re-run — what came back last time:** A repeating floral damask wallpaper, not a paper grain - an obvious motif on an obvious tiling grid.
+**Approved — do not regenerate.** This one passed the visual QA and is already in the set.
 
 ```text
 Render a random fibrous paper grain in warm off-white at low contrast, the irregular scatter of pulp fibres and flecks in handmade paper, seamless and tileable, with no motif of any kind - no flowers, rosettes, damask, lattice, medallions or repeating decorative pattern, and nothing that reads as wallpaper or gift wrap. It is a decorative texture, so keep it even across the frame, with no focal subject and no composition. Fill the entire background with pure flat black #000000, edge to edge, because the black will be dropped out in CSS. Do not draw a chequerboard, a grid of grey and white squares, or any other depiction of transparency; do not add a border, a frame or a page edge. Save it as an ordinary opaque JPEG - no alpha channel is wanted or possible. A flat graphic or textural render, not a photograph, 3D render or CGI, and with no depth of field or lens effects. Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade. The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements. Nothing medical: no pills, capsules, syringes, medical crosses, lab coats, clinical laboratory or hospital settings, stethoscopes, anatomical diagrams or glowing organs. No people, faces or hands. Anatomy must be correct with no duplicated or deformed specimens, no extra stems and no impossible growth. Avoid a generic stock-photograph look.
