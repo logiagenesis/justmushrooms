@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
-import { registerFilters, placeholderSvg } from './shims.mjs';
+import { registerFilters, placeholderSvg, realSlugs } from './shims.mjs';
 import { buildContext } from './fixtures.mjs';
 const require = createRequire(import.meta.url);
 const { Liquid } = require('liquidjs');
@@ -55,11 +55,39 @@ function resolveSetting(def, val) {
     default: return val;
   }
 }
-async function renderSection(id, type, settingsIn, blocksIn, order, globals) {
+// On a real store these images are chosen in the theme editor, so the JSON templates ship without
+// them and every image section falls to its placeholder branch. The demo has to stand in for that
+// editor: this maps "<template>:<section id>" to a slug in preview/assets/img. A slug with no file
+// keeps the placeholder, so the map can stay ahead of the photography.
+const DEMO_IMAGES = {
+  'index:sourcing': 'page-index-process',
+  'page.about:hero': 'page-about-hero',
+  'page.about:story': 'page-about-story',
+  'page.sourcing:hero': 'page-sourcing-hero',
+  'page.sourcing:process': 'page-sourcing-detail',
+  // Two images have no home in the current templates: page.species-index opens with the species grid
+  // and page.contact with the form, neither behind a page-hero section. page-species-hero.jpg and
+  // page-contact-hero.jpg wait for those templates to gain one.
+  'page.mushroom-finder:hero': 'page-mushroom-finder-hero',
+  'page.faq:hero': 'page-faq-hero',
+  'page.disclaimer:hero': 'page-disclaimer-hero',
+  'page.shipping-returns:hero': 'page-shipping-returns-hero',
+};
+const demoImage = (templateName, id) => {
+  const slug = DEMO_IMAGES[`${templateName}:${id}`];
+  if (!slug || !realSlugs.has(slug)) return null;
+  // Page heroes are 16:9, the image-with-text panels are 4:5. Ratio drives the generated crop.
+  const ratio = /-(hero|process|detail|story)$/.test(slug) && !/hero$/.test(slug) ? 1.25 : (/hero$/.test(slug) ? 0.5625 : 1.25);
+  return { slug, ratio, alt: '', width: 1200, height: Math.round(1200 * ratio) };
+};
+
+async function renderSection(id, type, settingsIn, blocksIn, order, globals, templateName = '') {
   const { schema, tpl } = loadSection(type);
   const settings = {}; for (const d of schema.settings || []) if (d.id) settings[d.id] = resolveSetting(d, settingsIn[d.id]);
   for (const [k, v] of Object.entries(settingsIn)) if (!(k in settings)) settings[k] = v;
   if (type === 'hero' && !settings.image) settings.image = ctxBase.heroImage;
+  if (type === 'hero' && !settings.image_mobile) settings.image_mobile = demoImage('index', 'hero_mobile') || { slug: 'hero-forest-mobile', ratio: 1.25, alt: '', width: 1080, height: 1350 };
+  if (!settings.image) { const d = demoImage(templateName, id); if (d) settings.image = d; }
   if (type === 'header' && !settings.logo) settings.logo = null;
   const blockDefs = Object.fromEntries((schema.blocks || []).map(b => [b.type, b]));
   const blocks = (order || Object.keys(blocksIn || {})).map(bid => { const b = blocksIn[bid]; const bd = blockDefs[b.type] || { settings: [] }; const bs = {}; for (const d of bd.settings || []) if (d.id) bs[d.id] = resolveSetting(d, (b.settings || {})[d.id]); return { id: bid, type: b.type, settings: bs, shopify_attributes: '' }; });
@@ -75,7 +103,7 @@ async function renderGroup(name, globals) {
 async function renderTemplate(name, pageGlobals) {
   const t = JSON.parse(read(path.join(THEME, 'templates', name + '.json')));
   const globals = { ...ctxBase, ...pageGlobals, content_for_header: '', powered_by_link: '', current_page: 1, all_country_option_tags: '', template: { name: name.split('.')[0], suffix: name.split('.')[1] || '' }, page_title: pageGlobals.page_title || 'Just Mushrooms', page_description: '', page_image: pageGlobals.page_image || (pageGlobals.product && pageGlobals.product.featured_image) || (pageGlobals.metaobject && pageGlobals.metaobject.hero_image.value) || (pageGlobals.collection && pageGlobals.collection.featured_image) || ctxBase.heroImage };
-  let body = ''; for (const id of t.order) { const s = t.sections[id]; body += await renderSection(id, s.type, s.settings || {}, s.blocks || {}, s.block_order, globals); }
+  let body = ''; for (const id of t.order) { const s = t.sections[id]; body += await renderSection(id, s.type, s.settings || {}, s.blocks || {}, s.block_order, globals, name); }
   const layout = engine.parse(read(path.join(THEME, 'layout', (t.layout || 'theme') + '.liquid')));
   const scope = { ...globals, content_for_layout: body };
   return engine.render(layout, scope, { globals: scope });
