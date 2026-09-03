@@ -4,6 +4,7 @@ import fs from 'node:fs';
 // and the scale plate must keep its hand, so those clauses are swapped rather than contradicted.
 const EX = {
   realism: 'Photographic realism only - not an illustration, 3D render or CGI.',
+  graphic: 'A flat graphic or textural render, not a photograph, 3D render or CGI, and with no depth of field or lens effects.',
   palette: 'Keep the palette in muted natural greens, ambers and near-blacks with no purple, magenta, rainbow or neon cast, and no teal-and-orange grade.',
   noText: 'The frame must contain no text, lettering, watermark, signature, logo, packaging or label, no borders, frames or vignette, and no interface elements.',
   keepLabel: "Apart from the product's own printed label, which must be reproduced exactly as it appears in the reference image, the frame must contain no added text, watermark, signature or logo, and no borders, frames, vignette or interface elements.",
@@ -17,11 +18,11 @@ const EX = {
 // Two independent axes, so they can combine: what may carry text, and who may be in frame.
 // Flags are '+'-separated - e.g. 'product+hand' is the scale plate, which shows both a label and a hand.
 //   product  the bottle's own label must survive     hand  one hand is allowed in frame
-//   text     a wordmark is being set deliberately
+//   text     a wordmark is being set deliberately     graphic  a flat mark or texture, not a photograph
 const exclusionsFor = (mode = '') => {
   const f = new Set(String(mode).split('+').filter(Boolean));
   return [
-    EX.realism,
+    f.has('graphic') ? EX.graphic : EX.realism,
     EX.palette,
     f.has('product') ? EX.keepLabel : f.has('text') ? EX.allowText : EX.noText,
     EX.medical,
@@ -62,6 +63,27 @@ const ONLY_THESE =
   + ' agaric, and no small brown or yellow-green gilled toadstool of any sort. No insects, no fossils, no'
   + ' shells and no foliage beyond what is described above.';
 
+// The brand sells one vessel. "Amber bottles" is a category, and the model answered it with
+// cork-stoppered apothecary bottles on both the shop-all and combo-deals cards.
+const BOTTLE = 'amber glass dropper bottles in the 30 ml and 50 ml apothecary sizes, each with a black'
+  + ' ribbed screw cap holding a glass pipette - not cork stoppers, not glass stoppers, not spirit or'
+  + ' wine bottles, and nothing larger than 50 ml';
+
+// Any prompt that puts paper, a notebook or a label in frame will get writing on it, and the writing
+// will be invented: a batch record naming nettle and valerian, a journal paper on Holocene climate,
+// shelf bottles labelled ARNICA. None of those are this brand's, and all of them are legible.
+const NO_LEGIBLE_TEXT =
+  ' No word anywhere in the frame may be legible. Any paper, page, notebook, label or spine must be'
+  + ' blank, or turned far enough from the camera that the writing reads only as a soft grey rhythm.'
+  + ' Do not invent titles, headings, ingredient lists, author names, dates or product names, and do'
+  + ' not render lorem-ipsum or pseudo-words that look like language at a glance.';
+
+// The wordmark instruction is a composition note, not a request for a panel. Asked plainly, the model
+// once answered it by pasting a darkened rectangle over the right third with a hard vertical seam.
+const SOFT_EDGE =
+  ' That space must fall away naturally in the scene itself - no hard edge, no seam, no pasted panel,'
+  + ' no overlaid gradient, band or vignette, and no visible join anywhere in the frame.';
+
 const rows = [];
 const add = (r) => rows.push(r);
 
@@ -99,7 +121,7 @@ for (const [h, heroSubj, macroSubj, alt] of species) {
   const atmos = arid ? 'fine dry dust and quartz glitter suspended in the light beam, arid mineral texture' : undefined;
   add({ file: `species-${h}-hero.jpg`, group: 'species', ratio: '16:9', size: '4K', slot: `metaobject ${h}.hero_image`, alt, prompt: SPECIES_STEM(heroSubj, atmos) + extra });
   add({ file: `species-${h}-macro.jpg`, group: 'species', ratio: '4:5', size: '2K', slot: `metaobject ${h}.macro_editorial_image`, alt, prompt: SPECIES_STEM(macroSubj, atmos) + extra });
-  add({ file: `species-${h}-og.jpg`, group: 'species', ratio: '3:2', size: '2K', slot: `metaobject ${h}.og_image (crop to 1200x630)`, alt, prompt: SPECIES_STEM(heroSubj, atmos) + ' Compose wide with generous negative space on one third of the frame for an overlaid wordmark.' + extra });
+  add({ file: `species-${h}-og.jpg`, group: 'species', ratio: '3:2', size: '2K', slot: `metaobject ${h}.og_image (crop to 1200x630)`, alt, prompt: SPECIES_STEM(heroSubj, atmos) + ' Compose wide with generous negative space on one third of the frame for an overlaid wordmark.' + SOFT_EDGE + extra });
 }
 
 // ---- products: 23 x 3
@@ -149,22 +171,22 @@ add({ file: 'page-index-process.jpg', group: 'home', ratio: '4:5', size: '2K', s
 
 // ---- collections
 const collections = [
-  ['all', 'Shop all', 'an arc of amber bottles receding into shadow at shallow depth of field'],
+  ['all', 'Shop all', `an arc of ${BOTTLE}, receding into shadow at shallow depth of field`],
   ['single-species', 'Single-species tinctures', `the eight Just Mushrooms species laid out in an even grid on dark slate, taxonomic and evenly lit - ${listOf(ALL_EIGHT)}`, ONLY_THESE],
   ['blends', 'Blends', `six named specimens overlapping and merging into one another in a warmer grade - ${listOf([SP.reishi, SP.lionsMane, SP.cordyceps, SP.chaga, SP.turkeyTail, SP.tremella])}`, ONLY_THESE],
   ['pets', 'For pets', 'a worn leather collar and an amber bottle on a sunlit floorboard, with no animal in frame'],
-  ['combo-deals', 'Combo deals', 'paired amber bottles, one taller and one shorter, repeated in receding rows'],
+  ['combo-deals', 'Combo deals', `paired ${BOTTLE}, one 50 ml and one 30 ml, repeated in receding rows`],
   ['botanicals', 'Botanicals', 'a sceletium succulent in Karoo quartz grit, wide and arid - a plant, not a fungus'],
   ['frontpage', 'Home page', 'the Southern Cape forest floor at first light with mist between the trunks'],
 ];
 for (const [h, title, subj, only = ''] of collections) {
-  add({ file: `collection-${h}-og.jpg`, group: 'collection', ratio: '3:2', size: '2K', slot: `collection ${h} - featured_image (crop to 1200x630)`, alt: `${title} collection.`, prompt: `Photograph ${subj}, lit with a single soft key at 45 degrees against a near-black #0B0E0C ground, in muted natural greens, ambers and near-blacks. Compose wide with generous negative space on one third of the frame for an overlaid wordmark. Premium editorial, matte, medium-format look.` + only });
+  add({ file: `collection-${h}-og.jpg`, group: 'collection', ratio: '3:2', size: '2K', slot: `collection ${h} - featured_image (crop to 1200x630)`, alt: `${title} collection.`, prompt: `Photograph ${subj}, lit with a single soft key at 45 degrees against a near-black #0B0E0C ground, in muted natural greens, ambers and near-blacks. Compose wide with generous negative space on one third of the frame for an overlaid wordmark.${SOFT_EDGE} Premium editorial, matte, medium-format look.` + only });
 }
 
 // ---- pages
 const pages = [
   ['about-hero', '16:9', '4K', 'page.about > page-hero.image', 'Plettenberg Bay coastline at dawn seen from the forest edge.', 'the Plettenberg Bay coastline at dawn seen from the forest edge, with mist lying over the Tsitsikamma, restrained and very wide'],
-  ['about-story', '4:5', '2K', 'page.about > image-with-text.image', 'Handwritten batch notes and a scale on a workbench.', 'a workbench detail - handwritten batch notes, a balance scale and amber glass in late light, with no faces and no branding'],
+  ['about-story', '4:5', '2K', 'page.about > image-with-text.image', 'Handwritten batch notes and a scale on a workbench.', 'a workbench detail - a brass balance scale, amber glass and a closed notebook in late light, with no faces and no branding', NO_LEGIBLE_TEXT],
   ['sourcing-hero', '16:9', '4K', 'page.sourcing > page-hero.image', 'Inoculated hardwood logs stacked in dappled forest shade.', 'inoculated hardwood logs stacked in dappled forest shade, damp and orderly, reading as real cultivation'],
   ['sourcing-detail', '4:5', '2K', 'page.sourcing > image-with-text.image', 'A wax-sealed inoculation point on an oak log.', 'a close detail of a drilled and wax-sealed inoculation point on an oak log, with sawdust spawn visible in the hole'],
   ['species-hero', '16:9', '4K', 'page.species-index > page-hero.image', 'Eight mushroom and plant specimens laid out on dark slate.', `a flat-lay taxonomy plate of the eight Just Mushrooms species arranged in an even grid on dark slate, evenly lit and museum-like - ${listOf(ALL_EIGHT)}`, ONLY_THESE],
@@ -180,33 +202,52 @@ for (const [n, ratio, size, slot, alt, subj, only = ''] of pages) {
 
 // ---- blog
 const articles = [
-  ['blog-hero', 'Blog index banner', `an open field notebook on a timber desk with three dried specimens laid beside it - ${listOf([SP.turkeyTail, SP.reishi, SP.sceletium])}`, ONLY_THESE],
+  ['blog-hero', 'Blog index banner', `an open field notebook on a timber desk with three dried specimens laid beside it - ${listOf([SP.turkeyTail, SP.reishi, SP.sceletium])}`, ONLY_THESE + NO_LEGIBLE_TEXT],
   ['what-is-a-tincture', 'What a dual extraction actually is', 'a glass vessel of spring water, a measure of clear ethanol and dried mushroom material arranged on dark slate'],
   ['fruit-body-vs-mycelium', 'Fruit body against grain-grown mycelium', 'a whole mushroom fruit body on the left and a block of pale grain-grown mycelium on the right, side by side on dark slate for comparison'],
-  ['reading-evidence-grades', 'How to read the evidence grades', 'a stack of printed journal papers on dark slate, annotated in pencil, with reading glasses beside them'],
-  ['how-to-take-a-tincture', 'How to take a tincture', 'a glass dropper held over a plain glass of water on a breakfast table in morning light'],
-  ['storage-and-shelf-life', 'Storage and shelf life', 'amber bottles standing in a dark cupboard with light falling across the shelf edge'],
-  ['sa-regulations-explained', 'South African regulation, explained', 'plain printed documents and a pen on a timber desk, sober and unbranded'],
+  ['reading-evidence-grades', 'How to read the evidence grades', 'a stack of printed papers on dark slate seen at a shallow oblique angle so the print reads only as texture, with reading glasses and a pencil beside them', NO_LEGIBLE_TEXT],
+  ['how-to-take-a-tincture', 'How to take a tincture', 'a glass dropper pipette held in one hand over a plain glass of water on a breakfast table in morning light', '', 'hand'],
+  ['storage-and-shelf-life', 'Storage and shelf life', `${BOTTLE}, unlabelled and clean rather than antique or dusty, standing in a dark cupboard with light falling across the shelf edge`, NO_LEGIBLE_TEXT],
+  ['sa-regulations-explained', 'South African regulation, explained', 'plain unmarked sheets of paper and a pen on a timber desk, sober and unbranded', NO_LEGIBLE_TEXT],
 ];
-for (const [n, title, subj, only = ''] of articles) {
-  add({ file: `article-${n}.jpg`, group: 'blog', ratio: '16:9', size: '2K', slot: `article card - ${title}`, alt: `${title}.`, prompt: `Photograph ${subj}, lit by a single soft key at 45 degrees against near-black shadows, in muted natural greens, ambers and near-blacks. Premium editorial, matte, medium-format look.` + only });
+for (const [n, title, subj, only = '', mode] of articles) {
+  add({ file: `article-${n}.jpg`, group: 'blog', ratio: '16:9', size: '2K', mode, slot: `article card - ${title}`, alt: `${title}.`, prompt: `Photograph ${subj}, lit by a single soft key at 45 degrees against near-black shadows, in muted natural greens, ambers and near-blacks. Premium editorial, matte, medium-format look.` + only });
 }
 
 // ---- brand
-add({ file: 'brand-favicon.png', group: 'brand', ratio: '1:1', size: '2K', slot: 'favicon source - redraw as vector', alt: '', prompt: 'Design a single simplified mycelium-node glyph: one central node with three or four branching threads, rendered in flat gold #C9A24A on a near-black #0B0E0C ground. It must stay legible when reduced to 16 pixels, so keep strokes thick and even and the silhouette simple. Flat graphic mark, centred, generous margin, no text.' });
-add({ file: 'brand-apple-touch.png', group: 'brand', ratio: '1:1', size: '2K', slot: 'apple-touch-icon source - redraw as vector', alt: '', prompt: 'Design the same simplified mycelium-node glyph in flat gold #C9A24A, full-bleed on a near-black #0B0E0C ground with a tighter margin. Flat graphic mark, no text.' });
-add({ file: 'brand-og-default.jpg', group: 'brand', ratio: '3:2', size: '2K', mode: 'text', slot: 'default og:image (crop to 1200x630)', alt: '', prompt: 'Photograph the Southern Cape forest floor at first light with mist between the trunks and a shaft of warm light on damp ground. Compose it very wide with the whole left half dark and empty for an overlaid wordmark. Muted green and amber, near-black shadows. Set the words "JUST MUSHROOMS" into that empty half in a fine serif, in cream, small and widely letterspaced.' });
-add({ file: 'brand-og-home.jpg', group: 'brand', ratio: '3:2', size: '2K', slot: 'home og:image (crop to 1200x630)', alt: '', prompt: 'Photograph an arc of amber dropper bottles receding into near-black shadow at shallow depth of field, warm rim light on the glass shoulders. Compose wide with the left third empty and dark for an overlaid wordmark.' });
+add({ file: 'brand-favicon.png', group: 'brand', ratio: '1:1', size: '2K', mode: 'graphic', slot: 'favicon source - redraw as vector', alt: '', prompt: 'Design a single mycelial node with exactly three threads branching from it, each thread a different length and leaving at a different angle, each forking once and tapering slightly towards its tip. The mark must be deliberately asymmetric and off-balance, the way a real hypha grows: no radial symmetry, no rotational repetition, no evenly spaced arms, no ball-tipped terminals, and no lattice of interconnected nodes. It must not read as a snowflake, an asterisk, a star, a molecule diagram or a network graph. Render it in flat gold #C9A24A on a near-black #0B0E0C ground. It will be read at 16 pixels, so keep the strokes thick and even, the branch count to three, and the silhouette simple enough to survive at that size. Flat graphic mark, centred, generous margin, no text.' });
+add({ file: 'brand-apple-touch.png', group: 'brand', ratio: '1:1', size: '2K', mode: 'graphic', slot: 'apple-touch-icon source - redraw as vector', alt: '', prompt: 'Design a single mycelial node with exactly three threads branching from it, each thread a different length and leaving at a different angle, each forking once and tapering slightly towards its tip. The mark must be deliberately asymmetric and off-balance, the way a real hypha grows: no radial symmetry, no rotational repetition, no evenly spaced arms, no ball-tipped terminals, and no lattice of interconnected nodes. It must not read as a snowflake, an asterisk, a star, a molecule diagram or a network graph. Render it in flat gold #C9A24A on a near-black #0B0E0C ground. Fill the frame with it, edge to edge, leaving only a narrow margin - it is a home-screen icon read at 180 pixels, so keep the strokes thick, the branch count to three and the silhouette simple. Flat graphic mark, no text.' });
+add({ file: 'brand-og-default.jpg', group: 'brand', ratio: '3:2', size: '2K', mode: 'text', slot: 'default og:image (crop to 1200x630)', alt: '', prompt: 'Photograph the Southern Cape forest floor at first light with mist between the trunks and a shaft of warm light on damp ground. Compose it very wide with the left half falling away into deep natural shadow so a wordmark can sit there.' + SOFT_EDGE + ' Muted green and amber, near-black shadows. Set the words "JUST MUSHROOMS" into that empty half in a fine serif, in cream, small and widely letterspaced.' });
+add({ file: 'brand-og-home.jpg', group: 'brand', ratio: '3:2', size: '2K', slot: 'home og:image (crop to 1200x630)', alt: '', prompt: 'Photograph an arc of amber dropper bottles receding into near-black shadow at shallow depth of field, warm rim light on the glass shoulders. Compose wide with the left third empty and dark for an overlaid wordmark.' + SOFT_EDGE });
 
 // ---- textures
+// The first run asked for "a fully transparent background" and an alpha channel. A model cannot
+// export alpha, so it did the only thing it could: it *painted* transparency, and mycelium-lines came
+// back as flat mint linework over a hand-drawn grey-and-white Photoshop checkerboard. The three
+// overlays are therefore specified as light marks on pure black and composited with
+// `mix-blend-mode: screen`, where black reads as zero - real transparency, no alpha channel needed,
+// and the intensity stays adjustable in CSS instead of baked into the pixels.
+const ON_BLACK =
+  ' Fill the entire background with pure flat black #000000, edge to edge, because the black will be'
+  + ' dropped out in CSS. Do not draw a chequerboard, a grid of grey and white squares, or any other'
+  + ' depiction of transparency; do not add a border, a frame or a page edge. Save it as an ordinary'
+  + ' opaque JPEG - no alpha channel is wanted or possible.';
 const textures = [
-  ['spores', 'fine suspended spore dust particles in warm white, scattered unevenly, against a fully transparent background'],
-  ['mycelium-lines', 'delicate branching mycelial linework at a single consistent stroke weight, in pale green #8FF7C8, against a fully transparent background'],
-  ['paper-grain', 'a neutral organic paper grain at low contrast, seamless and tileable, against a transparent background'],
-  ['slate', 'a wet dark slate surface texture, seamless and tileable, with subtle water beading and a raking highlight'],
+  ['spores', 'fine suspended spore dust particles in warm white, scattered unevenly and at varying'
+    + ' softness as if caught in a beam', ON_BLACK],
+  ['mycelium-lines', 'delicate branching mycelial linework at a single consistent hairline stroke'
+    + ' weight, in a muted sage green #A8BFA5 - a soft natural green, not mint, spring green, neon or'
+    + ' any saturated cyan-leaning colour', ON_BLACK],
+  ['paper-grain', 'a random fibrous paper grain in warm off-white at low contrast, the irregular'
+    + ' scatter of pulp fibres and flecks in handmade paper, seamless and tileable, with no motif of'
+    + ' any kind - no flowers, rosettes, damask, lattice, medallions or repeating decorative pattern,'
+    + ' and nothing that reads as wallpaper or gift wrap', ON_BLACK],
+  ['slate', 'a wet dark slate surface texture, seamless and tileable, with subtle water beading and a'
+    + ' raking highlight', ' This one is a background surface rather than an overlay, so render it as'
+    + ' it would really look and do not force the background to black.'],
 ];
-for (const [n, subj] of textures) {
-  add({ file: `texture-${n}.png`, group: 'texture', ratio: '1:1', size: '2K', slot: 'decorative overlay - aria-hidden', alt: '', prompt: `Render ${subj}. It is a decorative overlay, so keep it subtle and even across the frame, with no focal subject and no composition. Export with an alpha channel.` });
+for (const [n, subj, tail] of textures) {
+  add({ file: `texture-${n}.jpg`, group: 'texture', ratio: '1:1', size: '2K', mode: n === 'slate' ? '' : 'graphic', slot: 'decorative overlay - aria-hidden', alt: '', prompt: `Render ${subj}. It is a decorative texture, so keep it even across the frame, with no focal subject and no composition.${tail}` });
 }
 
 // ---- write CSV

@@ -28,81 +28,141 @@ for (const r of body) {
   byFile[r[0]] = Object.fromEntries(head.map((h, i) => [h, r[i]]));
 }
 
-// Batch 3 (21:12) is a merged bundle and completes Part A at 59 of 59: the home group arrived,
-// all ten page heroes are present, and the four hash-suffixed species cards were renamed.
-// What survives is a format problem and a resolution question, not missing files.
-const FORMAT = [
-  ['texture-spores.png', 'JPEG in batch 3. Batch 2 had the only genuine PNG of this file, so this is a regression - that copy is worth recovering.'],
-  ['texture-mycelium-lines.png', 'JPEG in all three batches.'],
-  ['texture-paper-grain.png', 'JPEG in all three batches.'],
-  ['texture-slate.png', 'JPEG in all three batches. This one is a surface rather than an overlay, so it needs no transparency - leave it as a JPEG and just rename it .jpg.'],
+// Rewritten after the visual QA in docs/22-image-qa-results.md. Every one of the 59 Part A files
+// has now been decoded and looked at, so this sheet lists what actually needs regenerating rather
+// than what the file metadata suggested. Prompts come verbatim from data/image-manifest.csv, which
+// has been corrected at source for all three defect families the QA found.
+
+// Wrong subject: the prompt named a category and the model chose from its own priors.
+const SUBJECT = [
+  ['page-species-hero.jpg', 'A cicada, a stag beetle, a damselfly, a trilobite and a pine cone. One of the eight items was a fungus, and it was not one of ours.'],
+  ['collection-single-species-og.jpg', 'Eight mushrooms, none of them ours, led by an **Amanita** with a warted cap and a basal volva. The single worst mushroom to head a range of ingestible tinctures.'],
+  ['collection-blends-og.jpg', 'A clustered mass of greenish-yellow gilled caps on dead wood, reading as **Sulphur Tuft**. Toxic, and gilled, while not one of the six species in the blends has gills.'],
+  ['article-blog-hero.jpg', 'Pressed *Quercus robur* and *Pteridium aquilinum* - oak and bracken. Not one fungus in the frame, on the header of a mushroom blog. Also carries the text problem below.'],
 ];
-const ICONS = [
-  ['brand-favicon.png', 'JPEG in all three batches. A favicon without transparency shows a black box around the glyph at 16 px.'],
-  ['brand-apple-touch.png', 'JPEG in all three batches. Full-bleed, so less visible than the favicon, but still mislabelled.'],
+// Wrong vessel: "amber bottles" got cork-stoppered apothecary and spirit bottles.
+const VESSEL = [
+  ['collection-all-og.jpg', 'Cork-stoppered spirit bottles, and far larger than 50 ml. Craft and composition otherwise exemplary.'],
+  ['collection-combo-deals-og.jpg', 'The same cork-stoppered apothecary bottles, correctly paired tall and short in receding rows.'],
 ];
-// Files whose batch-3 size sits in the ~3 MB cohort while comparable images are 8-11 MB.
+// Legible invented text, where the exclusions banned text outright.
+const TEXT = [
+  ['page-about-story.jpg', 'A batch record notebook listing **nettle, cedar leaf, dandelion root and valerian** - a herbal recipe this company does not make, legible on the About page.'],
+  ['article-storage-and-shelf-life.jpg', 'Shelf bottles clearly labelled **ARNICA**, **TINCTURE No. 4** and **VALERIAN**, dusty and half-empty. Wrong products, wrong vessel, and the wrong subtext for a shelf-life article.'],
+  ['article-reading-evidence-grades.jpg', 'A journal paper on **Holocene climate variability**, its title legible and its body dissolving into pseudo-words, illustrating an article about mycology evidence grades.'],
+];
+// Composition and format.
+const CRAFT = [
+  ['collection-frontpage-og.jpg', 'A hard vertical seam two-thirds across: the model answered "negative space on one third" by pasting a darkened panel over the right third.'],
+  ['brand-og-default.jpg', 'The same seam, at the halfway point. The wordmark itself is set correctly - fine serif, cream, well letterspaced - but this is the default card for every shared page on the site.'],
+  ['hero-forest-mobile.jpg', 'The brightest, busiest part of the frame sits exactly where the overlaid heading goes, and it is a different forest in a different grade from the desktop hero.'],
+  ['collection-botanicals-og.jpg', 'Right subject, but under a bright overcast sky that belongs to no other image on the site.'],
+  ['texture-mycelium-lines.jpg', 'Flat mint linework over a **hand-painted Photoshop chequerboard** - the model drew transparency rather than exporting it. Unusable as-is.'],
+  ['texture-paper-grain.jpg', 'A repeating floral damask wallpaper, not a paper grain. Obvious motif, obvious tiling grid.'],
+  ['brand-favicon.png', 'A **snowflake**. Technically clean - flat gold, thick even strokes, legible at 16 px - but four symmetric branching arms around a ring read as an ice crystal, not mycelium.'],
+  ['brand-apple-touch.png', 'A different mark entirely, not the favicon glyph: sixteen ball-tipped spokes and four hubs, reading as a molecule or network diagram, centred rather than full-bleed, and far too intricate for 180 px.'],
+];
+// Every 16:9 file measured came back 2752x1536 against the 3000x1688 the theme requests.
 const LOWRES = [
-  ['hero-forest.jpg', '3.0 MB', 'The home page hero. If this is 2K it is smaller than the 3000x1688 variant the theme requests.'],
-  ['hero-forest-mobile.jpg', '3.4 MB', ''],
-  ['page-index-process.jpg', '3.1 MB', ''],
-  ['page-sourcing-hero.jpg', '3.5 MB', ''],
-  ['page-sourcing-detail.jpg', '3.3 MB', ''],
-  ['page-species-hero.jpg', '3.0 MB', ''],
-  ['page-mushroom-finder-hero.jpg', '3.1 MB', ''],
-  ['page-disclaimer-hero.jpg', '3.2 MB', '**Confirmed 2K by the generator** - the 4K redo was blocked by a credit run-out.'],
-  ['species-sceletium-hero.jpg', '3.0 MB', 'Regenerated in batch 3 but still in the small cohort; batch 1 and 2 held byte-identical copies.'],
+  ['hero-forest.jpg', 'index > hero.image - the one that matters most; the browser would upscale the home hero'],
+  ['page-about-hero.jpg', ''],
+  ['page-sourcing-hero.jpg', ''],
+  ['page-species-hero.jpg', 'also in the subject list above'],
+  ['page-mushroom-finder-hero.jpg', ''],
+  ['page-faq-hero.jpg', ''],
+  ['page-contact-hero.jpg', ''],
+  ['page-disclaimer-hero.jpg', 'confirmed 2K by the generator - the 4K redo was blocked by a credit run-out'],
+  ['page-shipping-returns-hero.jpg', ''],
 ];
 
 const out = [];
 const w = (s = '') => out.push(s);
+const block = (f, note) => {
+  const r = byFile[f];
+  if (!r) throw new Error('no manifest row for ' + f);
+  w(`### \`${f}\``);
+  w();
+  w(`**Slot:** ${r.theme_slot} · **Ratio:** \`${r.aspect_ratio}\` · **Size:** \`${r.image_size}\``);
+  w(`**What came back:** ${note}`);
+  w();
+  w('```text');
+  w(r.prompt + ' ' + r.exclusions);
+  w('```');
+  w();
+};
 
 w('# 21 — Image re-run sheet');
 w();
-w('**Status after the third batch (02/09/2026, 21:12).** Part A is complete at 59 of 59 — every image');
-w('the site needs apart from the 71 product plates, which still wait on photographs of the real bottles.');
-w('What is left is a format problem, a resolution question, and one check nobody has done yet.');
+w('**Every Part A image has now been looked at.** This sheet replaces the metadata-based version: the');
+w('verdicts behind it are in [`22-image-qa-results.md`](22-image-qa-results.md), and the prompts below');
+w('are the corrected ones from [`20-image-prompt-book.md`](20-image-prompt-book.md), regenerated after');
+w('the QA. Full context: [`19-image-generation-manifest.md`](19-image-generation-manifest.md).');
 w();
-w('Full context: [`19-image-generation-manifest.md`](19-image-generation-manifest.md).');
-w('The complete prompt book: [`20-image-prompt-book.md`](20-image-prompt-book.md).');
+w('Generated in **Genspark** on **Nano Banana 2 Flash** (`gemini-3.1-flash-image`). Image generation');
+w('there is rate-limited in five-hour windows, and a batch that runs out of credit mid-way silently');
+w('falls back to a lower tier rather than failing — which is how `page-disclaimer-hero` ended up at 2K.');
+w('Plan the re-runs around that, and check the pixel dimensions of anything you get back.');
 w();
-w('Generated in **Genspark** on **Nano Banana 2 Flash** (`gemini-3.1-flash-image`) — the model §2.1 of');
-w('the manifest targets, so the prompts and the `aspectRatio`/`imageSize` guidance apply as written.');
-w('Note that image generation there is rate-limited in five-hour windows, which is worth planning');
-w('re-runs around: a batch that runs out of credit mid-way silently falls back to a lower tier rather');
-w('than failing, which is how `page-disclaimer-hero` ended up at 2K.');
+w('## What the QA found');
 w();
-w('## Where the three batches landed');
+w('| | Files | Cause |');
+w('|---|---|---|');
+w(`| Wrong subject | ${SUBJECT.length} | the prompt named a category, so the model chose from its own priors |`);
+w(`| Wrong vessel | ${VESSEL.length} | "amber bottles" is a category too |`);
+w(`| Legible invented text | ${TEXT.length} | the prompt asked for paper and the exclusions banned text |`);
+w(`| Composition and format | ${CRAFT.length} | seams, sky, and a painted-on transparency chequerboard |`);
+w(`| Under-sized 16:9 | ${LOWRES.length} | 2752 × 1536 against the 3000 × 1688 the theme requests |`);
 w();
-w('| Group | Wanted | Batch 1 | Batch 2 | **Batch 3** |');
-w('|---|---|---|---|---|');
-w('| Species | 24 | 24 | 24 (4 misnamed) | **24** |');
-w('| Collections | 7 | 7 | 7 | **7** |');
-w('| Blog | 7 | 7 | 7 | **7** |');
-w('| Brand | 4 | 4 | 4 | **4** |');
-w('| Pages | 10 | 6 | 5 | **10** |');
-w('| Textures | 4 | 4 | 3 | **4** |');
-w('| Home | 3 | 0 | 0 | **3** |');
-w('| **Total** | **59** | 52 | 50 | **59** |');
-w();
-w('**Fixed in batch 3:** the whole home group arrived, all ten page heroes are present, `texture-slate`');
-w('came back, and the four hash-suffixed species social cards were renamed. Nothing from the previous');
-w('sheet\'s missing list is outstanding.');
+w('The three prompt causes are fixed in `scripts/build-image-manifest.mjs` and regenerated through the');
+w('CSV and the prompt book, so the blocks below are ready to run as they stand. The under-sized files');
+w('need no prompt change at all — only `4K` instead of `2K`.');
 w();
 w('---');
 w();
-w('## 1. The transparency problem — still open');
+w('## 1. Wrong subject — re-run');
 w();
-w('Six files are JPEGs carrying a `.png` extension, unchanged across all three batches. **JPEG has no');
-w('alpha channel**, so renaming cannot fix it: the overlays are opaque rectangles that cannot be layered,');
-w('and the favicon will show a black box around the glyph.');
+w('Each of these prompts now enumerates the eight species by name and closes with a clause naming the');
+w('specific wrong answers already seen: no Amanita, no volva, no porcini, morel or ink cap, no insects,');
+w('no fossils. A negative the model can check against the picture is enforceable in a way that "only');
+w('these species" is not.');
 w();
-w('One regression worth catching: **`texture-spores.png` was a genuine PNG in batch 2** and is a JPEG');
-w('again in batch 3. That batch 2 copy is the only real PNG produced so far — recover it rather than');
-w('regenerate it.');
+for (const [f, n] of SUBJECT) block(f, n);
+
+w('---');
 w();
-w('**The fix for the three overlays is to stop needing alpha.** Generate them as light marks on pure');
-w('black, save as JPEG, and let CSS composite:');
+w('## 2. Wrong vessel — re-run');
+w();
+w('Both prompts now describe the bottle rather than naming a category: amber glass dropper bottles in');
+w('30 ml and 50 ml, black ribbed screw caps holding glass pipettes, and explicitly no cork or glass');
+w('stoppers and nothing larger than 50 ml.');
+w();
+for (const [f, n] of VESSEL) block(f, n);
+
+w('---');
+w();
+w('## 3. Legible invented text — re-run');
+w();
+w('The pattern is consistent: put paper, a notebook or a label in frame and the model will write on it,');
+w('and what it writes will be someone else\'s product. The corrected prompts require every word to be');
+w('illegible — blank, or turned far enough from the camera that the writing reads as a grey rhythm —');
+w('and forbid invented titles, ingredient lists, dates and pseudo-words.');
+w();
+w('`article-sa-regulations-explained` is the control: given the same contradiction it produced *blank*');
+w('sheets and passed. Making illegibility explicit removes the coin flip.');
+w();
+for (const [f, n] of TEXT) block(f, n);
+
+w('---');
+w();
+w('## 4. Composition and format — re-run');
+w();
+w('The two textures are the clearest failure in the set. The original prompt asked for "a fully');
+w('transparent background" and an alpha channel; a model cannot export alpha, so it painted');
+w('transparency instead — a grey-and-white chequerboard, drawn in pixels, under flat mint linework.');
+w();
+w('The three overlays are now specified as light marks on **pure black** and composited in CSS, where');
+w('black reads as zero under `screen`. Real transparency, no alpha channel, and the intensity stays');
+w('adjustable rather than baked into the file:');
 w();
 w('```css');
 w('.texture-overlay {');
@@ -112,99 +172,58 @@ w('  opacity: .35;');
 w('}');
 w('```');
 w();
-w('Black reads as zero under `screen`, so you get real transparency without an alpha channel, a smaller');
-w('file, and intensity control in CSS rather than baked into the pixels. `texture-slate` is a surface,');
-w('not an overlay — rename it `.jpg` and it is finished.');
+w('`texture-slate.jpg` is a background surface rather than an overlay and passed on sight — it needs');
+w('nothing but its correct extension. `texture-spores` is the same case as the other two overlays.');
 w();
-w('**The two icons should not be raster at all.** A favicon is read at 16 px; a generated one is mushy in');
-w('any format. Use the generated glyph as reference, redraw it as vector, export the PNGs from that.');
+w('The two brand icons stay a separate problem, and a larger one than the format: **they are not the');
+w('same mark**. The touch-icon prompt said "the same simplified mycelium-node glyph", which has no');
+w('referent for a model that never saw the favicon, so it invented a second one. The favicon came back');
+w('a snowflake and the touch icon a molecule diagram. Both prompts now describe the glyph in full and');
+w('in the same words - three threads, unequal lengths and angles, deliberately asymmetric, no radial');
+w('symmetry, no ball-tipped terminals, and explicitly not a snowflake, asterisk or network graph.');
 w();
-for (const [f, n] of [...FORMAT, ...ICONS]) {
-  const r = byFile[f];
-  if (!r) throw new Error('no manifest row for ' + f);
-  w(`### \`${f}\``);
-  w();
-  w(`**Slot:** ${r.theme_slot} · **Ratio:** \`${r.aspect_ratio}\` · **Size:** \`${r.image_size}\``);
-  w(`**Status:** ${n}`);
-  w();
-  w('```text');
-  w(r.prompt + ' ' + r.exclusions);
-  w('```');
-  w();
-}
+w('Even so, generate these only as a **reference**. A favicon is read at 16 px, and a generated raster');
+w('is mushy at that size in any format. Draw the final mark as vector from whichever reference reads');
+w('best, and export both PNGs from that one file so the two icons can never diverge again.');
+w();
+for (const [f, n] of CRAFT) block(f, n);
 
 w('---');
 w();
-w('## 2. A resolution question — check before uploading');
+w('## 5. Under-sized — re-run at `4K`, prompt unchanged');
 w();
-w('The nine images below sit at roughly 3 MB in batch 3, while comparable images from the earlier runs');
-w('are 8–11 MB. A consistent 3× gap across a whole cohort suggests the gap-fill run used `2K` where the');
-w('rest used `4K`. File size is not proof — JPEG quality settings move it too — so **check the pixel');
-w('dimensions rather than taking this as fact.**');
+w('Every 16:9 file measured came back **2752 × 1536**. Per §2.1 of the manifest that is the `2K` tier,');
+w('and it is smaller than the 3000 × 1688 variant the theme requests, so the browser upscales and the');
+w('result is soft on a retina screen. The 4:5 portraits are fine: they arrive at 1856 × 2304 and');
+w('comfortably exceed their slots.');
 w();
-w('The generator has confirmed one of these outright: `page-disclaimer-hero` is a 2K render, because the');
-w('4K redo hit a credit limit. For the rest it said only \'the latest 4K or 2K version\' — which is not a');
-w('statement that they are 4K, so the dimensions still need checking one by one.');
+w('| File | Note |');
+w('|---|---|');
+for (const [f, note] of LOWRES) w(`| \`${f}\` | ${note} |`);
 w();
-w('It matters most for the first row. Per §2.1 of the manifest, `2K` at 16:9 is roughly 2668 × 1500,');
-w('which is *smaller than the 3000 × 1688 variant the theme requests* — so the browser would upscale the');
-w('home hero, and it will look soft on a retina screen.');
-w();
-w('| File | Batch 3 size | Note |');
-w('|---|---|---|');
-for (const [f, sz, note] of LOWRES) w(`| \`${f}\` | ${sz} | ${note} |`);
-w();
-w('Anything under 3000 px on the long edge should be re-run at `4K` from the prompt book. If 4K is not');
-w('enabled on the account, that is the moment to move these few to Nano Banana Pro.');
+w('Nothing about these prompts is wrong. Re-run them from the prompt book with `imageSize: "4K"`. If 4K');
+w('is not enabled on the account, this is the moment to move these nine to Nano Banana Pro.');
 w();
 w('---');
 w();
-w('## 3. The check nobody has done');
-w();
-w('**No image has been visually inspected.** `drive.google.com` is blocked by the agent environment\'s');
-w('egress proxy, and Drive returns an empty text representation for JPEGs, so every finding in this');
-w('document comes from file metadata — names, sizes, MIME types — and none of it says whether the');
-w('pictures are right.');
-w();
-w('That leaves the rejection table in §7 of the manifest entirely unverified. The risks it exists to');
-w('catch are exactly the ones metadata cannot see: a Lion\'s Mane with gills, a chaga growing from the');
-w('ground rather than a living birch, turkey tail with gills instead of pores, an opaque tremella, a');
-w('cordyceps emerging from an insect, and above all **Sceletium rendered as a mushroom rather than the');
-w('succulent it is.**');
-w();
-w('To unblock it, put downsampled copies somewhere in the shared folder — 1024 px on the long edge is');
-w('plenty. The images are being generated in Genspark, whose AI Drive can do this without a local');
-w('download; ask it to:');
-w();
-w('> Resize every image in /mycelia-bundle/species to 1024 px on the long edge, keep the filenames');
-w('> unchanged, write them to /mycelia-bundle/previews, and sync that folder to the shared Drive.');
-w();
-w('Locally it is one line either way:');
-w();
-w('```bash');
-w('# ImageMagick');
-w('mkdir -p previews');
-w('for f in */*.jpg; do magick "$f" -resize 1024x1024\\> "previews/$(basename "$f")"; done');
-w();
-w('# macOS, no extra tooling');
-w('mkdir -p previews && cp */*.jpg previews/ && sips -Z 1024 previews/*.jpg');
-w('```');
-w();
-w('At that size the 24 species images can be pulled and checked one by one, with a written pass or fail');
-w('against §7 for each.');
-w();
-w('---');
-w();
-w('## 4. Running total');
+w('## 6. Running total');
 w();
 w('| | Files |');
 w('|---|---|');
-w('| Complete and correct | 53 |');
-w('| Re-save or re-approach — transparency | 6 |');
-w('| Verify dimensions, re-run if 2K | 9 |');
-w('| Visually unverified | **59** |');
+w('| Part A, generated | 59 |');
+w('| Inspected | **59** |');
+w(`| Re-run for subject, vessel or text | ${SUBJECT.length + VESSEL.length + TEXT.length} |`);
+w(`| Re-run for composition or format | ${CRAFT.length} |`);
+w(`| Re-run at 4K, prompt unchanged | ${LOWRES.length} |`);
+w('| Rename `.png` → `.jpg`, no re-run | 1 (`texture-slate`) |');
+w('| Redraw as vector | 2 (`brand-favicon`, `brand-apple-touch`) |');
+w('| Pass, no action | 33 |');
 w();
-w('The overlap is deliberate: the last row covers everything, because nothing has been looked at.');
+w('`page-species-hero` is counted once in the subject list and again in the 4K list; it needs both.');
+w();
+w('Beyond Part A, the **71 product plates** remain blocked on photographs of the 23 real bottles. Six of');
+w('those prompts carried the category defect and are corrected here too, so they will run correctly');
+w('first time once the reference photographs exist.');
 
 fs.writeFileSync(new URL('../docs/21-image-rerun-sheet.md', import.meta.url), out.join('\n') + '\n');
 console.log('wrote docs/21-image-rerun-sheet.md');

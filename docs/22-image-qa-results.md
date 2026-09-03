@@ -8,15 +8,22 @@ document is different: every row below was decoded and viewed.
 
 ## Headline
 
-**All eight species pass on anatomy. None of the failure modes the rejection table exists to catch
-occurred.** The prompts are sound — including the two the model was most likely to get wrong.
+**All 59 Part A images have now been decoded and looked at.** Nothing in this document rests on file
+metadata.
+
+**All 24 species images pass on anatomy — heroes, macros and social cards alike. None of the failure
+modes the rejection table exists to catch occurred.** No gilled Lion's Mane, no ground-dwelling chaga,
+no gilled turkey tail, no opaque tremella, no insect under the cordyceps, and Sceletium is a succulent
+in every one of its three frames. Several are better than the brief: the turkey tail and reishi cards
+both volunteer a visible **pore** surface, which is the exact discriminator the rejection table asks for.
 
 **Every 16:9 file measured is 2752 × 1536** — the `2K` tier, under the 3000 × 1688 the theme requests.
 The resolution question in §2 of the re-run sheet is settled rather than suspected. It is narrower than
 feared, though: the 4:5 images come out at 1856 × 2304 and comfortably exceed what their slots ask for,
 so only the landscape heroes need re-running.
 
-**Five images fail, and three of them fail the same way.** `page-species-hero.jpg` is the worst and
+**Eighteen images fail, and they fall into three families with one shape between them: wherever the
+prompt named a category instead of the thing, the model filled the gap from its own priors.** `page-species-hero.jpg` is the worst and
 most consequential: the Species Library header shows a cicada, a stag beetle, a damselfly, a trilobite
 and a pine cone, with one generic mushroom among eight items. `collection-single-species-og.jpg` shows
 eight mushrooms of which **none** are ours, including an **Amanita** with a warted cap and a basal
@@ -26,10 +33,13 @@ overlaid heading goes, and is a different forest in a different grade from the d
 match; `collection-botanicals-og.jpg` has the right subject under a bright overcast sky that belongs
 to no other image on the site.
 
-Twenty-one images inspected: **sixteen pass, five fail**. The two failure families are separate and
-both are now fixed at source — the composition failures track bright sky (set out below), and the
-three subject failures all come from one prompt defect, corrected across ten prompts in
-[`§ The category defect`](#the-category-defect-fixed-at-source).
+**59 inspected: 41 pass, 18 fail.** Every failure has been traced to a prompt, and every one of those
+prompts is corrected in `scripts/build-image-manifest.mjs` and regenerated through
+[`20-image-prompt-book.md`](20-image-prompt-book.md) and
+[`21-image-rerun-sheet.md`](21-image-rerun-sheet.md). Separately, **every 16:9 file measured came back
+2752 × 1536** — the `2K` tier, under the 3000 × 1688 the theme requests — so nine landscape heroes need
+a re-run at `4K` with no prompt change at all. The 4:5 portraits arrive at 1856 × 2304 and comfortably
+exceed their slots.
 
 ## How these were checked
 
@@ -416,8 +426,183 @@ and [`20-image-prompt-book.md`](20-image-prompt-book.md) are regenerated and rea
 Three of the ten need re-running from the corrected prompts; six have not been run at all and will now
 run correctly first time; `article-blog-hero.jpg` should be re-checked before deciding.
 
-## Still unchecked
+## Verdicts — species macros and social cards
 
-The 16 species macro and OG files, five of the ten page heroes, three collection cards, six article
-images and the three remaining textures. The same method works for any of them under roughly 4 MB, which
-covers all the batch 1 copies and the smaller batch 3 page heroes.
+All sixteen pass. The macros are the strongest work in the set.
+
+| File | Size | Verdict |
+|---|---|---|
+| `species-lions-mane-macro.jpg` | 1856 × 2304 | **PASS** — individual teeth resolved, translucency at the tips, dew beading |
+| `species-reishi-macro.jpg` | 1856 × 2304 | **PASS** — lacquered concentric bands, white growing margin at the frame edge |
+| `species-chaga-macro.jpg` | 1856 × 2304 | **PASS** — cracked black exterior, burnt-orange cork interior, birch bark at the edge |
+| `species-cordyceps-macro.jpg` | 1856 × 2304 | **PASS** — perithecia as fine surface bumps, **no insect** |
+| `species-turkey-tail-macro.jpg` | 1856 × 2304 | **PASS** — velvet concentric banding, wavy pale margin, on wood |
+| `species-tremella-macro.jpg` | 1856 × 2304 | **PASS** — light passes through the gelatinous lobes; genuinely translucent |
+| `species-shiitake-macro.jpg` | 1856 × 2304 | **PASS** — white fissured crackle, and a second cap showing cream gills |
+| `species-sceletium-macro.jpg` | 1856 × 2304 | **PASS** — raised translucent bladder cells rendered accurately; a succulent, no fungus |
+| `species-lions-mane-og.jpg` | 2528 × 1696 | **PASS** — cushion of spines on hardwood, dark left third for the wordmark |
+| `species-reishi-og.jpg` | 2528 × 1696 | **PASS** — underside shows a clear **pore** surface, not gills |
+| `species-chaga-og.jpg` | 2528 × 1696 | **PASS** — conk on a **living** birch, which is the detail most often got wrong |
+| `species-cordyceps-og.jpg` | 2528 × 1696 | **PASS** — clubs from leaf litter, no host insect |
+| `species-turkey-tail-og.jpg` | 2528 × 1696 | **PASS** — a flipped bracket volunteers the white **pore** surface |
+| `species-tremella-og.jpg` | 2528 × 1696 | **PASS** |
+| `species-shiitake-og.jpg` | 2528 × 1696 | **PASS** — white cracking, cream gills, on an inoculated log |
+| `species-sceletium-og.jpg` | 2528 × 1696 | **PASS** — sprawling in Karoo quartz under low sun, one open star-shaped flower |
+
+The rejection table in §7 of the manifest can be closed. Every risk it was written to catch was
+checked in three separate frames per species, and none occurred.
+
+## Verdicts — the rest
+
+| File | Verdict |
+|---|---|
+| `collection-all-og.jpg` | **FAIL** — wrong vessel |
+| `collection-combo-deals-og.jpg` | **FAIL** — wrong vessel |
+| `collection-frontpage-og.jpg` | **FAIL** — hard vertical seam |
+| `page-faq-hero.jpg` | **PASS** — layered turkey tail, calm, heavy negative space right |
+| `page-about-story.jpg` | **FAIL** — legible batch notes naming the wrong ingredients |
+| `page-shipping-returns-hero.jpg` | **PASS** — unbranded kraft parcel, twine, no logos, no text |
+| `page-sourcing-detail.jpg` | **PASS** — drilled hole, sawdust spawn visible, wax over it |
+| `page-disclaimer-hero.jpg` | **PASS** — wet slate under a raking light, deliberately plain |
+| `article-what-is-a-tincture.jpg` | **PASS** — water, ethanol, dried material on slate; the dual extraction, clearly |
+| `article-how-to-take-a-tincture.jpg` | **PASS** on content; manifest metadata was wrong |
+| `article-sa-regulations-explained.jpg` | **PASS** — and the useful control case |
+| `article-reading-evidence-grades.jpg` | **FAIL** — a legible paper on Holocene climate variability |
+| `article-blog-hero.jpg` | **FAIL** — oak and bracken, no fungus, and legible gibberish |
+| `article-storage-and-shelf-life.jpg` | **FAIL** — bottles labelled ARNICA and VALERIAN |
+| `texture-slate.jpg` | **PASS** — ships as-is once renamed |
+| `texture-mycelium-lines.jpg` | **FAIL** — a painted-on transparency chequerboard |
+| `texture-paper-grain.jpg` | **FAIL** — a floral damask wallpaper |
+| `brand-og-home.jpg` | **PASS** — and the image that proves the vessel fix |
+| `brand-og-default.jpg` | **FAIL** — the same seam, at the halfway point |
+| `brand-favicon.png` | **FAIL** — a snowflake |
+| `brand-apple-touch.png` | **FAIL** — a different mark from the favicon, and far too intricate |
+
+### `page-sourcing-detail.jpg` — PASS, with one craft note
+
+A drilled hole in bark with sawdust spawn visible inside and wax over it: the right subject, and the
+detail that makes the Sourcing page read as a real cultivation operation. Two small realism notes for
+whoever shoots the real thing one day — the wax is rendered glossy, closer to toffee than to opaque
+cheese wax, and it only half-covers the hole where a real seal covers it entirely. Neither is worth a
+re-run.
+
+### `article-how-to-take-a-tincture.jpg` — PASS, and a manifest error
+
+A dropper held over a glass of water on a breakfast table, drop caught mid-fall. Correct, and the
+right image for the article.
+
+It also has **a hand in frame**, and the exclusions for this row said "No people, faces or hands." The
+image is not the defect: the prompt said the dropper was *held*, so a hand was always going to appear,
+and it is anatomically clean and cropped at the fingers. The row was simply carrying the wrong
+exclusion axis. It is now `mode: 'hand'`, which swaps in the one-hand clause, so a future re-run will
+not strip out the thing that makes the picture work.
+
+### `article-sa-regulations-explained.jpg` — PASS, and the control case
+
+The prompt asked for "plain printed documents"; the exclusions banned text. Faced with that
+contradiction the model produced **blank sheets** — sober, unbranded, no text, no gibberish. Blank
+paper for an article on South African regulation is a touch literal, and arguably apt.
+
+This is the useful half of the experiment. Given the identical contradiction, `page-about-story`,
+`article-reading-evidence-grades` and `article-blog-hero` all went the other way and invented legible
+writing. The model resolves the conflict by coin flip. Making illegibility explicit removes the flip.
+
+---
+
+## The second defect family — the vessel
+
+Three images put the wrong bottle on the site, and one image proves why.
+
+| File | Prompt said | What came back |
+|---|---|---|
+| `collection-all-og.jpg` | "an arc of **amber bottles**" | Cork-stoppered spirit bottles, several times 50 ml |
+| `collection-combo-deals-og.jpg` | "paired **amber bottles**" | Cork-stoppered apothecary bottles |
+| `article-storage-and-shelf-life.jpg` | "**amber bottles** in a dark cupboard" | Antique labelled apothecary bottles, dusty and half-empty |
+| `brand-og-home.jpg` | "an arc of **amber dropper bottles**" | **Exactly the right bottle** |
+
+One word. `brand-og-home` came back with amber glass, black ribbed screw caps, rubber bulbs and
+visible glass pipettes — the Just Mushrooms vessel, rendered without a reference photograph. The three
+that omitted "dropper" got the apothecary bottles of the model's training set.
+
+All three prompts now describe the object rather than naming a category: *amber glass dropper bottles
+in the 30 ml and 50 ml apothecary sizes, each with a black ribbed screw cap holding a glass pipette —
+not cork stoppers, not glass stoppers, not spirit or wine bottles, and nothing larger than 50 ml.*
+
+## The third defect family — invented legible text
+
+Put paper, a notebook or a label in frame and the model will write on it. What it writes will be
+fluent-looking, legible, and somebody else's product.
+
+| File | What it says |
+|---|---|
+| `page-about-story.jpg` | A batch record: **nettle 40 g, cedar leaf 15 g, dandelion root 20 g, valerian 15 g** |
+| `article-storage-and-shelf-life.jpg` | Shelf labels: **ARNICA**, **TINCTURE No. 4**, **VALERIAN** |
+| `article-reading-evidence-grades.jpg` | A paper titled *The Role of Holocene Climate Variability…*, body text dissolving into pseudo-words |
+| `article-blog-hero.jpg` | *Quercus robur*, *Pteridium aquilinum*, and two pages of confident gibberish |
+
+Every one of these ran under an exclusion that said, verbatim, "The frame must contain **no text,
+lettering**, watermark, signature, logo, packaging or **label**". The exclusion lost, because the
+prompt in the same breath asked for "handwritten batch notes", "printed journal papers, annotated in
+pencil", "an open field notebook". A contradiction resolves in favour of the concrete noun.
+
+Two of these are more than a craft problem. A batch record on the About page listing a herbal recipe
+this company does not make, and a shelf of bottles labelled arnica and valerian on an article about
+storing *your* tincture, are both representations about the business, on a site whose entire pitch is
+that it does not overstate. Under the CPA that is the kind of detail worth being careful about.
+
+The corrected prompts stop asking for the impossible and say what is actually wanted:
+
+```text
+No word anywhere in the frame may be legible. Any paper, page, notebook, label or spine must be blank,
+or turned far enough from the camera that the writing reads only as a soft grey rhythm. Do not invent
+titles, headings, ingredient lists, author names, dates or product names, and do not render
+lorem-ipsum or pseudo-words that look like language at a glance.
+```
+
+## And two smaller ones
+
+**The seam.** `collection-frontpage-og` and `brand-og-default` both carry a hard vertical edge running
+the full height of the frame — the model answered "leave the left half dark and empty for a wordmark"
+by pasting a darkened panel over that half. Two of the three prompts using the most emphatic phrasing
+did it. The negative-space clause now adds: *that space must fall away naturally in the scene itself —
+no hard edge, no seam, no pasted panel, no overlaid gradient, band or vignette.*
+
+**The chequerboard.** `texture-mycelium-lines` is the single clearest failure in the set: flat mint
+linework drawn over a **hand-painted grey-and-white Photoshop chequerboard**. The prompt asked for "a
+fully transparent background" and said "export with an alpha channel". A model cannot export alpha, so
+it painted a picture *of* transparency instead. `texture-paper-grain` came back a repeating floral
+damask — a motif and a tiling grid where a random fibre scatter was wanted.
+
+The three overlays are now specified as light marks on **pure black**, saved as ordinary JPEGs and
+composited with `mix-blend-mode: screen`, where black reads as zero. Real transparency, no alpha
+channel, and the intensity stays adjustable in CSS instead of baked into the pixels. The mint
+`#8FF7C8` is replaced with a muted sage `#A8BFA5`; the neon green was mine, and outside the palette
+the exclusions demand in the same breath.
+
+**The icons.** The favicon is a competent flat gold mark that reads as a **snowflake** — four
+symmetric branching arms around a ring is an ice crystal, not a hypha; symmetry is the tell. The
+apple-touch icon is not the same mark at all: sixteen ball-tipped spokes and four hubs, a molecule
+diagram, centred where full-bleed was asked for, and hopeless at 180 px. The prompt said "the same
+simplified mycelium-node glyph", which has no referent for a model that never saw the first image.
+Both prompts now describe the glyph in full, in identical words, and demand asymmetry.
+
+---
+
+## Where this leaves the image set
+
+| | Files |
+|---|---|
+| Part A generated | 59 |
+| **Inspected** | **59** |
+| Pass | 41 |
+| Fail | 18 |
+| Of the passes, needing a 4K re-run for size only | 9 |
+
+Species imagery — the part with real regulatory exposure and the part hardest to get right — is
+**complete and correct at 24 of 24**. Everything that failed did so on a prompt I wrote, and all of
+those prompts are now fixed at source. Nothing needs a new idea; it needs a re-run.
+
+The 71 product plates remain blocked on photographs of the 23 real bottles. Six of those prompts
+carried the category defect and two carried the vessel defect; both are corrected here, so they will
+run right the first time once the reference photographs exist. On the evidence of `brand-og-home`, a
+carefully described bottle gets very close even without one.

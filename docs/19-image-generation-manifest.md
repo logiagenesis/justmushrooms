@@ -35,7 +35,7 @@ Three rules decide whether the output is usable. They cost nothing to follow now
 | `page-` | Static page heroes and inline images | `page-about-hero.jpg` |
 | `article-` | Blog article cards | `article-what-is-a-tincture.jpg` |
 | `brand-` | Logo, favicon, default social card | `brand-og-default.jpg` |
-| `texture-` | Decorative overlays, `aria-hidden` | `texture-spores.png` |
+| `texture-` | Decorative overlays, `aria-hidden` | `texture-spores.jpg` |
 
 The `product-` and `species-` identifiers **must** match the existing handles exactly — they are listed in full in §5 and §4. A mismatch means the image silently does not appear.
 
@@ -340,10 +340,10 @@ Decorative, `aria-hidden`, no alt text. 2048 × 2048, alpha channel.
 
 | File | Subject |
 |---|---|
-| `texture-spores.png` | Fine suspended spore dust particles, warm white, transparent background, subtle |
-| `texture-mycelium-lines.png` | Delicate branching mycelial linework, single-weight, mycelium green, transparent |
-| `texture-paper-grain.png` | Neutral organic paper grain for section overlays, low contrast |
-| `texture-slate.png` | Wet dark slate surface texture, tileable, for card grounds |
+| `texture-spores.jpg` | Fine suspended spore dust particles, warm white, on pure black, composited with `mix-blend-mode: screen` |
+| `texture-mycelium-lines.jpg` | Delicate branching mycelial linework, single-weight, muted sage `#A8BFA5`, on pure black, screened |
+| `texture-paper-grain.jpg` | Random fibrous paper grain for section overlays, low contrast, no motif, on pure black, screened |
+| `texture-slate.jpg` | Wet dark slate surface texture, tileable, for card grounds — a real surface, not an overlay |
 
 ---
 
