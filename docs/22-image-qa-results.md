@@ -16,9 +16,13 @@ The resolution question in §2 of the re-run sheet is settled rather than suspec
 feared, though: the 4:5 images come out at 1856 × 2304 and comfortably exceed what their slots ask for,
 so only the landscape heroes need re-running.
 
-**One image fails its slot outright**: `hero-forest-mobile.jpg` puts the brightest, busiest part of the
-frame exactly where the overlaid heading goes, and is a different forest in a different grade from the
-desktop hero it is supposed to match.
+**Two images fail.** `page-species-hero.jpg` is the worse of the two and the most consequential miss
+found: the Species Library header shows a cicada, a stag beetle, a damselfly, a trilobite and a pine
+cone, with one generic mushroom among eight items. `hero-forest-mobile.jpg` puts the brightest, busiest
+part of the frame exactly where the overlaid heading goes, and is a different forest in a different
+grade from the desktop hero it is supposed to match.
+
+Thirteen images inspected so far: eleven pass, two fail.
 
 ## How these were checked
 
@@ -176,8 +180,53 @@ cheapest way to close it is to have the generator itself report on its own outpu
 the files are already in its AI Drive — or to place copies of the batch 3 heroes under about 4 MB
 anywhere in the shared Drive, at which point they can be checked here directly.
 
+## Verdicts — page heroes (batch 3)
+
+| File | Dimensions | Verdict |
+|---|---|---|
+| `page-mushroom-finder-hero.jpg` | 2752 × 1536 | **PASS** — one of the best in the set |
+| `page-species-hero.jpg` | 2752 × 1536 | **FAIL — wrong subject entirely** |
+
+### `page-mushroom-finder-hero.jpg` — PASS
+
+A branching mycelial network on near-black substrate: genuinely hyphal, with the fine repeated
+bifurcation that reads as a decision tree without being literal about it. The pale green accent stays
+well inside the ≤5% budget because the threads are filaments rather than a wash, and the left third is
+clean and dark for the overlaid heading. Undersized like every other 16:9 hero, and otherwise
+excellent.
+
+### `page-species-hero.jpg` — FAIL, and the most consequential miss found
+
+The Species Library header shows a natural-history cabinet flat-lay of eight items on dark slate:
+a **cicada**, an oak leaf with **acorns**, a **stag beetle**, a **fern frond**, two generic dried
+**mushrooms**, a **damselfly**, a **trilobite fossil**, and a **pine cone**.
+
+One of the eight items is a fungus, and it is not one of the eight species this site sells.
+
+The craft is good — even lighting, dark slate, muted palette, museum framing, nothing forbidden in
+frame. It is simply the wrong subject, and wrong in a way that matters here more than it would
+elsewhere: this is the header of a page whose entire purpose is a cited taxonomy of seven fungi and
+one succulent. Opening it with beetles and a trilobite undercuts the mycological credibility the copy
+spends 201 citations building.
+
+**This is a defect in the prompt, not in the generator.** The manifest asked for *"a flat-lay taxonomy
+plate of eight distinct specimens arranged in an even grid on dark slate, evenly lit and museum-like"*.
+"Specimens" without a list is an invitation to produce natural-history specimens in general, and that
+is exactly what came back. The species were never named. Replacement prompt:
+
+```text
+Photograph, directly overhead, a museum taxonomy plate: eight fungal and botanical specimens laid out
+in an even two-row grid on a dark slate slab, evenly lit with soft diffuse light and no harsh shadow.
+The eight specimens, and nothing else, are: a Lion's Mane fungus with cascading white spines; a
+varnished red-brown reishi bracket; a black cracked chaga conk; a cluster of orange cordyceps clubs; a
+banded turkey tail bracket; a translucent white tremella lobe mass; a brown shiitake cap with white
+cracking; and a sprig of Sceletium tortuosum succulent with fleshy leaves. Every item in the frame
+must be one of these eight. No insects, no beetles, no dragonflies, no fossils, no pine cones, no
+acorns, no oak leaves and no ferns. Muted natural colour, matte finish, near-black ground.
+```
+
 ## Still unchecked
 
-The 16 species macro and OG files, the ten page heroes, seven collection cards, seven article images
-and the three remaining textures. The same method works for any of them under roughly 4 MB, which
+The 16 species macro and OG files, eight of the ten page heroes, seven collection cards, seven article
+images and the three remaining textures. The same method works for any of them under roughly 4 MB, which
 covers all the batch 1 copies and the smaller batch 3 page heroes.
