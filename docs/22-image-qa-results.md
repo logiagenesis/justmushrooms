@@ -11,9 +11,14 @@ document is different: every row below was decoded and viewed.
 **All eight species pass on anatomy. None of the failure modes the rejection table exists to catch
 occurred.** The prompts are sound — including the two the model was most likely to get wrong.
 
-**All eight are 2752 × 1536.** That is the `2K` tier and it is smaller than the 3000 × 1688 variant
-the theme requests, so the resolution question in §2 of the re-run sheet is now settled rather than
-suspected — at least for the files that could be inspected. See the caveat below.
+**Every 16:9 file measured is 2752 × 1536** — the `2K` tier, under the 3000 × 1688 the theme requests.
+The resolution question in §2 of the re-run sheet is settled rather than suspected. It is narrower than
+feared, though: the 4:5 images come out at 1856 × 2304 and comfortably exceed what their slots ask for,
+so only the landscape heroes need re-running.
+
+**One image fails its slot outright**: `hero-forest-mobile.jpg` puts the brightest, busiest part of the
+frame exactly where the overlaid heading goes, and is a different forest in a different grade from the
+desktop hero it is supposed to match.
 
 ## How these were checked
 
@@ -94,6 +99,44 @@ with the pore surface facing the camera. That is the single most convincing deta
 | `hero-forest.jpg` (batch 3) | 2752 × 1536 | **PASS** on content, **FAIL** on size |
 | `texture-spores.png` | 1024 × 1024 | **FAIL** — half the specified 2048 × 2048, and a JPEG despite the name, so no alpha channel |
 
+### The home group — all three checked in batch 3 form
+
+| File | Dimensions | Largest variant the theme asks for | Verdict |
+|---|---|---|---|
+| `hero-forest.jpg` | 2752 × 1536 | 3000 × 1688 | Content **PASS**, size **FAIL** |
+| `hero-forest-mobile.jpg` | 1856 × 2304 | 1080 × 1350 | Size **PASS**, composition **FAIL** |
+| `page-index-process.jpg` | 1856 × 2304 | 1200 × 1500 | **PASS** |
+
+**A correction to the size claim.** Only the **16:9 heroes** are undersized. Every 16:9 file measured
+comes out at 2752 × 1536, under the 3000 × 1688 the theme requests. The **4:5 files** are 1856 × 2304,
+which comfortably exceeds the 1080 × 1350 and 1200 × 1500 variants their slots request. So the fix is
+narrower than "the whole ~3 MB cohort is too small": it is the landscape heroes that need re-running,
+not the portrait images.
+
+### `page-index-process.jpg` — PASS
+
+The best image in the set. Amber demijohns, spring water in a plain glass vessel, dried mushroom
+material in a shallow steel tray with a wooden scoop, on a scarred timber bench in late window light.
+It reads as an artisanal workshop and not a laboratory, which is exactly the line the brief drew —
+no lab equipment, no clinical surfaces, no people. It tells the "spring water, ethanol, time" story
+without a word of copy.
+
+### `hero-forest-mobile.jpg` — composition FAIL
+
+The content is fine: Afromontane forest, mist, ferns, a mushroom cluster on a mossy log in the lower
+third as specified. But it fails its slot for two reasons.
+
+**The text has nowhere to go.** The brief asked for clear dark space across the top half, because the
+mobile hero carries the overlaid heading. Instead the top half is the *brightest and busiest* part of
+the frame — pale misty sky showing through a dense tangle of branches. Cream type over that would be
+unreadable. This is a functional failure, not a taste one.
+
+**It is not the same scene as the desktop hero.** The brief called for the desktop scene recomposed
+vertically. What arrived is a different forest with a different grade: the desktop hero is warm, amber
+and near-black; the mobile is cool, grey-green and misty. A visitor moving between phone and desktop
+would see two unrelated photographs. Worth re-running with the desktop hero supplied as a reference
+image so the model matches scene and grade rather than inventing a second forest.
+
 ### `hero-forest.jpg` — the home page hero
 
 Checked in its **batch 3 form**, so this verdict applies to the file intended for upload.
@@ -135,6 +178,6 @@ anywhere in the shared Drive, at which point they can be checked here directly.
 
 ## Still unchecked
 
-The 16 species macro and OG files, the three home images (`hero-forest` above all), the ten page
-heroes, seven collection cards, seven article images and the three remaining textures. The same
-method works for any of them that are under roughly 4 MB.
+The 16 species macro and OG files, the ten page heroes, seven collection cards, seven article images
+and the three remaining textures. The same method works for any of them under roughly 4 MB, which
+covers all the batch 1 copies and the smaller batch 3 page heroes.
