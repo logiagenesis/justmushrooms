@@ -23,8 +23,8 @@ exactly where the overlaid heading goes, and is a different forest in a differen
 desktop hero it should match. `collection-botanicals-og.jpg` has the right subject under a bright
 overcast sky that belongs to no other image on the site.
 
-Seventeen images inspected: **fourteen pass, three fail**. The failures are not random — they split by
-mode, not subject, and the pattern is set out below.
+Nineteen images inspected: **sixteen pass, three fail**. The failures are not random and not about
+subject matter — they track how much bright sky is in the frame. The pattern is set out below.
 
 ## How these were checked
 
@@ -191,10 +191,25 @@ useful thing the inspection turned up.
 image, the pets card, the fruit-body comparison and the mycelium network are strong: correct anatomy,
 brand palette, clean negative space where the type goes. Nine of nine.
 
-**Wide environmental and landscape scenes — consistently drift.** They come back brighter, cooler and
-more generic than the art direction asks for, and they lose the dark area the overlaid type needs.
-`hero-forest-mobile` and `collection-botanicals-og` fail outright on this; the turkey tail and shiitake
-heroes show a milder version of the same drift with busier green backgrounds.
+**Landscapes are not the problem — bright skies are.** My first reading of this was that wide
+environmental scenes drift, and two more landscapes disproved it. `page-about-hero` is a wide coastal
+vista and is one of the most on-brand images in the set: near-black foreground, warm amber band at the
+horizon, mist over the Tsitsikamma, tree ferns framing the bottom. `page-contact-hero` is a wide coast
+road and holds too, land dark under a grey sky.
+
+The variable is **how much sky is in frame and how bright it is**, and that tracks the time of day the
+prompt specified:
+
+| Sky in the prompt | Result |
+|---|---|
+| Dawn, first light, low sun (`page-about-hero`) | Dark, warm, on brand |
+| Overcast daylight, land-dominant (`page-contact-hero`) | Mid-tone, acceptable |
+| Bright overcast, sky across the top third (`collection-botanicals-og`, `hero-forest-mobile`) | **Fails** — washes the frame and destroys the type area |
+
+So the fix for the two failures is not "avoid landscapes". It is **name the hour and cap the sky**:
+specify first light or last light, and say how little sky may appear. The turkey tail and shiitake
+heroes show a milder version of the same thing, with daylight-green backgrounds where the brief asked
+for near-black.
 
 **Briefs that name a category rather than a list — fail outright.** `page-species-hero` asked for
 "eight distinct specimens… museum-like" and got a natural-history cabinet. The model filled an
@@ -214,6 +229,8 @@ mood word like "atmospheric" does not.
 | `article-fruit-body-vs-mycelium.jpg` (b1) | 2752 × 1536 | **PASS** — the best educational image |
 | `collection-pets-og.jpg` (b1) | 2528 × 1696 | **PASS** — exemplary |
 | `collection-botanicals-og.jpg` (b1) | 2528 × 1696 | Subject **PASS**, palette **FAIL** |
+| `page-about-hero.jpg` (b1) | 2752 × 1536 | **PASS** — among the most on-brand in the set |
+| `page-contact-hero.jpg` (b1) | 2752 × 1536 | **PASS** |
 
 ### `page-sourcing-hero.jpg` — PASS
 
@@ -242,6 +259,20 @@ One forward-looking note: the bottle is a generic corked apothecary bottle, not 
 the real products. On a collection card rather than a product plate that is defensible — it is
 editorial, unlabelled, and claims nothing. But once the real bottles are photographed, re-shooting this
 card with the actual product would be both stronger and safer.
+
+### `page-about-hero.jpg` — PASS
+
+A wide coastal vista from the forest edge at dawn: near-black silhouetted trunks framing the left, mist
+lying along the Tsitsikamma ridges, a warm amber band at the horizon, tree ferns across the foreground.
+It is restrained, unmistakably Southern Cape, and holds the brand grade better than several of the
+studio shots. This is the image that disproved the "landscapes drift" theory.
+
+### `page-contact-hero.jpg` — PASS
+
+The Garden Route coast road winding along a cliff coastline, fynbos and proteas in the near foreground,
+soft morning light, no signage and no vehicles as specified. Regionally convincing. The sky is grey
+across the top third, which lifts it above the brand's near-black, but the land stays dark enough that
+it reads as part of the same site.
 
 ### `collection-botanicals-og.jpg` — subject PASS, palette FAIL
 
@@ -294,6 +325,6 @@ acorns, no oak leaves and no ferns. Muted natural colour, matte finish, near-bla
 
 ## Still unchecked
 
-The 16 species macro and OG files, seven of the ten page heroes, five collection cards, six article
+The 16 species macro and OG files, five of the ten page heroes, five collection cards, six article
 images and the three remaining textures. The same method works for any of them under roughly 4 MB, which
 covers all the batch 1 copies and the smaller batch 3 page heroes.
