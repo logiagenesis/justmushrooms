@@ -18,6 +18,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pull Drive images
+        run: |
+          pip install -q gdown
+          mkdir -p /tmp/drive
+          gdown --folder "https://drive.google.com/drive/folders/1YXnsT47PMXUNkULeuG1jWII37UcwKsWW" -O /tmp/drive/rerun || true
+          gdown --folder "https://drive.google.com/drive/folders/1km7x5KEJfA0gVvq9mxRZiEhmBVCW8fut" -O /tmp/drive/bundle || true
+          python3 scripts/preview/flatten-drive-images.py /tmp/drive preview/assets/img
+          ls preview/assets/img | wc -l
       - name: Install and render
         working-directory: preview
         run: |
