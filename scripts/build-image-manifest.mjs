@@ -269,6 +269,36 @@ const GROUP_TITLES = {
 };
 const READY = ['species', 'home', 'page', 'collection', 'blog', 'brand', 'texture'];
 
+// Verdicts from the visual QA in docs/22-image-qa-results.md - all 59 Part A files were decoded and
+// looked at. Anything not listed here passed and should NOT be regenerated: the set is already
+// consistent, and a re-run of a good image is a coin flip you do not need to take.
+const REDO = {
+  'page-species-hero.jpg': 'A cicada, a stag beetle, a damselfly, a trilobite and a pine cone. One of the eight items was a fungus, and not one of ours.',
+  'collection-single-species-og.jpg': 'Eight mushrooms, none ours, led by an **Amanita** - warted cap, ring, basal volva - on the header of a range of ingestible tinctures. Also a porcini, a parasol, a chanterelle, a milkcap, a shaggy ink cap and a morel.',
+  'collection-blends-og.jpg': 'A clustered mass of greenish-yellow gilled caps on dead wood, reading as **Sulphur Tuft** (*Hypholoma fasciculare*). Toxic, and gilled, while not one of the six species in the blends has gills.',
+  'article-blog-hero.jpg': 'Pressed *Quercus robur* and *Pteridium aquilinum* - oak and bracken - with no fungus at all, plus two pages of legible gibberish.',
+  'collection-all-og.jpg': 'Cork-stoppered spirit bottles, several times 50 ml. Composition and light were exemplary; only the vessel was wrong.',
+  'collection-combo-deals-og.jpg': 'The same cork-stoppered apothecary bottles, correctly paired tall and short in receding rows.',
+  'page-about-story.jpg': 'A legible batch record listing **nettle 40 g, cedar leaf 15 g, dandelion root 20 g, valerian 15 g** - a herbal recipe this company does not make, on the About page.',
+  'article-storage-and-shelf-life.jpg': 'Bottles clearly labelled **ARNICA**, **TINCTURE No. 4** and **VALERIAN**, dusty and half-empty. Wrong products, wrong vessel, and the wrong subtext for a shelf-life article.',
+  'article-reading-evidence-grades.jpg': 'A legible journal paper titled *The Role of Holocene Climate Variability...*, its body dissolving into pseudo-words, illustrating an article about mycology evidence.',
+  'collection-frontpage-og.jpg': 'A hard vertical seam two-thirds across - the model answered "negative space on one third" by pasting a darkened panel over the right third.',
+  'brand-og-default.jpg': 'The same seam, at the halfway point. The wordmark itself was set correctly. This is the default share card for every page on the site.',
+  'hero-forest-mobile.jpg': 'The brightest, busiest part of the frame sits exactly where the overlaid heading goes, and it is a different forest in a different grade from the desktop hero. **Attach the approved `hero-forest.jpg` as a reference so the two match.**',
+  'collection-botanicals-og.jpg': 'Right subject, but under a bright overcast sky that belongs to no other image on the site.',
+  'texture-spores.jpg': '1024 x 1024 against the 2048 x 2048 specified, and a JPEG carrying a `.png` name.',
+  'texture-mycelium-lines.jpg': 'Flat mint linework over a **hand-painted grey-and-white transparency chequerboard**. The old prompt asked for a transparent background; a model cannot export alpha, so it painted a picture of one.',
+  'texture-paper-grain.jpg': 'A repeating floral damask wallpaper, not a paper grain - an obvious motif on an obvious tiling grid.',
+  'brand-favicon.png': 'A **snowflake**. Technically clean, but four symmetric branching arms around a ring read as an ice crystal. Generate this only as a reference for a vector redraw.',
+  'brand-apple-touch.png': 'A different mark from the favicon entirely: sixteen ball-tipped spokes and four hubs, reading as a molecule diagram, and hopeless at 180 px. Generate only as a reference.',
+};
+// Passes on content, but short for its slot. hero.liquid is the only section in the theme that asks
+// for a 3000w variant; every other 16:9 file at 2752 x 1536 comfortably exceeds the 2400w its own
+// section requests, so nothing else needs a size re-run.
+const SIZE_ONLY = {
+  'hero-forest.jpg': 'Content passes. But it came back 2752 x 1536, and `sections/hero.liquid` requests a **3000w** variant - the only place in the theme that does - so the browser upscales the home hero. Re-run at `4K`, prompt unchanged.',
+};
+
 const book = [];
 const w = (s = '') => book.push(s);
 
@@ -303,6 +333,21 @@ w();
 w('**Filenames are load-bearing.** They match the handles the theme and the Shopify metaobjects expect.');
 w('Save each file exactly as named or it will not appear in its slot.');
 w();
+w('## What actually needs generating');
+w();
+w('Every one of the 59 Part A images has been generated once and **looked at** — verdicts in');
+w('[`22-image-qa-results.md`](22-image-qa-results.md). So most of the blocks below are already done.');
+w('Each one is marked:');
+w();
+w('| | Meaning |');
+w('|---|---|');
+w('| ✅ | **Approved. Do not regenerate.** It passed. A re-run of a good image is a coin flip you do not need to take |');
+w('| 🔁 | **Re-run.** The block says what came back last time and why it failed. The prompt is already corrected |');
+w('| 📐 | **Re-run for size only.** The prompt is unchanged — just set `4K` |');
+w('| 📷 | **Blocked.** Needs a photograph of the real bottle attached |');
+w();
+w(`**${Object.keys(REDO).length} to re-run, ${Object.keys(SIZE_ONLY).length} for size, and ${rows.filter(r => READY.includes(r.group)).length - Object.keys(REDO).length - Object.keys(SIZE_ONLY).length} already approved.** Work the 🔁 and 📐 blocks; skip every ✅.`);
+w();
 w('---');
 w();
 w(`## Part A — ready to generate now (${rows.filter(r => READY.includes(r.group)).length} images)`);
@@ -313,10 +358,15 @@ w();
 let n = 0;
 const emit = (r) => {
   n++;
-  w(`### ${n}. \`${r.file}\``);
+  const redo = REDO[r.file], size = SIZE_ONLY[r.file];
+  const flag = r.group === 'product' ? '📷' : redo ? '🔁' : size ? '📐' : '✅';
+  w(`### ${n}. ${flag} \`${r.file}\``);
   w();
   w(`**Slot:** ${r.slot} · **Ratio:** \`${r.ratio}\` · **Size:** \`${r.size}\``);
   if (r.alt) w(`**Alt text:** ${r.alt}`);
+  if (redo) w(`**Re-run — what came back last time:** ${redo}`);
+  else if (size) w(`**Re-run for size only.** ${size}`);
+  else if (r.group !== 'product') w('**Approved — do not regenerate.** This one passed the visual QA and is already in the set.');
   w();
   w('```text');
   w(r.prompt + ' ' + exclusionsFor(r.mode));
@@ -363,3 +413,8 @@ console.log(byGroup);
 const dupes = rows.map(r => r.file).filter((f, i, a) => a.indexOf(f) !== i);
 console.log('duplicate filenames:', dupes.length ? dupes : 'none');
 console.log('prompt book entries:', n);
+const files = new Set(rows.map(r => r.file));
+for (const f of [...Object.keys(REDO), ...Object.keys(SIZE_ONLY)]) {
+  if (!files.has(f)) throw new Error('QA verdict for a file not in the manifest: ' + f);
+}
+console.log('re-run:', Object.keys(REDO).length, '| size-only:', Object.keys(SIZE_ONLY).length);

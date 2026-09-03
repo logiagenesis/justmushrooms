@@ -62,17 +62,12 @@ const CRAFT = [
   ['brand-favicon.png', 'A **snowflake**. Technically clean - flat gold, thick even strokes, legible at 16 px - but four symmetric branching arms around a ring read as an ice crystal, not mycelium.'],
   ['brand-apple-touch.png', 'A different mark entirely, not the favicon glyph: sixteen ball-tipped spokes and four hubs, reading as a molecule or network diagram, centred rather than full-bleed, and far too intricate for 180 px.'],
 ];
-// Every 16:9 file measured came back 2752x1536 against the 3000x1688 the theme requests.
+// Every 16:9 file came back 2752 x 1536 rather than the 4K asked for - but that only matters where
+// the theme asks for more. `sections/hero.liquid` is the only place in the whole theme requesting a
+// 3000w variant; species-hero.liquid and page-hero.liquid top out at 2400w, the shared image snippet
+// at 2000w, and the product gallery at 1600w. So one file is short, not nine.
 const LOWRES = [
-  ['hero-forest.jpg', 'index > hero.image - the one that matters most; the browser would upscale the home hero'],
-  ['page-about-hero.jpg', ''],
-  ['page-sourcing-hero.jpg', ''],
-  ['page-species-hero.jpg', 'also in the subject list above'],
-  ['page-mushroom-finder-hero.jpg', ''],
-  ['page-faq-hero.jpg', ''],
-  ['page-contact-hero.jpg', ''],
-  ['page-disclaimer-hero.jpg', 'confirmed 2K by the generator - the 4K redo was blocked by a credit run-out'],
-  ['page-shipping-returns-hero.jpg', ''],
+  ['hero-forest.jpg', 'index > hero.image - the only slot in the theme requesting a 3000w variant, so this is the only file the browser would upscale'],
 ];
 
 const out = [];
@@ -111,7 +106,7 @@ w(`| Wrong subject | ${SUBJECT.length} | the prompt named a category, so the mod
 w(`| Wrong vessel | ${VESSEL.length} | "amber bottles" is a category too |`);
 w(`| Legible invented text | ${TEXT.length} | the prompt asked for paper and the exclusions banned text |`);
 w(`| Composition and format | ${CRAFT.length} | seams, sky, and a painted-on transparency chequerboard |`);
-w(`| Under-sized 16:9 | ${LOWRES.length} | 2752 × 1536 against the 3000 × 1688 the theme requests |`);
+w(`| Under-sized | ${LOWRES.length} | the home hero only — the one slot asking for a 3000w variant |`);
 w();
 w('The three prompt causes are fixed in `scripts/build-image-manifest.mjs` and regenerated through the');
 w('CSV and the prompt book, so the blocks below are ready to run as they stand. The under-sized files');
@@ -192,17 +187,30 @@ w('---');
 w();
 w('## 5. Under-sized — re-run at `4K`, prompt unchanged');
 w();
-w('Every 16:9 file measured came back **2752 × 1536**. Per §2.1 of the manifest that is the `2K` tier,');
-w('and it is smaller than the 3000 × 1688 variant the theme requests, so the browser upscales and the');
-w('result is soft on a retina screen. The 4:5 portraits are fine: they arrive at 1856 × 2304 and');
-w('comfortably exceed their slots.');
+w('Every 16:9 file came back **2752 × 1536** — the `2K` tier, not the `4K` the manifest asked for. That');
+w('sounds like seventeen re-runs. It is one, and the difference is worth setting out, because the');
+w('earlier version of this sheet got it wrong by inferring the gap from file sizes instead of reading');
+w('the theme.');
+w();
+w('What matters is the largest variant each **section** actually requests:');
+w();
+w('| Section | Largest `widths` entry | Files it serves | Verdict at 2752 px |');
+w('|---|---|---|---|');
+w('| `sections/hero.liquid` | **3000** | `hero-forest` | **short** |');
+w('| `sections/species-hero.liquid` | 2400 | the 8 species heroes | fine |');
+w('| `sections/page-hero.liquid` | 2400 | the 8 page heroes | fine |');
+w('| `snippets/image.liquid` (default) | 2000 | article and collection cards | fine |');
+w('| `sections/main-product.liquid` | 1600 | product gallery | fine |');
+w();
+w('So only the home hero is genuinely upscaled. The 4:5 portraits arrive at 1856 × 2304 and the 3:2');
+w('cards at 2528 × 1696, both comfortably above what their slots ask for.');
 w();
 w('| File | Note |');
 w('|---|---|');
 for (const [f, note] of LOWRES) w(`| \`${f}\` | ${note} |`);
 w();
-w('Nothing about these prompts is wrong. Re-run them from the prompt book with `imageSize: "4K"`. If 4K');
-w('is not enabled on the account, this is the moment to move these nine to Nano Banana Pro.');
+w('Nothing about this prompt is wrong. Re-run it with `imageSize: "4K"`. If 4K is not enabled on the');
+w('account, this is the one file worth taking to Nano Banana Pro.');
 w();
 w('---');
 w();
@@ -219,7 +227,8 @@ w('| Rename `.png` → `.jpg`, no re-run | 1 (`texture-slate`) |');
 w('| Redraw as vector | 2 (`brand-favicon`, `brand-apple-touch`) |');
 w('| Pass, no action | 33 |');
 w();
-w('`page-species-hero` is counted once in the subject list and again in the 4K list; it needs both.');
+w('`page-species-hero` needs a corrected prompt; at 2752 px it is still above the 2400w its section asks');
+w('for, so it does not need 4K as well.');
 w();
 w('Beyond Part A, the **71 product plates** remain blocked on photographs of the 23 real bottles. Six of');
 w('those prompts carried the category defect and are corrected here too, so they will run correctly');

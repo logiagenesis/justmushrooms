@@ -18,7 +18,7 @@ Plan the re-runs around that, and check the pixel dimensions of anything you get
 | Wrong vessel | 2 | "amber bottles" is a category too |
 | Legible invented text | 3 | the prompt asked for paper and the exclusions banned text |
 | Composition and format | 8 | seams, sky, and a painted-on transparency chequerboard |
-| Under-sized 16:9 | 9 | 2752 × 1536 against the 3000 × 1688 the theme requests |
+| Under-sized | 1 | the home hero only — the one slot asking for a 3000w variant |
 
 The three prompt causes are fixed in `scripts/build-image-manifest.mjs` and regenerated through the
 CSV and the prompt book, so the blocks below are ready to run as they stand. The under-sized files
@@ -244,25 +244,30 @@ Design a single mycelial node with exactly three threads branching from it, each
 
 ## 5. Under-sized — re-run at `4K`, prompt unchanged
 
-Every 16:9 file measured came back **2752 × 1536**. Per §2.1 of the manifest that is the `2K` tier,
-and it is smaller than the 3000 × 1688 variant the theme requests, so the browser upscales and the
-result is soft on a retina screen. The 4:5 portraits are fine: they arrive at 1856 × 2304 and
-comfortably exceed their slots.
+Every 16:9 file came back **2752 × 1536** — the `2K` tier, not the `4K` the manifest asked for. That
+sounds like seventeen re-runs. It is one, and the difference is worth setting out, because the
+earlier version of this sheet got it wrong by inferring the gap from file sizes instead of reading
+the theme.
+
+What matters is the largest variant each **section** actually requests:
+
+| Section | Largest `widths` entry | Files it serves | Verdict at 2752 px |
+|---|---|---|---|
+| `sections/hero.liquid` | **3000** | `hero-forest` | **short** |
+| `sections/species-hero.liquid` | 2400 | the 8 species heroes | fine |
+| `sections/page-hero.liquid` | 2400 | the 8 page heroes | fine |
+| `snippets/image.liquid` (default) | 2000 | article and collection cards | fine |
+| `sections/main-product.liquid` | 1600 | product gallery | fine |
+
+So only the home hero is genuinely upscaled. The 4:5 portraits arrive at 1856 × 2304 and the 3:2
+cards at 2528 × 1696, both comfortably above what their slots ask for.
 
 | File | Note |
 |---|---|
-| `hero-forest.jpg` | index > hero.image - the one that matters most; the browser would upscale the home hero |
-| `page-about-hero.jpg` |  |
-| `page-sourcing-hero.jpg` |  |
-| `page-species-hero.jpg` | also in the subject list above |
-| `page-mushroom-finder-hero.jpg` |  |
-| `page-faq-hero.jpg` |  |
-| `page-contact-hero.jpg` |  |
-| `page-disclaimer-hero.jpg` | confirmed 2K by the generator - the 4K redo was blocked by a credit run-out |
-| `page-shipping-returns-hero.jpg` |  |
+| `hero-forest.jpg` | index > hero.image - the only slot in the theme requesting a 3000w variant, so this is the only file the browser would upscale |
 
-Nothing about these prompts is wrong. Re-run them from the prompt book with `imageSize: "4K"`. If 4K
-is not enabled on the account, this is the moment to move these nine to Nano Banana Pro.
+Nothing about this prompt is wrong. Re-run it with `imageSize: "4K"`. If 4K is not enabled on the
+account, this is the one file worth taking to Nano Banana Pro.
 
 ---
 
@@ -274,12 +279,13 @@ is not enabled on the account, this is the moment to move these nine to Nano Ban
 | Inspected | **59** |
 | Re-run for subject, vessel or text | 9 |
 | Re-run for composition or format | 8 |
-| Re-run at 4K, prompt unchanged | 9 |
+| Re-run at 4K, prompt unchanged | 1 |
 | Rename `.png` → `.jpg`, no re-run | 1 (`texture-slate`) |
 | Redraw as vector | 2 (`brand-favicon`, `brand-apple-touch`) |
 | Pass, no action | 33 |
 
-`page-species-hero` is counted once in the subject list and again in the 4K list; it needs both.
+`page-species-hero` needs a corrected prompt; at 2752 px it is still above the 2400w its section asks
+for, so it does not need 4K as well.
 
 Beyond Part A, the **71 product plates** remain blocked on photographs of the 23 real bottles. Six of
 those prompts carried the category defect and are corrected here too, so they will run correctly

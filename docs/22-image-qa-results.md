@@ -36,10 +36,15 @@ to no other image on the site.
 **59 inspected: 41 pass, 18 fail.** Every failure has been traced to a prompt, and every one of those
 prompts is corrected in `scripts/build-image-manifest.mjs` and regenerated through
 [`20-image-prompt-book.md`](20-image-prompt-book.md) and
-[`21-image-rerun-sheet.md`](21-image-rerun-sheet.md). Separately, **every 16:9 file measured came back
-2752 × 1536** — the `2K` tier, under the 3000 × 1688 the theme requests — so nine landscape heroes need
-a re-run at `4K` with no prompt change at all. The 4:5 portraits arrive at 1856 × 2304 and comfortably
-exceed their slots.
+[`21-image-rerun-sheet.md`](21-image-rerun-sheet.md).
+
+**On resolution — a correction.** Every 16:9 file came back 2752 × 1536, the `2K` tier rather than the
+`4K` asked for, and an earlier draft of this document called that nine re-runs. It is **one**. What
+decides it is not the requested tier but the largest variant each *section* asks for, and reading the
+theme settles it: `sections/hero.liquid` requests a **3000w** variant and is the only place in the
+theme that does. `species-hero.liquid` and `page-hero.liquid` top out at 2400w, the shared image
+snippet at 2000w, the product gallery at 1600w. At 2752 px every one of those is oversupplied. Only
+**`hero-forest.jpg`**, the home page hero, is genuinely upscaled.
 
 ## How these were checked
 
@@ -596,7 +601,7 @@ Both prompts now describe the glyph in full, in identical words, and demand asym
 | **Inspected** | **59** |
 | Pass | 41 |
 | Fail | 18 |
-| Of the passes, needing a 4K re-run for size only | 9 |
+| Of the passes, needing a 4K re-run for size only | 1 (`hero-forest`) |
 
 Species imagery — the part with real regulatory exposure and the part hardest to get right — is
 **complete and correct at 24 of 24**. Everything that failed did so on a prompt I wrote, and all of
