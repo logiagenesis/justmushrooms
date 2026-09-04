@@ -31,6 +31,9 @@
 .card__media img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease)}
 .card:hover .card__media img{transform:scale(1.04)}
 .motion-off .card:hover .card__media img{transform:none}
+.card--product .card__media{aspect-ratio:3/4;background:#f3f1ec}
+.card--product .card__media img{object-fit:contain;object-position:center}
+.card--product:hover .card__media img{transform:none}
 .card__media--placeholder{display:grid;place-items:center;color:var(--c-cream-2);background:radial-gradient(circle at 50% 40%,var(--c-ink-2),var(--c-ink))}
 .card__media--placeholder svg{width:38%;opacity:.5}
 .card__badges{position:absolute;top:12px;left:12px;display:flex;gap:6px;flex-wrap:wrap;z-index:2}
@@ -114,7 +117,7 @@ textarea.input{min-height:140px;resize:vertical}
 .count-bubble{position:absolute;top:4px;right:2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--c-spore);color:var(--c-ink);font-size:.7rem;font-weight:700;display:grid;place-items:center}
 /* cart line */
 .line{display:grid;grid-template-columns:72px 1fr;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--c-line)}
-.line img{width:72px;height:90px;object-fit:cover;border-radius:10px;background:var(--c-ink-3)}
+.line img{width:72px;height:90px;object-fit:contain;object-position:center;border-radius:10px;background:#f3f1ec}
 .line__title{font-weight:600;margin:0 0 .2rem}
 .line__row{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-top:.5rem}
 .line .qty{height:40px}
@@ -130,7 +133,7 @@ textarea.input{min-height:140px;resize:vertical}
 .sticky-atc{position:fixed;left:0;right:0;bottom:0;z-index:800;background:rgba(19,24,22,.94);backdrop-filter:blur(10px);border-top:1px solid var(--c-line);transform:translateY(110%);transition:transform var(--dur) var(--ease)}
 .sticky-atc.is-visible{transform:none}
 .sticky-atc__inner{display:flex;align-items:center;gap:1rem;padding:.7rem clamp(16px,4vw,48px)}
-.sticky-atc img{width:44px;height:56px;object-fit:cover;border-radius:8px}
+.sticky-atc img{width:44px;height:56px;object-fit:contain;object-position:center;border-radius:8px;background:#f3f1ec}
 .sticky-atc__title{font-weight:600;font-size:.95rem;margin:0;flex:1 1 auto;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
 @media (max-width:767px){.sticky-atc__title{display:none}.sticky-atc .btn{flex:1 1 auto}}
 /* pagination */
