@@ -48,8 +48,33 @@ for (const name of imgs) {
   if (!m) continue;
   const [, slug, w, h, ext] = m;
   if (ext === 'svg') { fs.writeFileSync(path.join(imgDir, name), placeholderSvg(Number(w), Number(h), slug)); fake++; continue; }
-  await sharp(path.join(ASSET_DIR, `${slug}.jpg`))
-    .resize({ width: Number(w), height: Number(h), fit: 'cover', position: 'attention', withoutEnlargement: false })
+  let pipeline = sharp(path.join(ASSET_DIR, `${slug}.jpg`));
+  // Live bottle plates are 3:4 phone shots with empty studio above the cap
+  // and below the wood. Card slots are 4:5. Crop onto the bottle first so
+  // cover-resize cannot reintroduce white letterbox bars.
+  if (slug.startsWith('product-')) {
+    const meta = await sharp(path.join(ASSET_DIR, `${slug}.jpg`)).metadata();
+    const sw = meta.width || 3024;
+    const sh = meta.height || 4032;
+    const targetRatio = 4 / 5;
+    let cw = sw;
+    let ch = Math.round(sw / targetRatio);
+    if (ch > sh) {
+      ch = sh;
+      cw = Math.round(sh * targetRatio);
+    }
+    // Bias down: more empty ceiling than empty floor on these plates.
+    const left = Math.max(0, Math.round((sw - cw) / 2));
+    const top = Math.max(0, Math.round((sh - ch) * 0.62));
+    pipeline = pipeline.extract({
+      left,
+      top: Math.min(top, sh - ch),
+      width: cw,
+      height: ch
+    });
+  }
+  await pipeline
+    .resize({ width: Number(w), height: Number(h), fit: 'cover', position: 'centre', withoutEnlargement: false })
     .jpeg({ quality: 76, progressive: true, mozjpeg: true })
     .toFile(path.join(imgDir, name));
   real++;
