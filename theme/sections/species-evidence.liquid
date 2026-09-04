@@ -1,10 +1,10 @@
 {%- assign s = metaobject -%}
 <section class="section" id="evidence">
   <div class="page-width">
-    <div class="section-header reveal"><div><p class="eyebrow">Evidence</p><h2>What {{ s.common_name.value }} may support, and what it does not do</h2><p class="lede">Every line is graded. Where human trials are small, short or absent, we say so instead of rounding up.</p></div></div>
+    <div class="section-header reveal"><div><p class="eyebrow">Tradition and research</p><h2>Why people take {{ s.common_name.value }}</h2><p class="lede">Kitchen history first. Then the studies, graded so you can see how strong each line is.</p></div></div>
     <div class="split">
       <div class="split__panel reveal">
-        <h3 class="h3">May support</h3>
+        <h3 class="h3">In tradition and research</h3>
         {%- if s.verified_benefits.value -%}
           <ul class="tier-list">
             {%- for b in s.verified_benefits.value -%}<li>{% render 'badge-evidence', level: b.tier %}<span>{{ b.text }}{% if b.ref %} <a class="small" href="#ref-{{ b.ref }}">[{{ b.ref }}]</a>{% endif %}</span></li>{%- endfor -%}
@@ -14,12 +14,12 @@
         {%- endif -%}
       </div>
       <div class="split__panel split__panel--not reveal">
-        <h3 class="h3">Does not do</h3>
+        <h3 class="h3">Worth knowing</h3>
         <div class="rte">{{ s.what_it_does_not_do | metafield_tag }}</div>
       </div>
     </div>
     {%- if s.human_evidence_summary.value -%}
-      <div class="rte reveal" style="margin-top:2.5rem"><h3>What the human research actually shows</h3>{{ s.human_evidence_summary | metafield_tag }}</div>
+      <div class="rte reveal" style="margin-top:2.5rem"><h3>The studies, in plain language</h3>{{ s.human_evidence_summary | metafield_tag }}</div>
     {%- endif -%}
   </div>
 </section>

@@ -10,8 +10,8 @@
   <div class="page-width">
     <div class="grid-2">
       <div class="reveal">
-        <p class="eyebrow">Key details</p>
-        <h2 class="h3">What is in the bottle</h2>
+        <p class="eyebrow">The bottle</p>
+        <h2 class="h3">What you are buying</h2>
         <table class="spec">
           <tbody>
             {%- if species.size > 0 -%}<tr><th scope="row">Species</th><td>{% for s in species %}<a href="{{ s.system.url }}">{{ s.common_name.value }}</a> (<span class="sci">{{ s.scientific_name.value }}</span>){% unless forloop.last %}<br>{% endunless %}{% endfor %}</td></tr>{%- endif -%}
@@ -20,7 +20,7 @@
             <tr><th scope="row">Ingredients</th><td>{% if m.ingredients.value %}{{ m.ingredients | metafield_tag }}{% else %}<span class="muted">Follow product label</span>{% endif %}</td></tr>
             {%- if m.alcohol_percent.value -%}<tr><th scope="row">Alcohol</th><td>Approximately {{ m.alcohol_percent.value }}% ethanol by volume</td></tr>{%- endif -%}
             {%- if m.extraction_ratio.value -%}<tr><th scope="row">Declared strength</th><td>{{ m.extraction_ratio.value }} <span class="small muted">(manufacturer's input ratio, not an assayed potency)</span></td></tr>{%- endif -%}
-            <tr><th scope="row">Origin / sourcing</th><td>{% if m.origin.value %}{{ m.origin.value }}{% else %}<span class="muted">Sourcing documents not yet supplied. No origin claim is made.</span>{% endif %}</td></tr>
+            <tr><th scope="row">Made</th><td>{% if m.origin.value %}{{ m.origin.value }}{% else %}Plettenberg Bay, Western Cape. Fruit-body dual extraction in spring water and food-grade ethanol.{% endif %}</td></tr>
             {%- if m.lab_report.value -%}<tr><th scope="row">Lab report</th><td><a href="{{ m.lab_report.value.url }}" rel="noopener" target="_blank">View certificate of analysis (PDF)</a></td></tr>{%- endif -%}
             {%- if product.selected_or_first_available_variant.sku != blank -%}<tr><th scope="row">SKU</th><td>{{ product.selected_or_first_available_variant.sku }}</td></tr>{%- endif -%}
           </tbody>
@@ -41,20 +41,27 @@
   <div class="page-width">
     <div class="split">
       <div class="split__panel reveal">
-        <p class="eyebrow">Evidence-led</p>
-        <h2 class="h3">What the species research suggests</h2>
-        <div class="rte">{% if m.evidence_summary.value %}{{ m.evidence_summary | metafield_tag }}{% else %}<p>Read the graded evidence on the species page{% if species.size > 1 %}s{% endif %} linked below. We do not repeat claims here that the species pages do not support.</p>{% endif %}</div>
-        {%- if species.size > 0 -%}<div class="btn-row" style="margin-top:1rem">{% for s in species %}<a class="btn btn--secondary" href="{{ s.system.url }}#evidence">{{ s.common_name.value }} evidence</a>{% endfor %}</div>{%- endif -%}
+        <p class="eyebrow">Why this bottle</p>
+        <h2 class="h3">The ritual, bottled</h2>
+        <div class="rte">{% if m.evidence_summary.value %}{{ m.evidence_summary | metafield_tag }}{% else %}<p>Fruit-body extraction in spring water and food-grade ethanol, bottled in Plettenberg Bay. Meet the mushroom{% if species.size > 1 %}s{% endif %} on the species page{% if species.size > 1 %}s{% endif %} below.</p>{% endif %}</div>
+        {%- if species.size > 0 -%}<div class="btn-row" style="margin-top:1rem">{% for s in species %}<a class="btn btn--secondary" href="{{ s.system.url }}">Meet {{ s.common_name.value }}</a>{% endfor %}</div>{%- endif -%}
       </div>
-      <div class="split__panel split__panel--not reveal">
-        <p class="eyebrow">Plainly</p>
-        <h2 class="h3">What this product does not do</h2>
-        <ul>
-          <li>It does not cure, treat or prevent any disease{% if is_pet %} in animals{% endif %}.</li>
-          <li>It does not replace {% if is_pet %}veterinary{% else %}medical{% endif %} care or prescribed medicines.</li>
-          <li>It does not guarantee any result. Responses vary and the research is early.</li>
-          {%- if m.what_it_does_not_do.value -%}{{ m.what_it_does_not_do | metafield_tag | replace: '<ul>', '' | replace: '</ul>', '' }}{%- endif -%}
-        </ul>
+      <div class="split__panel reveal">
+        <p class="eyebrow">Good to know</p>
+        <h2 class="h3">A daily complementary ritual</h2>
+        <p>These tinctures sit alongside a well-run life — food, sleep, movement, and the people who look after you. They are complementary health products, not a substitute for {% if is_pet %}veterinary{% else %}medical{% endif %} care.</p>
+        <div class="acc" style="margin-top:1rem">
+          <details class="acc__item">
+            <summary>Complementary product notice</summary>
+            <div class="acc__body rte">
+              <ul>
+                <li>Not intended to diagnose, treat, cure or prevent any disease{% if is_pet %} in animals{% endif %}.</li>
+                <li>Not a replacement for {% if is_pet %}veterinary{% else %}medical{% endif %} care or prescribed medicines.</li>
+                {%- if m.what_it_does_not_do.value -%}{{ m.what_it_does_not_do | metafield_tag | replace: '<ul>', '' | replace: '</ul>', '' }}{%- endif -%}
+              </ul>
+            </div>
+          </details>
+        </div>
       </div>
     </div>
   </div>
