@@ -11,7 +11,6 @@ const mf = (v) => (v === undefined || v === null ? { value: null } : { value: v 
 export function buildContext() {
   const settingsData = JSON.parse(read('theme/config/settings_data.json')).current;
   const settings = { ...settingsData }; delete settings.sections;
-  // schema defaults the harness needs (Shopify applies these itself)
   settings.four_item_layout = settings.four_item_layout || '4'; settings.twelve_item_layout = settings.twelve_item_layout || '3x4';
   settings.type_display_font = { family: 'Georgia', fallback_families: 'serif', weight: 600 };
   settings.type_body_font = { family: 'system-ui', fallback_families: 'sans-serif', weight: 400 };
@@ -22,6 +21,8 @@ export function buildContext() {
   const clean = Object.fromEntries(cleanup.slice(1).map(l => { const c = cells(l); return [c[hdr.indexOf('Handle')], Object.fromEntries(hdr.map((h, i) => [h, c[i]]))]; }));
   const pm = exists('data/shopify/products-metafields.json') ? Object.fromEntries(JSON.parse(read('data/shopify/products-metafields.json')).products.map(p => [p.handle, p.metafields])) : {};
   const speciesRaw = exists('data/shopify/species-entries.json') ? JSON.parse(read('data/shopify/species-entries.json')).entries : stubSpecies();
+  const speciesOverlay = exists('data/shopify/species-shorts-overlay.json') ? JSON.parse(read('data/shopify/species-shorts-overlay.json')) : {};
+  for (const e of speciesRaw) Object.assign(e.fields, speciesOverlay[e.handle] || {});
 
   const species = speciesRaw.map(e => {
     const f = e.fields; const o = { system: { handle: e.handle, url: `/species/${e.handle}`, type: 'species' } };
@@ -40,6 +41,8 @@ export function buildContext() {
     const image = img(`product-${p.handle}`, 1.25, c.Title || p.title);
     const prod = { id: p.id, handle: p.handle, title: c.Title || p.title, url: `/products/${p.handle}`, type: c.Type || 'Tincture', vendor: 'Just Mushrooms', tags: (c.Tags || '').split(',').map(s => s.trim()).filter(Boolean), description: p.body_html, content: p.body_html, images: [image], featured_image: image, price: variant.price, variants: [variant], selected_or_first_available_variant: variant, available: v0.available, options: p.options };
     prod.metafields = { jm: {} };
+    const overlay = exists('data/shopify/copy-overlay.json') ? JSON.parse(read('data/shopify/copy-overlay.json')) : {};
+    Object.assign(m, overlay[p.handle] || {});
     for (const k of ['product_promise', 'form', 'volume', 'alcohol_percent', 'extraction_ratio', 'scientific_name', 'ingredients', 'usage_instructions', 'warnings', 'evidence_summary', 'what_it_does_not_do', 'faq', 'primary_benefit_tags', 'seo_title', 'seo_description', 'seo_focus_keyword', 'origin', 'lab_report']) prod.metafields.jm[k] = mf(m[k] ?? null);
     prod.metafields.jm.linked_species = mf(slugs.map(s => bySlug[s]).filter(Boolean));
     return prod;

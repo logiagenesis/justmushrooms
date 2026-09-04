@@ -1,0 +1,42 @@
+{
+  "lions-mane": {
+    "short_description": "The shaggy white mushroom chefs cook as a steak and monks named after their robes. The bottle people keep next to the laptop.",
+    "seo_title": "Lion's Mane (Hericium erinaceus) — Just Mushrooms",
+    "seo_description": "What Lion's Mane is, what small human trials actually found, the kitchen history, the tincture, and how to use it. Written for South African shoppers."
+  },
+  "reishi": {
+    "short_description": "The varnished red bracket of East Asian tradition — taken as extract, never as dinner. Bitter on purpose. The evening mushroom.",
+    "seo_title": "Reishi (Ganoderma lucidum) — Just Mushrooms",
+    "seo_description": "Reishi explained honestly: what two Cochrane reviews found, the documented liver caution, interactions to know, and the products that contain it."
+  },
+  "chaga": {
+    "short_description": "The charcoal conk that grows on living birch. Brewed as a dark tea from Siberia to Finland. Our bottle is that tradition, extracted.",
+    "seo_title": "Chaga (Inonotus obliquus) — Just Mushrooms",
+    "seo_description": "Chaga without the hype: a sterile birch conk with a long tea tradition, no human trials, and a real kidney caution. Cited and graded."
+  },
+  "cordyceps": {
+    "short_description": "The orange club fungus, cultivated now rather than hunted. The bottle people reach for when the day still has a second half.",
+    "seo_title": "Cordyceps (Cordyceps militaris) — Just Mushrooms",
+    "seo_description": "Cordyceps militaris explained: what the small exercise trials found and did not find, the naming confusion, interactions, and where to buy in South Africa."
+  },
+  "turkey-tail": {
+    "short_description": "The banded bracket on every damp log. A daily tea in Chinese and Japanese kitchens long before it had an English name.",
+    "seo_title": "Turkey Tail (Trametes versicolor) — Just Mushrooms",
+    "seo_description": "Turkey tail explained honestly: why PSK and PSP evidence is not tincture evidence, what the human studies show, safety, and the products that contain it."
+  },
+  "tremella": {
+    "short_description": "Snow fungus — the translucent jelly of Chinese dessert soups. The beauty mushroom of tradition, in a dropper you take.",
+    "seo_title": "Tremella (Tremella fuciformis) — Just Mushrooms",
+    "seo_description": "Snow fungus, honestly: the one human trial, why the skin research is topical not oral, safety notes, and the blends that contain it."
+  },
+  "shiitake": {
+    "short_description": "The oak-log mushroom of East Asian cooking, and the second most cultivated mushroom on earth. Food first. Extract second.",
+    "seo_title": "Shiitake (Lentinula edodes) — Just Mushrooms",
+    "seo_description": "Shiitake without the myths: what the food research shows, why lentinan and kojic acid are not supplement claims, and the skin-blend it appears in."
+  },
+  "sceletium": {
+    "short_description": "Kanna. A Cape succulent chewed as kougoed by the San and Khoi for centuries. Not a mushroom — a South African plant that belongs in this shop.",
+    "seo_title": "Sceletium tortuosum (Kanna) — Just Mushrooms",
+    "seo_description": "Kanna explained: a South African succulent, not a mushroom. What four small trials found, the serotonin interaction warning, and its legal status in SA."
+  }
+}
