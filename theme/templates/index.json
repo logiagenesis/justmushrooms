@@ -1,22 +1,22 @@
 {
   "sections": {
-    "hero": { "type": "hero", "settings": { "eyebrow": "Functional mushroom tinctures · Plettenberg Bay", "heading": "The underground, bottled.", "text": "Small-batch tinctures from seven mushrooms and one South African botanical. Every species page shows what the evidence says, and what it does not.", "cta_1_label": "Shop mushrooms", "cta_1_url": "/collections/all", "cta_2_label": "Explore species", "cta_2_url": "/pages/species" } },
+    "hero": { "type": "hero", "settings": { "eyebrow": "Small-batch tinctures from Plettenberg Bay", "heading": "A few drops. Every morning.", "text": "Seven mushrooms and one Cape botanical, dual-extracted and bottled on the Garden Route. Fruit body, spring water, food-grade ethanol. Courier to your door.", "cta_1_label": "Shop the tinctures", "cta_1_url": "/collections/all", "cta_2_label": "Meet the mushrooms", "cta_2_url": "/pages/species" } },
     "trust": { "type": "trust-strip", "blocks": {
-      "t1": { "type": "item", "settings": { "icon": "truck", "title": "Delivered across South Africa", "text": "Courier from Plettenberg Bay. Rates shown at checkout." } },
-      "t2": { "type": "item", "settings": { "icon": "lock", "title": "Secure Shopify checkout", "text": "Cards, instant EFT and more. We never see your card details." } },
-      "t3": { "type": "item", "settings": { "icon": "flask", "title": "Label-declared, evidence-tiered", "text": "Every claim is graded. No cures, no miracles." } },
-      "t4": { "type": "item", "settings": { "icon": "leaf", "title": "Small-batch tinctures", "text": "Spring water and 30% ethanol extraction. Made in the Western Cape." } } }, "block_order": ["t1","t2","t3","t4"] },
-    "species": { "type": "featured-species", "settings": { "limit": 6 } },
-    "finder": { "type": "finder-teaser" },
-    "products": { "type": "featured-products", "settings": { "collection": "frontpage", "limit": 6 } },
-    "education": { "type": "education-block", "blocks": {
-      "m1": { "type": "may", "settings": { "text": "Aspects of cognitive performance in small, short trials of Lion's Mane extract.", "tier": "Limited human evidence" } },
-      "m2": { "type": "may", "settings": { "text": "Exercise tolerance in older adults in small trials of Cordyceps preparations.", "tier": "Limited human evidence" } },
-      "m3": { "type": "may", "settings": { "text": "A long history of culinary and traditional use for Reishi, Turkey Tail, Chaga and Tremella.", "tier": "Traditional use" } },
-      "n1": { "type": "not", "settings": { "text": "They do not cure, treat or prevent any disease, including cancer, dementia, depression, anxiety or diabetes." } },
-      "n2": { "type": "not", "settings": { "text": "They are not a replacement for medical care or prescribed medicines." } },
-      "n3": { "type": "not", "settings": { "text": "They do not guarantee results. Responses vary and most studies are small." } },
-      "n4": { "type": "not", "settings": { "text": "They are not suitable for everyone: pregnancy, breastfeeding, mushroom allergy and several medicines call for caution." } } }, "block_order": ["m1","m2","m3","n1","n2","n3","n4"] },
+      "t1": { "type": "item", "settings": { "icon": "leaf", "title": "Made in Plettenberg Bay", "text": "Small batches on the Garden Route. Amber glass, dropper, a label you can actually read." } },
+      "t2": { "type": "item", "settings": { "icon": "flask", "title": "Fruit-body dual extract", "text": "Spring water and food-grade ethanol. The compounds that dissolve in each, in one bottle." } },
+      "t3": { "type": "item", "settings": { "icon": "truck", "title": "Courier across South Africa", "text": "From our workshop to your door. Rates shown at checkout." } },
+      "t4": { "type": "item", "settings": { "icon": "lock", "title": "Secure Shopify checkout", "text": "Cards, instant EFT and more. We never see your card details." } } }, "block_order": ["t1","t2","t3","t4"] },
+    "species": { "type": "featured-species", "settings": { "limit": 6, "eyebrow": "The mushrooms", "heading": "Meet the eight", "text": "Each page is the story, the kitchen history, and the bottle that carries it. Start with the one that sounds like your day." } },
+    "finder": { "type": "finder-teaser", "settings": { "heading": "Not sure which bottle is yours?", "text": "Four short questions. A starting point. Then you pick the dropper that belongs on your counter." } },
+    "products": { "type": "featured-products", "settings": { "collection": "frontpage", "limit": 6, "eyebrow": "Shop", "heading": "The bottles people reorder", "text": "Singles for the devotees. Blends for the people who want one ritual, not a shelf. VAT included." } },
+    "education": { "type": "education-block", "settings": { "eyebrow": "The ritual", "heading": "A few drops. Every day. That is the whole method.", "text": "These mushrooms have been eaten, brewed and extracted for centuries. We bottle them so the ritual is simple enough to keep.", "may_heading": "Why people keep a bottle on the desk", "not_heading": "What is in every bottle" }, "blocks": {
+      "m1": { "type": "may", "settings": { "text": "Lion's Mane for the workday mind — the bottle that lives next to the laptop.", "tier": "Traditional use" } },
+      "m2": { "type": "may", "settings": { "text": "Cordyceps for the afternoon that still has something in it.", "tier": "Traditional use" } },
+      "m3": { "type": "may", "settings": { "text": "Reishi for the hour the house goes quiet. Tremella from the beauty kitchens of China.", "tier": "Traditional use" } },
+      "n1": { "type": "not", "settings": { "text": "Fruit-body extraction in spring water and food-grade ethanol — dual solvent, small batch." } },
+      "n2": { "type": "not", "settings": { "text": "Bottled in amber glass in Plettenberg Bay, with a dropper you will actually use." } },
+      "n3": { "type": "not", "settings": { "text": "Courier to every corner of South Africa. Secure checkout. Honest labels." } },
+      "n4": { "type": "not", "settings": { "text": "A complementary daily ritual — not a medicine, and not trying to be one." } } }, "block_order": ["m1","m2","m3","n1","n2","n3","n4"] },
     "sourcing": { "type": "image-with-text" },
     "reviews": { "type": "reviews" }
   },
