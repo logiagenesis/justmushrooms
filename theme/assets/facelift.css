@@ -1,5 +1,6 @@
 /* Just Mushrooms facelift — paper + terracotta. Loaded last. */
 .header{background:rgba(244,239,230,.92)!important}
+.header__logo img{height:56px!important;width:56px!important;object-fit:contain;border-radius:50%}
 .header__nav .mega{background:var(--c-ink-3);box-shadow:0 24px 48px -28px rgba(28,25,22,.35)}
 .announcement{background:#1C1916!important;color:#F4EFE6!important}
 .search-panel{background:rgba(244,239,230,.97)!important}
