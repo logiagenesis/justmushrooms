@@ -10,6 +10,11 @@
   {%- if settings.favicon != blank -%}
     <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
     <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180, height: 180 }}">
+  {%- else -%}
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ 'favicon-32.png' | asset_url }}">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ 'favicon-64.png' | asset_url }}">
+    <link rel="apple-touch-icon" href="{{ 'apple-touch.png' | asset_url }}">
+    <link rel="icon" type="image/png" href="https://justmushrooms.co.za/cdn/shop/files/logoclicked.png?v=1730131869&width=64">
   {%- endif -%}
 
   {%- render 'meta-tags' -%}
