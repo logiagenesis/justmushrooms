@@ -1,5 +1,4 @@
-/* Mushroom Finder — goal-based, never diagnostic. Maps stated preferences to species pages + products.
-   Copy here is limited to preferences ("I want to support...") and never mentions conditions or outcomes. */
+/* Mushroom Finder — two questions, three bottles. Preference in, product out. */
 (function () {
   'use strict';
   const root = document.querySelector('[data-finder]'); if (!root) return;
@@ -11,7 +10,8 @@
   function show(i) { steps.forEach((s, n) => s.classList.toggle('is-active', n === i)); progress.forEach((p, n) => p.classList.toggle('is-done', n < i)); result.classList.remove('is-active'); }
   root.addEventListener('click', (e) => {
     const opt = e.target.closest('.finder__opt'); if (opt) {
-      if (!started) { started = true; window.JM && JM.track('mushroom_finder_start', {}); }
+      if (!started) { started = true; window.JM && JM.track('mushroom_finder_start', {});
+      }
       const step = opt.closest('.finder__step'); step.querySelectorAll('.finder__opt').forEach(o => o.setAttribute('aria-pressed', 'false')); opt.setAttribute('aria-pressed', 'true');
       answers[step.dataset.key] = opt.dataset.value;
       setTimeout(() => { idx++; if (idx < steps.length) show(idx); else finish(); }, 180);
@@ -27,8 +27,11 @@
     const list = result.querySelector('[data-finder-species]'); list.innerHTML = '';
     ranked.forEach(slug => {
       const sp = data.species[slug];
+      const shop = sp.product_url
+        ? '<a class="btn btn--primary" href="' + sp.product_url + '">Shop ' + (sp.name || '') + '</a>'
+        : '';
       const li = document.createElement('li');
-      li.innerHTML = '<div class="card card--species"><div class="card__body"><span class="badge badge--' + sp.tier_class + '">' + sp.tier + '</span><h3 class="card__title"><a href="' + sp.url + '">' + sp.name + '</a></h3><p class="card__sub sci">' + sp.sci + '</p><p class="card__text">' + sp.blurb + '</p><div class="card__actions"><a class="btn btn--secondary" href="' + sp.url + '">Explore species</a>' + (sp.product_url ? '<a class="btn btn--primary" href="' + sp.product_url + '">Shop</a>' : '') + '</div></div></div>';
+      li.innerHTML = '<div class="card card--species"><div class="card__body"><h3 class="card__title"><a href="' + (sp.product_url || sp.url) + '">' + sp.name + '</a></h3><p class="card__sub sci">' + sp.sci + '</p><p class="card__text">' + (sp.blurb || '') + '</p><div class="card__actions">' + shop + '<a class="btn btn--secondary" href="' + sp.url + '">Meet the mushroom</a></div></div></div>';
       list.appendChild(li);
     });
     const grid = list.closest('.bgrid'); if (grid) { grid.dataset.count = String(ranked.length); grid.dataset.odd = String(ranked.length % 2 === 1); }
