@@ -7,70 +7,50 @@
       <p class="eyebrow">{{ section.settings.eyebrow }}</p>
       <h2>{{ section.settings.heading }}</h2>
       <p class="lede">{{ section.settings.text }}</p>
-      <div class="finder__progress" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="finder__progress" aria-hidden="true"><i></i><i></i></div>
 
       <div class="finder__step is-active" data-key="goal">
-        <h3 class="h4">1. What do you want to support day to day?</h3>
+        <h3 class="h4">What do you want from the bottle?</h3>
         <div class="finder__options">
-          <button class="finder__opt" type="button" data-value="focus" aria-pressed="false">Focus and mental clarity<small>Studying, deep work, long days</small></button>
-          <button class="finder__opt" type="button" data-value="energy" aria-pressed="false">Energy and training<small>Stamina for exercise or a full schedule</small></button>
-          <button class="finder__opt" type="button" data-value="calm" aria-pressed="false">Winding down<small>Evening routine and a calmer pace</small></button>
-          <button class="finder__opt" type="button" data-value="routine" aria-pressed="false">A general daily routine<small>One bottle, broad tradition of use</small></button>
-          <button class="finder__opt" type="button" data-value="skin" aria-pressed="false">Skin and hydration routine<small>Beauty-from-within tradition</small></button>
+          <button class="finder__opt" type="button" data-value="focus" aria-pressed="false">Focus for the desk<small>The bottle that lives next to the laptop</small></button>
+          <button class="finder__opt" type="button" data-value="energy" aria-pressed="false">Lift for the afternoon<small>When the day still has a second half</small></button>
+          <button class="finder__opt" type="button" data-value="calm" aria-pressed="false">The hour the laptop closes<small>Evening, bitter and woody</small></button>
+          <button class="finder__opt" type="button" data-value="routine" aria-pressed="false">A daily house blend<small>The dropper people start on and stay on</small></button>
+          <button class="finder__opt" type="button" data-value="skin" aria-pressed="false">Skin and morning light<small>Tremella, the beauty-from-within bottle</small></button>
         </div>
       </div>
       <div class="finder__step" data-key="form">
-        <h3 class="h4">2. Single species or a blend?</h3>
+        <h3 class="h4">One mushroom, or a blend?</h3>
         <div class="finder__options">
-          <button class="finder__opt" type="button" data-value="single" aria-pressed="false">One species<small>Learn one organism properly</small></button>
-          <button class="finder__opt" type="button" data-value="blend" aria-pressed="false">A blend<small>Several species in one bottle</small></button>
-          <button class="finder__opt" type="button" data-value="either" aria-pressed="false">Either<small>Show me the best fit</small></button>
-        </div>
-      </div>
-      <div class="finder__step" data-key="evidence">
-        <h3 class="h4">3. How much do you weigh the research?</h3>
-        <div class="finder__options">
-          <button class="finder__opt" type="button" data-value="human" aria-pressed="false">Human trials matter to me<small>Prioritise species with at least limited human evidence</small></button>
-          <button class="finder__opt" type="button" data-value="tradition" aria-pressed="false">Tradition is enough<small>Long culinary or cultural history</small></button>
-        </div>
-      </div>
-      <div class="finder__step" data-key="caution">
-        <h3 class="h4">4. Anything we should know?</h3>
-        <p class="small muted">This does not replace advice from your doctor or pharmacist. It only changes which species we suggest.</p>
-        <div class="finder__options">
-          <button class="finder__opt" type="button" data-value="none" aria-pressed="false">None of the below</button>
-          <button class="finder__opt" type="button" data-value="meds" aria-pressed="false">I take prescription medication<small>We will point you to the safety notes first</small></button>
-          <button class="finder__opt" type="button" data-value="pregnant" aria-pressed="false">Pregnant, breastfeeding or planning<small>Most species have no safety data here</small></button>
-          <button class="finder__opt" type="button" data-value="alcohol" aria-pressed="false">I avoid alcohol<small>Our tinctures contain ~30% ethanol</small></button>
+          <button class="finder__opt" type="button" data-value="single" aria-pressed="false">One species<small>A single dropper. Learn it properly.</small></button>
+          <button class="finder__opt" type="button" data-value="blend" aria-pressed="false">A house blend<small>Several mushrooms, one bottle</small></button>
+          <button class="finder__opt" type="button" data-value="either" aria-pressed="false">Surprise me<small>Just give me three bottles to look at</small></button>
         </div>
         <button class="btn btn--ghost" type="button" data-finder-back>Back</button>
       </div>
 
       <div class="finder__result">
-        <p class="eyebrow">Your starting points</p>
-        <h3 class="h3">Three species worth reading about</h3>
-        <p class="muted">Read the evidence and safety sections before you buy. If you selected a caution above, please speak to a healthcare professional first.</p>
+        <p class="eyebrow">Your bottles</p>
+        <h3 class="h3">Start with these</h3>
+        <p class="muted">Three droppers that match what you picked. Open the one that belongs on your counter.</p>
         <ul class="bgrid" data-count="3" data-odd="true" role="list" data-finder-species></ul>
-        <div class="btn-row" style="margin-top:1.5rem"><a class="btn btn--secondary" href="/pages/species">All species</a><button class="btn btn--ghost" type="button" data-finder-restart>Start again</button></div>
+        <div class="btn-row" style="margin-top:1.5rem"><a class="btn btn--primary" href="/collections/all">Shop all tinctures</a><button class="btn btn--ghost" type="button" data-finder-restart>Start again</button></div>
       </div>
 
       <script type="application/json">
       {
         "rules": {
           "goal": { "focus": ["lions-mane","cordyceps","reishi"], "energy": ["cordyceps","lions-mane","turkey-tail"], "calm": ["reishi","sceletium","lions-mane"], "routine": ["turkey-tail","reishi","chaga"], "skin": ["tremella","reishi","chaga"] },
-          "form": { "single": [], "blend": [], "either": [] },
-          "evidence": { "human": ["lions-mane","cordyceps","reishi","sceletium"], "tradition": ["reishi","chaga","turkey-tail","tremella"] },
-          "caution": { "none": [], "meds": ["turkey-tail","tremella"], "pregnant": [], "alcohol": [] }
+          "form": { "single": [], "blend": [], "either": [] }
         },
         "species": {
           {%- for s in species -%}
-          {{ s.system.handle | json }}: { "name": {{ s.common_name.value | json }}, "sci": {{ s.scientific_name.value | json }}, "url": {{ s.system.url | json }}, "blurb": {{ s.short_description.value | json }}, "tier": {{ s.evidence_level.value | default: 'Traditional use' | json }}, "tier_class": {% assign lvl = s.evidence_level.value %}{% if lvl == 'Strong human evidence' %}"strong"{% elsif lvl == 'Limited human evidence' %}"limited"{% elsif lvl == 'Animal/in-vitro evidence' %}"animal"{% else %}"traditional"{% endif %}, "product_url": {% if s.linked_products.value.size > 0 %}{{ s.linked_products.value.first.url | json }}{% else %}null{% endif %} }{% unless forloop.last %},{% endunless %}
+          {{ s.system.handle | json }}: { "name": {{ s.common_name.value | json }}, "sci": {{ s.scientific_name.value | json }}, "url": {{ s.system.url | json }}, "blurb": {{ s.short_description.value | json }}, "product_url": {% if s.linked_products.value.size > 0 %}{{ s.linked_products.value.first.url | json }}{% else %}null{% endif %}, "product_title": {% if s.linked_products.value.size > 0 %}{{ s.linked_products.value.first.title | json }}{% else %}null{% endif %} }{% unless forloop.last %},{% endunless %}
           {%- endfor -%}
         }
       }
       </script>
     </div>
-    <p class="disclaimer" style="margin-top:1.5rem">The Mushroom Finder matches stated preferences to species pages. It does not assess your health, diagnose anything or recommend treatment. {{ settings.disclaimer_short }}</p>
   </div>
 </section>
 <script src="{{ 'finder.js' | asset_url }}" defer></script>
@@ -79,8 +59,8 @@
   "name": "Mushroom Finder",
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Mushroom Finder" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Four questions. Three honest suggestions." },
-    { "type": "textarea", "id": "text", "label": "Text", "default": "Tell us what you want to support and how much you weigh the research. We point you to species pages, not promises." }
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Find the bottle that belongs on your counter." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Two short questions. Three tinctures to look at. Then you pick the dropper." }
   ],
   "presets": [ { "name": "Mushroom Finder" } ]
 }
