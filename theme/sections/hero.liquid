@@ -1,0 +1,56 @@
+{%- liquid
+  assign img = section.settings.image
+  assign img_m = section.settings.image_mobile | default: img
+-%}
+<section class="hero{% if section.settings.compact %} hero--compact{% endif %}" aria-labelledby="hero-{{ section.id }}">
+  <div class="hero__media">
+    {%- if img -%}
+      <picture>
+        {%- if section.settings.image_mobile -%}<source media="(max-width:767px)" srcset="{{ img_m | image_url: width: 1080 }} 1080w, {{ img_m | image_url: width: 1440 }} 1440w" sizes="100vw">{%- endif -%}
+        {{ img | image_url: width: 2400 | image_tag: widths: '900,1200,1600,2000,2400,3000', sizes: '100vw', loading: 'eager', fetchpriority: 'high', preload: true, alt: img.alt | default: section.settings.heading }}
+      </picture>
+    {%- else -%}
+      <div style="width:100%;height:100%;background:radial-gradient(ellipse at 70% 28%,rgba(184,92,56,.28),transparent 52%),radial-gradient(ellipse at 18% 80%,rgba(28,25,22,.35),transparent 55%),#1C1916"></div>
+    {%- endif -%}
+  </div>
+  <div class="hero__scrim"></div>
+  {%- if section.settings.show_spores and settings.enable_motion -%}<div class="spores" aria-hidden="true">{% for i in (1..14) %}<i style="left:{{ i | times: 7 | modulo: 100 }}%;animation-delay:-{{ i | times: 1.7 }}s"></i>{% endfor %}</div>{%- endif -%}
+  {%- if section.settings.annot_1 != blank or section.settings.annot_2 != blank -%}
+  <div class="hero__annots" aria-hidden="true">
+    {%- if section.settings.annot_1 != blank -%}<span class="annot">{{ section.settings.annot_1 }}</span>{%- endif -%}
+    {%- if section.settings.annot_2 != blank -%}<span class="annot">{{ section.settings.annot_2 }}</span>{%- endif -%}
+    {%- if section.settings.annot_3 != blank -%}<span class="annot">{{ section.settings.annot_3 }}</span>{%- endif -%}
+  </div>
+  {%- endif -%}
+  <div class="page-width hero__content">
+    {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+    <h1 id="hero-{{ section.id }}">{{ section.settings.heading }}</h1>
+    {%- if section.settings.text != blank -%}<p class="lede">{{ section.settings.text }}</p>{%- endif -%}
+    <div class="btn-row">
+      {%- if section.settings.cta_1_label != blank -%}<a class="btn btn--primary btn--lg" href="{{ section.settings.cta_1_url }}">{{ section.settings.cta_1_label }}</a>{%- endif -%}
+      {%- if section.settings.cta_2_label != blank -%}<a class="btn btn--secondary btn--lg" href="{{ section.settings.cta_2_url }}">{{ section.settings.cta_2_label }}</a>{%- endif -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Hero image (2400×1350 or wider, AVIF/WebP)" },
+    { "type": "image_picker", "id": "image_mobile", "label": "Mobile crop (1080×1350)" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Small-batch tinctures from Plettenberg Bay" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "A few drops. Every morning." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Seven mushrooms and one Cape botanical, dual-extracted and bottled on the Garden Route." },
+    { "type": "text", "id": "cta_1_label", "label": "Primary CTA label", "default": "Shop the tinctures" },
+    { "type": "url", "id": "cta_1_url", "label": "Primary CTA link", "default": "/collections/all" },
+    { "type": "text", "id": "cta_2_label", "label": "Secondary CTA label", "default": "Meet the mushrooms" },
+    { "type": "url", "id": "cta_2_url", "label": "Secondary CTA link", "default": "/pages/species" },
+    { "type": "text", "id": "annot_1", "label": "Annotation line 1", "default": "" },
+    { "type": "text", "id": "annot_2", "label": "Annotation line 2", "default": "" },
+    { "type": "text", "id": "annot_3", "label": "Annotation line 3", "default": "" },
+    { "type": "checkbox", "id": "show_spores", "label": "Spore particles", "default": false },
+    { "type": "checkbox", "id": "compact", "label": "Compact height", "default": false }
+  ],
+  "presets": [ { "name": "Hero" } ]
+}
+{% endschema %}

@@ -1,0 +1,47 @@
+{%- assign per = section.settings.per_page -%}
+<section class="section section--tight">
+  <div class="page-width">
+    {%- render 'breadcrumbs' -%}
+    <div class="coll-head reveal">
+      <div>
+        <p class="eyebrow">Shop</p>
+        <h1>{{ collection.title }}</h1>
+        {%- if collection.description != blank -%}<div class="lede rte">{{ collection.description }}</div>{%- endif -%}
+      </div>
+      <div class="coll-tools">
+        <nav class="pills" aria-label="Collections">
+          {%- for c in collections -%}{%- unless c.handle == 'frontpage' or c.products_count == 0 -%}<a class="pill" href="{{ c.url }}" {% if c.handle == collection.handle %}aria-current="true"{% endif %}>{{ c.title }}</a>{%- endunless -%}{%- endfor -%}
+        </nav>
+        <form method="get" id="SortForm">
+          <label class="visually-hidden" for="SortBy">Sort</label>
+          <select id="SortBy" name="sort_by" onchange="this.form.submit()">
+            {%- for opt in collection.sort_options -%}<option value="{{ opt.value }}" {% if opt.value == collection.sort_by %}selected{% endif %}>{{ opt.name }}</option>{%- endfor -%}
+          </select>
+        </form>
+      </div>
+    </div>
+    {%- paginate collection.products by per -%}
+      {%- if collection.products.size > 0 -%}
+        <h2 class="visually-hidden">Products</h2>
+        {%- render 'balanced-grid', items: collection.products, card: 'product', list_name: collection.title, fillers: 'auto' -%}
+      {%- else -%}
+        <p class="notice">{% render 'icon', name: 'info' %} No products in this collection yet.</p>
+      {%- endif -%}
+      {%- if paginate.pages > 1 -%}
+        <nav class="pagination" aria-label="{{ 'general.pagination.label' | t }}">
+          {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}" aria-label="{{ 'general.pagination.previous' | t }}">‹</a>{%- endif -%}
+          {%- for part in paginate.parts -%}{%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>{%- elsif part.title == paginate.current_page -%}<span aria-current="page">{{ part.title }}</span>{%- else -%}<span>{{ part.title }}</span>{%- endif -%}{%- endfor -%}
+          {%- if paginate.next -%}<a href="{{ paginate.next.url }}" aria-label="{{ 'general.pagination.next' | t }}">›</a>{%- endif -%}
+        </nav>
+      {%- endif -%}
+      {%- render 'schema-collection', paginate: paginate -%}
+    {%- endpaginate -%}
+    {%- render 'disclaimer', alcohol: true -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [ { "type": "range", "id": "per_page", "label": "Products per page (12 keeps every full page balanced; the last page uses the count table)", "min": 6, "max": 24, "step": 3, "default": 12 } ]
+}
+{% endschema %}

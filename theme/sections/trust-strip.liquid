@@ -1,0 +1,29 @@
+<section class="trust" aria-label="Why shop with us">
+  <div class="page-width trust__inner">
+    {%- for block in section.blocks -%}
+      <div class="trust__item" {{ block.shopify_attributes }}>
+        {%- render 'icon', name: block.settings.icon -%}
+        <span><strong>{{ block.settings.title }}</strong>{{ block.settings.text }}</span>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Trust strip",
+  "max_blocks": 4,
+  "blocks": [
+    { "type": "item", "name": "Item", "settings": [
+      { "type": "select", "id": "icon", "label": "Icon", "options": [ {"value":"truck","label":"Truck"}, {"value":"lock","label":"Lock"}, {"value":"leaf","label":"Leaf"}, {"value":"flask","label":"Flask"}, {"value":"check","label":"Check"}, {"value":"info","label":"Info"} ], "default": "truck" },
+      { "type": "text", "id": "title", "label": "Title", "default": "Delivered across South Africa" },
+      { "type": "text", "id": "text", "label": "Text", "default": "Courier from Plettenberg Bay. Rates shown at checkout." }
+    ] }
+  ],
+  "presets": [ { "name": "Trust strip", "blocks": [
+    { "type": "item", "settings": { "icon": "truck", "title": "Delivered across South Africa", "text": "Courier from Plettenberg Bay. Rates shown at checkout." } },
+    { "type": "item", "settings": { "icon": "lock", "title": "Secure Shopify checkout", "text": "Cards, instant EFT and more. We never see your card details." } },
+    { "type": "item", "settings": { "icon": "flask", "title": "Label-declared, evidence-tiered", "text": "Every claim is graded. No cures, no miracles." } },
+    { "type": "item", "settings": { "icon": "leaf", "title": "Small-batch tinctures", "text": "Spring water and 30% ethanol extraction. Made in the Western Cape." } }
+  ] } ]
+}
+{% endschema %}

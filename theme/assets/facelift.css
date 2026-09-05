@@ -1,0 +1,24 @@
+/* Just Mushrooms facelift — paper + terracotta. Loaded last. */
+.header{background:rgba(244,239,230,.92)!important}
+.header__logo img{height:56px!important;width:56px!important;object-fit:contain;border-radius:50%}
+.header__nav .mega{background:var(--c-ink-3);box-shadow:0 24px 48px -28px rgba(28,25,22,.35)}
+.announcement{background:#1C1916!important;color:#F4EFE6!important}
+.search-panel{background:rgba(244,239,230,.97)!important}
+.hero__scrim{background:linear-gradient(180deg,rgba(28,25,22,.28) 0%,rgba(28,25,22,.12) 38%,rgba(28,25,22,.78) 100%),linear-gradient(90deg,rgba(28,25,22,.55) 0%,rgba(28,25,22,.28) 42%,rgba(28,25,22,0) 78%)!important}
+.hero .eyebrow,.species-hero .eyebrow{color:#E8C4B0}
+.hero h1,.hero h2,.species-hero h1,.page-hero h1,.hero .lede,.species-hero .lede,.page-hero .lede{color:#F4EFE6}
+.hero .lede,.species-hero .lede,.page-hero .lede{color:rgba(244,239,230,.88)}
+.hero .btn--secondary,.species-hero .btn--secondary{color:#F4EFE6;border-color:rgba(244,239,230,.45)}
+.hero .annot{color:rgba(244,239,230,.72)}
+.finder{background:var(--c-ink-2)!important}
+.finder__opt:hover,.finder__opt[aria-pressed="true"]{border-color:var(--c-spore);background:rgba(184,92,56,.08)}
+.newsletter{background:var(--c-ink-2)!important}
+.split__panel--not{border-color:var(--c-line)!important}
+.btn--primary:hover{background:#9a4a2c;color:#F4EFE6}
+.badge{background:rgba(28,25,22,.06)}
+.card:hover,.card:focus-within{box-shadow:0 24px 48px -28px rgba(28,25,22,.28)}
+.card--cta{background:var(--c-ink-3)!important;border-color:var(--c-line-strong)!important}
+.sticky-atc{background:rgba(244,239,230,.94)!important;color:var(--c-cream)}
+.consent{box-shadow:0 24px 48px -28px rgba(28,25,22,.28)}
+.pdp__buy{background:var(--c-ink-3)}
+.shopify-payment-button__button--unbranded{background:#1C1916!important;color:#F4EFE6!important}

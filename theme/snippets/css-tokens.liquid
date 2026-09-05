@@ -1,0 +1,28 @@
+{%- comment -%} Design tokens generated from theme settings. Rendered inline in <head>. {%- endcomment -%}
+:root{
+  --c-ink:{{ settings.color_ink }};
+  --c-ink-2:{{ settings.color_ink_2 }};
+  --c-ink-3:{{ settings.color_ink_3 }};
+  --c-cream:{{ settings.color_cream }};
+  --c-cream-2:{{ settings.color_cream_2 }};
+  --c-spore:{{ settings.color_spore }};
+  --c-forest:{{ settings.color_forest }};
+  --c-myc:{{ settings.color_myc }};
+  --c-danger:{{ settings.color_danger }};
+  --c-line:rgba(28,25,22,.10);
+  --c-line-strong:rgba(28,25,22,.20);
+  --c-paper:#F4EFE6;
+  --c-on-photo:#F4EFE6;
+  --font-display:{{ settings.type_display_font.family }},{{ settings.type_display_font.fallback_families }};
+  --font-display-weight:{{ settings.type_display_font.weight }};
+  --font-body:{{ settings.type_body_font.family }},{{ settings.type_body_font.fallback_families }};
+  --font-body-weight:{{ settings.type_body_font.weight }};
+  --type-scale:{{ settings.type_scale | divided_by: 100.0 }};
+  --page-width:{{ settings.page_width }}px;
+  --radius:{{ settings.card_radius }}px;
+  --radius-sm:{{ settings.card_radius | divided_by: 2 }}px;
+  --gap:clamp(16px,2vw,28px);
+  --section-pad:clamp(56px,8vw,128px);
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --dur:.45s;
+}

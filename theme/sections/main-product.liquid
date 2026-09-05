@@ -1,0 +1,83 @@
+{%- liquid
+  assign v = product.selected_or_first_available_variant
+  assign species = product.metafields.jm.linked_species.value
+  assign is_pet = false
+  if product.tags contains 'audience:pets'
+    assign is_pet = true
+  endif
+  assign img = product.featured_image
+-%}
+<section class="section section--tight">
+  <div class="page-width">
+    {%- render 'breadcrumbs' -%}
+    <div class="pdp">
+      <div class="pdp__gallery">
+        <div class="pdp__main-img">
+          {%- if img -%}{{ img | image_url: width: 1600 | image_tag: widths: '540,720,900,1200,1600', sizes: '(min-width:900px) 55vw, 100vw', loading: 'eager', fetchpriority: 'high', alt: img.alt | default: product.title, data-main-image: true }}{%- else -%}{% render 'image', image: nil, alt: product.title %}{%- endif -%}
+        </div>
+        {%- if product.images.size > 1 -%}
+        <div class="pdp__thumbs" role="list">
+          {%- for image in product.images -%}
+            <button type="button" data-thumb data-src="{{ image | image_url: width: 1200 }}" data-srcset="{{ image | image_url: width: 540 }} 540w, {{ image | image_url: width: 900 }} 900w, {{ image | image_url: width: 1600 }} 1600w" {% if forloop.first %}aria-current="true"{% endif %} aria-label="View image {{ forloop.index }}">{{ image | image_url: width: 200, height: 200, crop: 'center' | image_tag: alt: image.alt | default: product.title, loading: 'lazy' }}</button>
+          {%- endfor -%}
+        </div>
+        {%- endif -%}
+      </div>
+
+      <div class="pdp__info">
+        <div class="pills">
+          {%- if is_pet -%}<span class="badge badge--pets">For pets</span>{%- endif -%}
+          {%- if product.tags contains 'kingdom:plant' -%}<span class="badge badge--botanical">Botanical</span>{%- endif -%}
+          {%- if product.metafields.jm.form.value -%}<span class="badge">{{ product.metafields.jm.form.value }}</span>{%- endif -%}
+        </div>
+        <h1 class="pdp__title">{{ product.title }}</h1>
+        {%- if species.size > 0 -%}
+          <p class="pdp__species">
+            {%- for s in species -%}<a class="pill" href="{{ s.system.url }}">{{ s.common_name.value }} <span class="sci">{{ s.scientific_name.value }}</span></a>{%- endfor -%}
+          </p>
+        {%- endif -%}
+        {%- if product.metafields.jm.product_promise.value -%}<p class="pdp__promise">{{ product.metafields.jm.product_promise.value }}</p>{%- endif -%}
+
+        <div class="pdp__buy">
+          {%- render 'price', product: product -%}
+          <p class="small muted" style="margin:0">VAT included. {{ settings.shipping_summary }}</p>
+          {%- form 'product', product, id: 'ProductForm', data-product-form: true -%}
+            <input type="hidden" name="id" value="{{ v.id }}">
+            {%- if product.variants.size > 1 -%}
+              <div class="field"><label for="Variant">Option</label>
+                <select class="input" id="Variant" data-variant-select>
+                  {%- for variant in product.variants -%}<option value="{{ variant.id }}" data-available="{{ variant.available }}" data-price="{{ variant.price | money }}" {% if variant.id == v.id %}selected{% endif %}>{{ variant.title }}{% unless variant.available %} — sold out{% endunless %}</option>{%- endfor -%}
+                </select>
+              </div>
+            {%- endif -%}
+            <div class="pdp__buy-row">
+              <div class="qty" aria-label="Quantity"><button type="button" data-qty="minus" aria-label="Decrease">−</button><input type="number" name="quantity" value="1" min="1" aria-label="Quantity"><button type="button" data-qty="plus" aria-label="Increase">+</button></div>
+              <button class="btn btn--primary btn--lg" type="submit" {% unless v.available %}disabled{% endunless %}><span>{% if v.available %}{{ 'products.product.add_to_cart' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</span></button>
+            </div>
+            {%- if section.settings.show_dynamic_checkout and v.available -%}{{ form | payment_button }}{%- endif -%}
+            <p class="form-message" data-form-message hidden></p>
+          {%- endform -%}
+          <p class="pdp__ship">{% render 'icon', name: 'lock' %} Secure Shopify checkout · {% render 'icon', name: 'truck' %} Courier across South Africa</p>
+        </div>
+        <p class="visually-hidden">{% if is_pet %}{{ settings.disclaimer_pets }}{% else %}{{ settings.disclaimer_short }}{% endif %} {{ settings.alcohol_notice }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+{%- render 'schema-product' -%}
+{%- if settings.show_sticky_atc and v.available -%}
+<div class="sticky-atc" aria-hidden="true">
+  <div class="sticky-atc__inner page-width">
+    {%- if img -%}{{ img | image_url: width: 88, height: 112, crop: 'center' | image_tag: alt: '', loading: 'lazy' }}{%- endif -%}
+    <p class="sticky-atc__title">{{ product.title }}</p>
+    <strong>{{ v.price | money }}</strong>
+    <button class="btn btn--primary" type="button" data-sticky-add>{{ 'products.product.add_to_cart' | t }}</button>
+  </div>
+</div>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Product",
+  "settings": [ { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show dynamic checkout button (Buy now / Shop Pay)", "default": true } ]
+}
+{% endschema %}

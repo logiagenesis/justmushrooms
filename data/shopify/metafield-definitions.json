@@ -1,0 +1,25 @@
+{
+  "_comment": "Shopify Admin GraphQL metafieldDefinitionCreate payloads (ownerType PRODUCT unless stated). Namespace 'jm'. All storefront-visible.",
+  "definitions": [
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "linked_species", "name": "Linked species", "type": "list.metaobject_reference", "validations": [ { "name": "metaobject_definition_type", "value": "species" } ], "pin": true },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "scientific_name", "name": "Scientific name(s) on label", "type": "single_line_text_field" },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "product_promise", "name": "Product promise (one sentence, compliant)", "type": "single_line_text_field", "pin": true },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "form", "name": "Form", "type": "single_line_text_field", "validations": [ { "name": "choices", "value": "[\"Tincture\",\"Tincture combo\",\"Pet tincture\",\"Botanical tincture\"]" } ] },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "volume", "name": "Volume", "type": "single_line_text_field" },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "alcohol_percent", "name": "Alcohol % v/v", "type": "number_decimal" },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "extraction_ratio", "name": "Declared strength (label)", "type": "single_line_text_field" },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "origin", "name": "Origin / sourcing (verified only)", "type": "single_line_text_field" },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "ingredients", "name": "Ingredients (label)", "type": "rich_text_field", "pin": true },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "usage_instructions", "name": "Usage instructions (label)", "type": "rich_text_field", "pin": true },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "warnings", "name": "Warnings (label)", "type": "rich_text_field", "pin": true },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "lab_report", "name": "Lab report / COA", "type": "file_reference" },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "evidence_summary", "name": "Evidence summary (tiered)", "type": "rich_text_field" },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "what_it_does_not_do", "name": "What it does not do (extra items)", "type": "rich_text_field" },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "faq", "name": "FAQ (JSON: [{question, answer}])", "type": "json" },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "primary_benefit_tags", "name": "Primary benefit tags (internal, non-medical)", "type": "list.single_line_text_field" },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "seo_focus_keyword", "name": "SEO focus keyword", "type": "single_line_text_field" },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "seo_title", "name": "SEO title override", "type": "single_line_text_field" },
+    { "ownerType": "PRODUCT", "namespace": "jm", "key": "seo_description", "name": "SEO description override", "type": "single_line_text_field" },
+    { "ownerType": "ARTICLE", "namespace": "jm", "key": "related_species", "name": "Related species", "type": "list.metaobject_reference", "validations": [ { "name": "metaobject_definition_type", "value": "species" } ] }
+  ]
+}

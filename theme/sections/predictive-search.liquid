@@ -1,0 +1,15 @@
+<div id="predictive-search-results">
+  {%- if predictive_search.performed -%}
+    {%- for product in predictive_search.resources.products -%}
+      <a href="{{ product.url }}">{% if product.featured_image %}{{ product.featured_image | image_url: width: 96, height: 120, crop: 'center' | image_tag: alt: '', loading: 'lazy' }}{% endif %}<span>{{ product.title }}<br><small class="muted">{{ product.price | money }}</small></span></a>
+    {%- endfor -%}
+    {%- for page in predictive_search.resources.pages -%}<a href="{{ page.url }}"><span>{{ page.title }} <small class="muted">· page</small></span></a>{%- endfor -%}
+    {%- for article in predictive_search.resources.articles -%}<a href="{{ article.url }}"><span>{{ article.title }} <small class="muted">· article</small></span></a>{%- endfor -%}
+    {%- for s in shop.metaobjects.species.values -%}
+      {%- assign q = predictive_search.terms | downcase -%}
+      {%- assign n = s.common_name.value | downcase -%}
+      {%- if n contains q -%}<a href="{{ s.system.url }}"><span>{{ s.common_name.value }} <small class="muted">· species</small></span></a>{%- endif -%}
+    {%- endfor -%}
+    <a href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}" class="btn btn--ghost">All results for “{{ predictive_search.terms }}”</a>
+  {%- endif -%}
+</div>

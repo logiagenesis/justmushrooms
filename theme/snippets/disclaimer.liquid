@@ -1,0 +1,6 @@
+{%- comment -%} Mandatory disclaimer. pets = true swaps in the animal wording; alcohol = true appends the ethanol notice. {%- endcomment -%}
+<div class="disclaimer" role="note">
+  {%- if pets -%}{{ settings.disclaimer_pets }}{%- else -%}{{ settings.disclaimer_short }}{%- endif -%}
+  {%- if alcohol %} {{ settings.alcohol_notice }}{%- endif -%}
+  <a href="/pages/disclaimer" class="small" style="display:block;margin-top:.4rem">Read the full disclaimer</a>
+</div>

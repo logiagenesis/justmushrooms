@@ -1,0 +1,107 @@
+{%- liquid
+  assign species = product.metafields.jm.linked_species.value
+  assign m = product.metafields.jm
+  assign is_pet = false
+  if product.tags contains 'audience:pets'
+    assign is_pet = true
+  endif
+  assign ing_raw = m.ingredients.value | default: ''
+-%}
+<section class="pdp__section pdp__section--tight" id="details">
+  <div class="page-width">
+    <div class="grid-2">
+      <div class="reveal">
+        <p class="eyebrow">The bottle</p>
+        <h2 class="h3">What you are buying</h2>
+        <table class="spec">
+          <tbody>
+            {%- if species.size > 0 -%}<tr><th scope="row">Species</th><td>{% for s in species %}<a href="{{ s.system.url }}">{{ s.common_name.value }}</a> (<span class="sci">{{ s.scientific_name.value }}</span>){% unless forloop.last %}<br>{% endunless %}{% endfor %}</td></tr>{%- endif -%}
+            <tr><th scope="row">Form</th><td>{{ m.form.value | default: 'Liquid tincture' }}</td></tr>
+            {%- if m.volume.value -%}<tr><th scope="row">Volume</th><td>{{ m.volume.value }}</td></tr>{%- endif -%}
+            <tr><th scope="row">Ingredients</th><td>{% if ing_raw != blank and ing_raw contains 'NEEDS CLIENT' %}Fruit-body extract in spring water and food-grade ethanol. The printed label is the authority.{% elsif m.ingredients.value %}{{ m.ingredients | metafield_tag }}{% else %}Fruit-body extract in spring water and food-grade ethanol. See the bottle label.{% endif %}</td></tr>
+            {%- if m.alcohol_percent.value -%}<tr><th scope="row">Alcohol</th><td>Approximately {{ m.alcohol_percent.value }}% ethanol by volume</td></tr>{%- endif -%}
+            {%- if m.extraction_ratio.value -%}<tr><th scope="row">Extraction</th><td>{{ m.extraction_ratio.value }}</td></tr>{%- endif -%}
+            <tr><th scope="row">Made</th><td>{% if m.origin.value %}{{ m.origin.value }}{% else %}Plettenberg Bay, Western Cape. Fruit-body dual extraction in spring water and food-grade ethanol.{% endif %}</td></tr>
+            {%- if m.lab_report.value -%}<tr><th scope="row">Lab report</th><td><a href="{{ m.lab_report.value.url }}" rel="noopener" target="_blank">View certificate of analysis (PDF)</a></td></tr>{%- endif -%}
+            {%- if product.selected_or_first_available_variant.sku != blank -%}<tr><th scope="row">SKU</th><td>{{ product.selected_or_first_available_variant.sku }}</td></tr>{%- endif -%}
+          </tbody>
+        </table>
+      </div>
+      <div class="reveal">
+        <p class="eyebrow">How to use</p>
+        <h2 class="h3">The ritual</h2>
+        <div class="rte">{% if m.usage_instructions.value %}{{ m.usage_instructions | metafield_tag }}{% else %}<p>A few drops in the morning, or as printed on the label. Keep the bottle on the counter you already stand at.</p>{% endif %}</div>
+        <div class="acc" style="margin-top:1.6rem">
+          <details class="acc__item">
+            <summary>Label notes</summary>
+            <div class="acc__body rte">
+              <p>Contains alcohol. Read the label. If you take prescribed medicine, are pregnant or breastfeeding, or have a condition you already manage with a clinician, ask them before you start.</p>
+              {%- if m.warnings.value -%}
+                <p class="small muted" style="margin-top:.8rem">Species notes from the literature we keep on file:</p>
+                {{ m.warnings | metafield_tag }}
+              {%- endif -%}
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pdp__section pdp__section--tight" id="evidence">
+  <div class="page-width">
+    <div class="split">
+      <div class="split__panel reveal">
+        <p class="eyebrow">Why this bottle</p>
+        <h2 class="h3">The ritual, bottled</h2>
+        <div class="rte">{% if m.evidence_summary.value %}{{ m.evidence_summary | metafield_tag }}{% else %}<p>Fruit-body extraction in spring water and food-grade ethanol, bottled in Plettenberg Bay. Meet the mushroom{% if species.size > 1 %}s{% endif %} on the species page{% if species.size > 1 %}s{% endif %} below.</p>{% endif %}</div>
+        {%- if species.size > 0 -%}<div class="btn-row" style="margin-top:1rem">{% for s in species %}<a class="btn btn--secondary" href="{{ s.system.url }}">Meet {{ s.common_name.value }}</a>{% endfor %}</div>{%- endif -%}
+      </div>
+      <div class="split__panel reveal">
+        <p class="eyebrow">Good to know</p>
+        <h2 class="h3">A daily complementary ritual</h2>
+        <p>These tinctures sit alongside a well-run life — food, sleep, movement, and the people who look after you.</p>
+        <div class="acc" style="margin-top:1rem">
+          <details class="acc__item">
+            <summary>Complementary product notice</summary>
+            <div class="acc__body rte">
+              <ul>
+                <li>Not intended to diagnose, treat, cure or prevent any disease{% if is_pet %} in animals{% endif %}.</li>
+                <li>Not a replacement for {% if is_pet %}veterinary{% else %}medical{% endif %} care or prescribed medicines.</li>
+                {%- if m.what_it_does_not_do.value -%}{{ m.what_it_does_not_do | metafield_tag | replace: '<ul>', '' | replace: '</ul>', '' }}{%- endif -%}
+              </ul>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- if m.faq.value -%}
+<section class="pdp__section pdp__section--tight" id="product-faq">
+  <div class="page-width page-width--narrow">
+    <p class="eyebrow">Questions</p>
+    <h2 class="h3">About this product</h2>
+    {%- render 'faq-accordion', items: m.faq.value -%}
+  </div>
+</section>
+{%- endif -%}
+
+<section class="pdp__section pdp__section--tight">
+  <div class="page-width page-width--narrow">
+    <div class="acc">
+      <details class="acc__item"><summary>Shipping</summary><div class="acc__body rte">{{ section.settings.shipping_text }}</div></details>
+      <details class="acc__item"><summary>Returns and refunds</summary><div class="acc__body rte">{{ section.settings.returns_text }}</div></details>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Product details",
+  "settings": [
+    { "type": "richtext", "id": "shipping_text", "label": "Shipping text", "default": "<p>We ship by courier across South Africa from Plettenberg Bay. Rates and estimated delivery times are shown at checkout. <a href=\"/pages/shipping-returns\">Full shipping and returns policy</a>.</p>" },
+    { "type": "richtext", "id": "returns_text", "label": "Returns text", "default": "<p>Under the Consumer Protection Act you may return goods that are defective or not as described. For hygiene reasons opened tinctures cannot be returned unless faulty. Contact us within 7 days of delivery. <a href=\"/pages/shipping-returns\">Read the returns policy</a>.</p>" }
+  ]
+}
+{% endschema %}

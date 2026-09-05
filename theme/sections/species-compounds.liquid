@@ -1,0 +1,16 @@
+{%- assign s = metaobject -%}
+{%- if s.active_compounds.value -%}
+<section class="section section--tight">
+  <div class="page-width">
+    <div class="section-header reveal"><div><p class="eyebrow">Inside the organism</p><h2>Compounds researchers study</h2><p class="lede">Reported constituents, explained simply. Presence in a compound is not proof of an effect in people.</p></div></div>
+    <div class="compounds">
+      {%- for c in s.active_compounds.value -%}
+        <div class="glance__item reveal"><h3 class="glance__name">{{ c.name }}</h3><p class="small">{{ c.text }}</p>{% if c.solubility %}<p class="annot small" style="margin-top:.6rem">{{ c.solubility }}</p>{% endif %}</div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{ "name": "Species: compounds", "settings": [], "presets": [ { "name": "Species: compounds" } ] }
+{% endschema %}

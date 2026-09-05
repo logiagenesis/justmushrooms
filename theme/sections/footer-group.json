@@ -1,0 +1,8 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": { "type": "footer", "settings": { "menu_shop": "footer", "menu_policies": "policies", "show_newsletter": true } }
+  },
+  "order": ["footer"]
+}

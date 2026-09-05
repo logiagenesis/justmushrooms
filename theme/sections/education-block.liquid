@@ -1,0 +1,50 @@
+<section class="section" id="what-mushrooms-do">
+  <div class="page-width">
+    <div class="section-header reveal">
+      <div>
+        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+        <h2>{{ section.settings.heading }}</h2>
+        <p class="lede">{{ section.settings.text }}</p>
+      </div>
+    </div>
+    <div class="split">
+      <div class="split__panel reveal">
+        <h3 class="h3">{{ section.settings.may_heading }}</h3>
+        <ul>{%- for block in section.blocks -%}{%- if block.type == 'may' -%}<li {{ block.shopify_attributes }}>{{ block.settings.text }} {% render 'badge-evidence', level: block.settings.tier %}</li>{%- endif -%}{%- endfor -%}</ul>
+      </div>
+      <div class="split__panel split__panel--not reveal">
+        <h3 class="h3">{{ section.settings.not_heading }}</h3>
+        <ul>{%- for block in section.blocks -%}{%- if block.type == 'not' -%}<li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>{%- endif -%}{%- endfor -%}</ul>
+      </div>
+    </div>
+    <p class="disclaimer" style="margin-top:2rem">{{ settings.disclaimer_short }}</p>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Education: may / does not",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Straight talk" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What mushrooms may support, and what they do not do" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "We grade every claim by the quality of the evidence behind it. Most functional-mushroom research is small, short and early. We say so." },
+    { "type": "text", "id": "may_heading", "label": "Left heading", "default": "What the evidence suggests they may support" },
+    { "type": "text", "id": "not_heading", "label": "Right heading", "default": "What they do not do" }
+  ],
+  "blocks": [
+    { "type": "may", "name": "May support", "settings": [
+      { "type": "text", "id": "text", "label": "Text" },
+      { "type": "select", "id": "tier", "label": "Evidence tier", "options": [ {"value":"Strong human evidence","label":"Strong human evidence"}, {"value":"Limited human evidence","label":"Limited human evidence"}, {"value":"Animal/in-vitro evidence","label":"Animal/in-vitro evidence"}, {"value":"Traditional use","label":"Traditional use"} ], "default": "Limited human evidence" }
+    ] },
+    { "type": "not", "name": "Does not", "settings": [ { "type": "text", "id": "text", "label": "Text" } ] }
+  ],
+  "presets": [ { "name": "Education: may / does not", "blocks": [
+    { "type": "may", "settings": { "text": "Aspects of cognitive performance in small, short trials of Lion's Mane extract.", "tier": "Limited human evidence" } },
+    { "type": "may", "settings": { "text": "Exercise tolerance in older adults in small trials of Cordyceps preparations.", "tier": "Limited human evidence" } },
+    { "type": "may", "settings": { "text": "A long history of culinary and traditional use for Reishi, Turkey Tail, Chaga and Tremella.", "tier": "Traditional use" } },
+    { "type": "not", "settings": { "text": "They do not cure, treat or prevent any disease, including cancer, dementia, depression, anxiety or diabetes." } },
+    { "type": "not", "settings": { "text": "They are not a replacement for medical care or prescribed medicines." } },
+    { "type": "not", "settings": { "text": "They do not guarantee results. Responses vary and most studies are small." } },
+    { "type": "not", "settings": { "text": "They are not suitable for everyone: pregnancy, breastfeeding, mushroom allergy, and several medicines call for caution." } }
+  ] } ]
+}
+{% endschema %}

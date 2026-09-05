@@ -1,0 +1,32 @@
+{
+  "_comment": "Navigation menus to create in Online Store → Navigation. Handles must match theme settings.",
+  "menus": [
+    { "handle": "main-menu", "title": "Main menu", "items": [
+      { "title": "Shop", "url": "/collections/all", "children": [ { "title": "All products", "url": "/collections/all" }, { "title": "Single-species tinctures", "url": "/collections/single-species" }, { "title": "Blends", "url": "/collections/blends" }, { "title": "Combo deals", "url": "/collections/combo-deals" }, { "title": "For pets", "url": "/collections/pets" } ] },
+      { "title": "Species", "url": "/pages/species" },
+      { "title": "Mushroom Finder", "url": "/pages/mushroom-finder" },
+      { "title": "Learn", "url": "/blogs/learn" },
+      { "title": "About", "url": "/pages/about", "children": [ { "title": "About us", "url": "/pages/about" }, { "title": "Sourcing and process", "url": "/pages/sourcing" }, { "title": "FAQ", "url": "/pages/faq" }, { "title": "Contact", "url": "/pages/contact" } ] }
+    ] },
+    { "handle": "footer", "title": "Footer shop", "items": [ { "title": "All products", "url": "/collections/all" }, { "title": "Single-species", "url": "/collections/single-species" }, { "title": "Blends", "url": "/collections/blends" }, { "title": "Combo deals", "url": "/collections/combo-deals" }, { "title": "For pets", "url": "/collections/pets" } ] },
+    { "handle": "policies", "title": "Help and policies", "items": [ { "title": "Shipping and returns", "url": "/pages/shipping-returns" }, { "title": "FAQ", "url": "/pages/faq" }, { "title": "Contact", "url": "/pages/contact" }, { "title": "Privacy policy", "url": "/policies/privacy-policy" }, { "title": "Terms of service", "url": "/policies/terms-of-service" }, { "title": "Refund policy", "url": "/policies/refund-policy" }, { "title": "Disclaimer", "url": "/pages/disclaimer" } ] }
+  ],
+  "pages_to_create": [
+    { "handle": "species", "title": "Species Library", "template": "page.species-index" },
+    { "handle": "mushroom-finder", "title": "Mushroom Finder", "template": "page.mushroom-finder" },
+    { "handle": "about", "title": "About", "template": "page.about" },
+    { "handle": "sourcing", "title": "Sourcing and process", "template": "page.sourcing" },
+    { "handle": "faq", "title": "FAQ", "template": "page.faq" },
+    { "handle": "contact", "title": "Contact", "template": "page.contact" },
+    { "handle": "shipping-returns", "title": "Shipping and returns", "template": "page.shipping-returns" },
+    { "handle": "disclaimer", "title": "Medical and supplement disclaimer", "template": "page.disclaimer" }
+  ],
+  "pages_to_delete_or_noindex": [ "test", "combo-deals (redirect to collection)" ],
+  "blogs": [ { "handle": "learn", "title": "Learn" } ],
+  "collections_to_create": [
+    { "handle": "single-species", "title": "Single-species tinctures", "rule": "tag equals form:single" },
+    { "handle": "blends", "title": "Blends", "rule": "tag equals form:blend" },
+    { "handle": "pets", "title": "For pets", "rule": "tag equals audience:pets" },
+    { "handle": "botanicals", "title": "Botanicals", "rule": "tag equals kingdom:plant" }
+  ]
+}

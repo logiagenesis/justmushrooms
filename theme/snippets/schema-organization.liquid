@@ -1,0 +1,32 @@
+{%- liquid
+  assign same_as = '' | split: ''
+  if settings.social_instagram != blank
+    assign same_as = same_as | concat: settings.social_instagram | split: '|'
+  endif
+-%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "{{ shop.url }}/#organization",
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | json }},
+      {%- if settings.biz_legal_name != blank -%}"legalName": {{ settings.biz_legal_name | json }},{%- endif -%}
+      "email": {{ settings.biz_email | json }},
+      "telephone": {{ settings.biz_phone | json }},
+      "address": { "@type": "PostalAddress", "streetAddress": "77 Hoof Road", "addressLocality": "Plettenberg Bay", "addressRegion": "Western Cape", "postalCode": "6603", "addressCountry": "ZA" },
+      "sameAs": [{% assign first = true %}{% for u in settings.social_instagram %}{% endfor %}{% if settings.social_instagram != blank %}{{ settings.social_instagram | json }}{% assign first = false %}{% endif %}{% if settings.social_facebook != blank %}{% unless first %},{% endunless %}{{ settings.social_facebook | json }}{% assign first = false %}{% endif %}{% if settings.social_tiktok != blank %}{% unless first %},{% endunless %}{{ settings.social_tiktok | json }}{% assign first = false %}{% endif %}{% if settings.social_youtube != blank %}{% unless first %},{% endunless %}{{ settings.social_youtube | json }}{% endif %}]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "{{ shop.url }}/#website",
+      "url": {{ shop.url | json }},
+      "name": {{ shop.name | json }},
+      "publisher": { "@id": "{{ shop.url }}/#organization" },
+      "potentialAction": { "@type": "SearchAction", "target": { "@type": "EntryPoint", "urlTemplate": "{{ shop.url }}{{ routes.search_url }}?q={search_term_string}" }, "query-input": "required name=search_term_string" }
+    }
+  ]
+}
+</script>

@@ -1,0 +1,9 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement": { "type": "announcement", "settings": { "text": "Small-batch tinctures from Plettenberg Bay — fruit body, dropper, couriered to your door.", "link": "/pages/shipping-returns" } },
+    "header": { "type": "header", "settings": { "menu": "main-menu", "sticky": true, "show_species_mega": true } }
+  },
+  "order": ["announcement", "header"]
+}

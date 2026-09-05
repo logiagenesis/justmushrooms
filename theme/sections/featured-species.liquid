@@ -1,0 +1,43 @@
+{%- liquid
+  assign all = shop.metaobjects.species.values
+  assign picked = '' | split: ''
+  for block in section.blocks
+    if block.settings.species
+      assign picked = picked | concat: block.settings.species
+    endif
+  endfor
+  if picked.size == 0
+    assign picked = all
+  endif
+  assign limit = section.settings.limit | default: 6
+-%}
+<section class="section" id="species-featured">
+  <div class="page-width">
+    <div class="section-header reveal">
+      <div>
+        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+        <h2>{{ section.settings.heading }}</h2>
+        <p class="lede">{{ section.settings.text }}</p>
+      </div>
+      <a class="btn btn--secondary" href="/pages/species">All species {% render 'icon', name: 'arrow' %}</a>
+    </div>
+    {%- if picked.size > 0 -%}
+      {%- render 'balanced-grid', items: picked, card: 'species', max: limit -%}
+    {%- else -%}
+      <p class="notice">{% render 'icon', name: 'info' %} No species published yet. Create entries in Content → Metaobjects → Species.</p>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Featured species",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Species library" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Know the organism before you buy the bottle" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Eight species, each with its own page: what it is, what the research shows, what it does not do, and who should be cautious." },
+    { "type": "range", "id": "limit", "label": "Maximum cards (6 = 3+3, 8 = 4+4)", "min": 2, "max": 12, "step": 1, "default": 6 }
+  ],
+  "blocks": [ { "type": "species", "name": "Species", "settings": [ { "type": "metaobject", "id": "species", "label": "Species", "metaobject_type": "species" } ] } ],
+  "presets": [ { "name": "Featured species" } ]
+}
+{% endschema %}

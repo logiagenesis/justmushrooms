@@ -1,0 +1,32 @@
+{%- liquid
+  assign s = metaobject
+  assign products = s.linked_products.value
+  assign img = s.hero_image.value
+-%}
+<section class="species-hero" aria-labelledby="species-title">
+  <div class="hero__media">
+    {%- if img -%}
+      {{ img | image_url: width: 2400 | image_tag: widths: '900,1200,1600,2000,2400', sizes: '100vw', loading: 'eager', fetchpriority: 'high', alt: img.alt | default: s.common_name.value }}
+    {%- else -%}
+      <div style="width:100%;height:100%;background:radial-gradient(ellipse at 70% 30%,rgba(47,93,70,.5),transparent 55%),var(--c-ink)"></div>
+    {%- endif -%}
+  </div>
+  <div class="hero__scrim"></div>
+  <div class="page-width hero__content">
+    {%- render 'breadcrumbs' -%}
+    <div class="pills" style="margin-bottom:1rem">
+      {%- render 'badge-evidence', level: s.evidence_level.value -%}
+      {%- if s.kingdom.value == 'Plantae' -%}<span class="badge badge--botanical">Botanical, not a mushroom</span>{%- endif -%}
+    </div>
+    <h1 id="species-title">{{ s.common_name.value }}</h1>
+    <p class="sci" style="font-size:1.25rem;margin-top:-.4rem">{{ s.scientific_name.value }}</p>
+    <p class="lede">{{ s.short_description.value }}</p>
+    <div class="btn-row">
+      {%- if products.size > 0 -%}<a class="btn btn--primary btn--lg" href="#shop-species">Shop {{ s.common_name.value }} ({{ products.size }})</a>{%- endif -%}
+      <a class="btn btn--secondary btn--lg" href="#evidence">Read the evidence</a>
+    </div>
+  </div>
+</section>
+{% schema %}
+{ "name": "Species hero", "settings": [], "presets": [ { "name": "Species hero" } ] }
+{% endschema %}

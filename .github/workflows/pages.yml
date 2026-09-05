@@ -1,0 +1,70 @@
+name: Preview Pages
+on:
+  push:
+    branches: [claude/just-mushrooms-rebuild-q3a9e4, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pull Drive images
+        run: |
+          pip install -q gdown
+          mkdir -p /tmp/drive
+          gdown --folder "https://drive.google.com/drive/folders/1YXnsT47PMXUNkULeuG1jWII37UcwKsWW" -O /tmp/drive/rerun || true
+          gdown --folder "https://drive.google.com/drive/folders/1km7x5KEJfA0gVvq9mxRZiEhmBVCW8fut" -O /tmp/drive/bundle || true
+          python3 scripts/preview/flatten-drive-images.py /tmp/drive preview/assets/img
+          ls preview/assets/img | wc -l
+      - name: Fetch brand logo
+        run: |
+          mkdir -p theme/assets
+          curl -fsSL "https://justmushrooms.co.za/cdn/shop/files/logoclicked.png?v=1730131869" -o /tmp/logoclicked.png
+          pip install -q pillow
+          python3 - <<'PY'
+from PIL import Image
+src = Image.open('/tmp/logoclicked.png').convert('RGBA')
+src.resize((320,320), Image.Resampling.LANCZOS).save('theme/assets/logo.png', 'PNG', optimize=True)
+src.resize((32,32), Image.Resampling.LANCZOS).save('theme/assets/favicon-32.png', 'PNG', optimize=True)
+src.resize((64,64), Image.Resampling.LANCZOS).save('theme/assets/favicon-64.png', 'PNG', optimize=True)
+src.resize((180,180), Image.Resampling.LANCZOS).save('theme/assets/apple-touch.png', 'PNG', optimize=True)
+src.resize((512,512), Image.Resampling.LANCZOS).save('theme/assets/favicon.png', 'PNG', optimize=True)
+PY
+          curl -fsSL "https://justmushrooms.co.za/cdn/shop/files/316955697_121928927392695_8890572885037283047_n.jpg?v=1730046342" -o theme/assets/og-image.jpg
+          ls -la theme/assets/logo.png theme/assets/favicon-32.png theme/assets/og-image.jpg
+      - name: Install and render
+        working-directory: preview
+        run: |
+          npm install
+          node render.mjs
+          node pages-rewrite.mjs
+      - name: Stage Pages root
+        run: |
+          mkdir -p _site
+          cp -a preview/dist/. _site/
+          touch _site/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

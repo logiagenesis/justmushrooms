@@ -1,0 +1,36 @@
+{%- assign species = shop.metaobjects.species.values -%}
+{%- if species.size > 1 -%}
+<section class="section" id="compare">
+  <div class="page-width">
+    <div class="section-header reveal"><div><p class="eyebrow">Compare</p><h2>{{ section.settings.heading }}</h2><p class="lede">{{ section.settings.text }}</p></div></div>
+    <div class="compare reveal">
+      <table>
+        <caption class="visually-hidden">Comparison of species by form, flavour, evidence tier and cautions</caption>
+        <thead><tr><th scope="col">Species</th><th scope="col">Type</th><th scope="col">Flavour / profile</th><th scope="col">Evidence tier</th><th scope="col">Key cautions</th><th scope="col">Shop</th></tr></thead>
+        <tbody>
+          {%- for s in species -%}
+          <tr>
+            <th scope="row"><a href="{{ s.system.url }}">{{ s.common_name.value }}</a><br><span class="sci small">{{ s.scientific_name.value }}</span></th>
+            <td>{{ s.kingdom.value | default: 'Fungi' }}{% if s.form_sold.value %} · {{ s.form_sold.value }}{% endif %}</td>
+            <td>{{ s.flavour_profile.value }}</td>
+            <td>{% render 'badge-evidence', level: s.evidence_level.value %}</td>
+            <td class="small">{{ s.key_cautions.value }}</td>
+            <td>{% if s.linked_products.value.size > 0 %}<a class="btn btn--ghost" href="{{ s.linked_products.value.first.url }}">View</a>{% endif %}</td>
+          </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Compare species",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Side by side" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Same columns for every species, so the differences are honest." }
+  ],
+  "presets": [ { "name": "Compare species" } ]
+}
+{% endschema %}

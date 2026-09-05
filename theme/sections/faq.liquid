@@ -1,0 +1,28 @@
+{%- liquid
+  assign items = '' | split: ''
+  for block in section.blocks
+    assign items = items | concat: block.settings
+  endfor
+-%}
+<section class="section section--tight" id="faq">
+  <div class="page-width page-width--narrow">
+    {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+    <h2>{{ section.settings.heading }}</h2>
+    <div class="acc">
+      {%- for block in section.blocks -%}
+        <details class="acc__item" {{ block.shopify_attributes }}><summary>{{ block.settings.question }}</summary><div class="acc__body rte">{{ block.settings.answer }}</div></details>
+      {%- endfor -%}
+    </div>
+    {%- if section.blocks.size > 0 -%}
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{% for block in section.blocks %}{"@type":"Question","name":{{ block.settings.question | json }},"acceptedAnswer":{"@type":"Answer","text":{{ block.settings.answer | strip_html | json }}}}{% unless forloop.last %},{% endunless %}{% endfor %}]}</script>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "FAQ",
+  "settings": [ { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "FAQ" }, { "type": "text", "id": "heading", "label": "Heading", "default": "Questions, answered plainly" } ],
+  "blocks": [ { "type": "qa", "name": "Question", "settings": [ { "type": "text", "id": "question", "label": "Question" }, { "type": "richtext", "id": "answer", "label": "Answer" } ] } ],
+  "presets": [ { "name": "FAQ" } ]
+}
+{% endschema %}
