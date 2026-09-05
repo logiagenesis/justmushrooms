@@ -5,17 +5,22 @@
       <div class="split__panel reveal">
         <p class="eyebrow">How to use</p>
         <h3 class="h3">Follow the product label</h3>
-        <div class="rte">{% if s.how_to_use.value %}{{ s.how_to_use | metafield_tag }}{% else %}<p>Dose and directions are printed on each bottle. We do not publish general dosing for a species because it depends on the product's concentration.</p>{% endif %}</div>
+        <div class="rte">{% if s.how_to_use.value %}{{ s.how_to_use | metafield_tag }}{% else %}<p>Dose and directions are printed on each bottle.</p>{% endif %}</div>
       </div>
       <div class="split__panel split__panel--not reveal">
-        <p class="eyebrow">Safety</p>
-        <h3 class="h3">Who should be cautious</h3>
+        <p class="eyebrow">On the label</p>
+        <h3 class="h3">Good to know</h3>
         <div class="rte">{{ s.safety_notes | metafield_tag }}</div>
-        {%- if s.contraindications.value -%}<h4 class="h4">Contraindications and interactions</h4><div class="rte">{{ s.contraindications | metafield_tag }}</div>{%- endif -%}
-        <div class="notice notice--warn" style="margin-top:1rem">{% render 'icon', name: 'warn' %}<span>Consult a healthcare professional before use if you are pregnant or breastfeeding, take any medication, or have a medical condition. Stop and seek advice if you notice a reaction.</span></div>
+        {%- if s.contraindications.value -%}
+        <div class="acc" style="margin-top:1rem">
+          <details class="acc__item">
+            <summary>Label notes</summary>
+            <div class="acc__body rte">{{ s.contraindications | metafield_tag }}</div>
+          </details>
+        </div>
+        {%- endif -%}
       </div>
     </div>
-    {%- render 'disclaimer', alcohol: true -%}
   </div>
 </section>
 {% schema %}
