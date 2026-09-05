@@ -35,7 +35,11 @@
       {%- endfor -%}
     </nav>
     <a class="header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }} home">
-      {%- if section.settings.logo -%}{{ section.settings.logo | image_url: width: 320 | image_tag: alt: shop.name, loading: 'eager', width: 160, height: 40 }}{%- else -%}<span>{{ shop.name }}</span>{%- endif -%}
+      {%- if section.settings.logo != blank -%}
+        {{ section.settings.logo | image_url: width: 320 | image_tag: alt: shop.name, loading: 'eager', width: 72, height: 72 }}
+      {%- else -%}
+        <img src="https://justmushrooms.co.za/cdn/shop/files/logoclicked.png?v=1730131869&amp;width=160" srcset="https://justmushrooms.co.za/cdn/shop/files/logoclicked.png?v=1730131869&amp;width=80 80w, https://justmushrooms.co.za/cdn/shop/files/logoclicked.png?v=1730131869&amp;width=160 160w, https://justmushrooms.co.za/cdn/shop/files/logoclicked.png?v=1730131869&amp;width=240 240w" sizes="56px" alt="{{ shop.name }}" width="72" height="72" loading="eager" decoding="async">
+      {%- endif -%}
     </a>
     <div class="header__actions">
       <button class="icon-btn" type="button" data-open-drawer="SearchPanel" aria-label="Search">{% render 'icon', name: 'search' %}</button>
@@ -48,7 +52,7 @@
 <div class="drawer menu-drawer" id="MenuDrawer" aria-hidden="true" role="dialog" aria-label="Menu">
   <div class="drawer__scrim" data-close-drawer="MenuDrawer"></div>
   <div class="drawer__panel">
-    <div class="drawer__head"><span class="display">{{ shop.name }}</span><button class="icon-btn" type="button" data-close-drawer="MenuDrawer" aria-label="Close menu" data-autofocus>{% render 'icon', name: 'close' %}</button></div>
+    <div class="drawer__head"><a class="header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }} home"><img src="https://justmushrooms.co.za/cdn/shop/files/logoclicked.png?v=1730131869&amp;width=160" alt="{{ shop.name }}" width="56" height="56"></a><button class="icon-btn" type="button" data-close-drawer="MenuDrawer" aria-label="Close menu" data-autofocus>{% render 'icon', name: 'close' %}</button></div>
     <nav class="drawer__body" aria-label="Mobile">
       {%- for link in menu.links -%}
         {%- if link.title == 'Species' and species.size > 0 -%}

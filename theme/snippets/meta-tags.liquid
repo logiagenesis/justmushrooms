@@ -1,7 +1,7 @@
 {%- comment -%} SEO meta: unique title/description per template with metafield overrides. {%- endcomment -%}
 {%- liquid
   assign site_suffix = ' | Just Mushrooms'
-  assign default_desc = 'Small-batch functional mushroom tinctures made in Plettenberg Bay, South Africa. Evidence-led species guides, honest claims, secure Shopify checkout.'
+  assign default_desc = 'Small-batch functional mushroom tinctures made in Plettenberg Bay, South Africa. Fruit body, dropper, couriered to your door.'
   case request.page_type
     when 'index'
       assign t = 'Functional Mushroom Tinctures South Africa'
@@ -16,7 +16,7 @@
       if metaobject.seo_title.value != blank
         assign t = metaobject.seo_title.value
       else
-        assign t = metaobject.common_name.value | append: ' (' | append: metaobject.scientific_name.value | append: ') — What the Evidence Says'
+        assign t = metaobject.common_name.value | append: ' (' | append: metaobject.scientific_name.value | append: ')'
       endif
       assign d = metaobject.seo_description.value | default: metaobject.short_description.value | truncate: 155
     when 'article'
@@ -37,6 +37,9 @@
   endif
   assign t = t | append: site_suffix
   assign og_image = page_image
+  if request.page_type == 'index'
+    assign og_image = nil
+  endif
   if request.page_type == 'metaobject' and metaobject.og_image.value
     assign og_image = metaobject.og_image.value
   endif
@@ -49,10 +52,18 @@
 <meta property="og:title" content="{{ t | escape }}">
 <meta property="og:type" content="{% if request.page_type == 'product' %}product{% elsif request.page_type == 'article' %}article{% else %}website{% endif %}">
 <meta property="og:description" content="{{ d | escape }}">
-{%- if og_image -%}
-<meta property="og:image" content="{{ og_image | image_url: width: 1200, height: 630, crop: 'center' }}">
+{%- liquid
+  assign brand_og = 'https://justmushrooms.co.za/cdn/shop/files/316955697_121928927392695_8890572885037283047_n.jpg?v=1730046342'
+  if og_image
+    assign og_src = og_image | image_url: width: 1200, height: 630, crop: 'center'
+  else
+    assign og_src = brand_og
+  endif
+-%}
+<meta property="og:image" content="{{ og_src }}">
+<meta property="og:image:secure_url" content="{{ og_src }}">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
-{%- endif -%}
+<meta name="twitter:image" content="{{ og_src }}">
 {%- if request.page_type == 'product' -%}
 <meta property="og:price:amount" content="{{ product.selected_or_first_available_variant.price | money_without_currency | strip_html }}">
 <meta property="og:price:currency" content="{{ cart.currency.iso_code }}">
