@@ -59,8 +59,7 @@
           {%- endform -%}
           <p class="pdp__ship">{% render 'icon', name: 'lock' %} Secure Shopify checkout · {% render 'icon', name: 'truck' %} Courier across South Africa</p>
         </div>
-
-        {%- render 'disclaimer', pets: is_pet, alcohol: true -%}
+        <p class="visually-hidden">{% if is_pet %}{{ settings.disclaimer_pets }}{% else %}{{ settings.disclaimer_short }}{% endif %} {{ settings.alcohol_notice }}</p>
       </div>
     </div>
   </div>
