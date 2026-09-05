@@ -28,8 +28,13 @@ const prefixAbs = (t) => {
 
 for (const p of files) {
   if (!/\.(html|css|js)$/.test(p)) continue;
-  fs.writeFileSync(p, prefixAbs(fs.readFileSync(p, 'utf8')));
+  let t = prefixAbs(fs.readFileSync(p, 'utf8'));
+  if (p.endsWith('.html') && !/name="robots"/.test(t)) {
+    t = t.replace('<head>', '<head>\n  <meta name="robots" content="noindex,nofollow">');
+  }
+  fs.writeFileSync(p, t);
 }
+fs.writeFileSync(path.join(DIST, 'robots.txt'), 'User-agent: *\nDisallow: /\n');
 
 const imgs = new Set();
 for (const p of files) {
