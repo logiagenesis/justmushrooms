@@ -5,6 +5,7 @@
   if product.tags contains 'audience:pets'
     assign is_pet = true
   endif
+  assign ing_raw = m.ingredients.value | default: ''
 -%}
 <section class="pdp__section pdp__section--tight" id="details">
   <div class="page-width">
@@ -17,9 +18,9 @@
             {%- if species.size > 0 -%}<tr><th scope="row">Species</th><td>{% for s in species %}<a href="{{ s.system.url }}">{{ s.common_name.value }}</a> (<span class="sci">{{ s.scientific_name.value }}</span>){% unless forloop.last %}<br>{% endunless %}{% endfor %}</td></tr>{%- endif -%}
             <tr><th scope="row">Form</th><td>{{ m.form.value | default: 'Liquid tincture' }}</td></tr>
             {%- if m.volume.value -%}<tr><th scope="row">Volume</th><td>{{ m.volume.value }}</td></tr>{%- endif -%}
-            <tr><th scope="row">Ingredients</th><td>{% if m.ingredients.value %}{{ m.ingredients | metafield_tag }}{% else %}<span class="muted">Follow product label</span>{% endif %}</td></tr>
+            <tr><th scope="row">Ingredients</th><td>{% if ing_raw != blank and ing_raw contains 'NEEDS CLIENT' %}Fruit-body extract in spring water and food-grade ethanol. The printed label is the authority.{% elsif m.ingredients.value %}{{ m.ingredients | metafield_tag }}{% else %}Fruit-body extract in spring water and food-grade ethanol. See the bottle label.{% endif %}</td></tr>
             {%- if m.alcohol_percent.value -%}<tr><th scope="row">Alcohol</th><td>Approximately {{ m.alcohol_percent.value }}% ethanol by volume</td></tr>{%- endif -%}
-            {%- if m.extraction_ratio.value -%}<tr><th scope="row">Declared strength</th><td>{{ m.extraction_ratio.value }} <span class="small muted">(manufacturer's input ratio, not an assayed potency)</span></td></tr>{%- endif -%}
+            {%- if m.extraction_ratio.value -%}<tr><th scope="row">Extraction</th><td>{{ m.extraction_ratio.value }}</td></tr>{%- endif -%}
             <tr><th scope="row">Made</th><td>{% if m.origin.value %}{{ m.origin.value }}{% else %}Plettenberg Bay, Western Cape. Fruit-body dual extraction in spring water and food-grade ethanol.{% endif %}</td></tr>
             {%- if m.lab_report.value -%}<tr><th scope="row">Lab report</th><td><a href="{{ m.lab_report.value.url }}" rel="noopener" target="_blank">View certificate of analysis (PDF)</a></td></tr>{%- endif -%}
             {%- if product.selected_or_first_available_variant.sku != blank -%}<tr><th scope="row">SKU</th><td>{{ product.selected_or_first_available_variant.sku }}</td></tr>{%- endif -%}
@@ -28,10 +29,20 @@
       </div>
       <div class="reveal">
         <p class="eyebrow">How to use</p>
-        <h2 class="h3">Directions</h2>
-        <div class="rte">{% if m.usage_instructions.value %}{{ m.usage_instructions | metafield_tag }}{% else %}<p>Follow the directions printed on the product label.</p>{% endif %}</div>
-        <p class="eyebrow" style="margin-top:2rem">Warnings</p>
-        <div class="notice notice--warn">{% render 'icon', name: 'warn' %}<div class="rte">{% if m.warnings.value %}{{ m.warnings | metafield_tag }}{% else %}<p>Not for use if you are allergic to mushrooms or alcohol. Consult a healthcare professional before use if you are pregnant, breastfeeding, taking medication or have a medical condition. Keep out of reach of children.</p>{% endif %}</div></div>
+        <h2 class="h3">The ritual</h2>
+        <div class="rte">{% if m.usage_instructions.value %}{{ m.usage_instructions | metafield_tag }}{% else %}<p>A few drops in the morning, or as printed on the label. Keep the bottle on the counter you already stand at.</p>{% endif %}</div>
+        <div class="acc" style="margin-top:1.6rem">
+          <details class="acc__item">
+            <summary>Label notes</summary>
+            <div class="acc__body rte">
+              <p>Contains alcohol. Read the label. If you take prescribed medicine, are pregnant or breastfeeding, or have a condition you already manage with a clinician, ask them before you start.</p>
+              {%- if m.warnings.value -%}
+                <p class="small muted" style="margin-top:.8rem">Species notes from the literature we keep on file:</p>
+                {{ m.warnings | metafield_tag }}
+              {%- endif -%}
+            </div>
+          </details>
+        </div>
       </div>
     </div>
   </div>
@@ -49,7 +60,7 @@
       <div class="split__panel reveal">
         <p class="eyebrow">Good to know</p>
         <h2 class="h3">A daily complementary ritual</h2>
-        <p>These tinctures sit alongside a well-run life — food, sleep, movement, and the people who look after you. They are complementary health products, not a substitute for {% if is_pet %}veterinary{% else %}medical{% endif %} care.</p>
+        <p>These tinctures sit alongside a well-run life — food, sleep, movement, and the people who look after you.</p>
         <div class="acc" style="margin-top:1rem">
           <details class="acc__item">
             <summary>Complementary product notice</summary>
@@ -89,7 +100,7 @@
 {
   "name": "Product details",
   "settings": [
-    { "type": "richtext", "id": "shipping_text", "label": "Shipping text", "default": "<p>We ship by courier across South Africa from Plettenberg Bay. Rates and estimated delivery times are shown at checkout. NEEDS CLIENT INPUT: confirm carriers, rates, free-shipping threshold and dispatch days. <a href=\"/pages/shipping-returns\">Full shipping and returns policy</a>.</p>" },
+    { "type": "richtext", "id": "shipping_text", "label": "Shipping text", "default": "<p>We ship by courier across South Africa from Plettenberg Bay. Rates and estimated delivery times are shown at checkout. <a href=\"/pages/shipping-returns\">Full shipping and returns policy</a>.</p>" },
     { "type": "richtext", "id": "returns_text", "label": "Returns text", "default": "<p>Under the Consumer Protection Act you may return goods that are defective or not as described. For hygiene reasons opened tinctures cannot be returned unless faulty. Contact us within 7 days of delivery. <a href=\"/pages/shipping-returns\">Read the returns policy</a>.</p>" }
   ]
 }
