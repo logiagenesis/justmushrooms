@@ -1,0 +1,17 @@
+{%- comment -%} Evidence tier badge. level = one of the 5 approved strings. {%- endcomment -%}
+{%- liquid
+  assign lvl = level | default: 'Traditional use'
+  case lvl
+    when 'Strong human evidence'
+      assign cls = 'strong'
+    when 'Limited human evidence'
+      assign cls = 'limited'
+    when 'Animal/in-vitro evidence'
+      assign cls = 'animal'
+    when 'Client/product-label claim'
+      assign cls = 'label'
+    else
+      assign cls = 'traditional'
+  endcase
+-%}
+<span class="badge badge--{{ cls }}" title="Evidence tier: {{ lvl }}">{{ lvl }}</span>

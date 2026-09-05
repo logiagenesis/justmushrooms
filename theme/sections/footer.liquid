@@ -1,0 +1,81 @@
+{%- assign species = shop.metaobjects.species.values -%}
+<footer class="footer" role="contentinfo">
+  <div class="page-width">
+    {%- if section.settings.show_newsletter -%}
+    <div class="newsletter reveal" id="newsletter">
+      <div>
+        <p class="eyebrow">Field notes</p>
+        <h2 class="h3">{{ section.settings.newsletter_heading }}</h2>
+        <p class="muted">{{ section.settings.newsletter_text }}</p>
+      </div>
+      {%- form 'customer', class: 'newsletter__form', data-newsletter-form: true -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <label class="visually-hidden" for="NewsletterEmail">Email</label>
+        <input class="input" id="NewsletterEmail" type="email" name="contact[email]" placeholder="you@example.com" required autocomplete="email">
+        <button class="btn btn--primary" type="submit">Subscribe</button>
+        {%- if form.posted_successfully? -%}<p class="form-message form-message--success" style="grid-column:1/-1">{{ 'sections.footer.success' | t }}</p>{%- endif -%}
+        {%- if form.errors -%}<p class="form-message form-message--error">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>{%- endif -%}
+      {%- endform -%}
+    </div>
+    {%- endif -%}
+
+    <div class="footer__grid" style="margin-top:3rem">
+      <div>
+        <p class="display" style="font-size:1.4rem;margin:0 0 .8rem">{{ shop.name }}</p>
+        <p class="footer__biz">
+          {%- if settings.biz_legal_name != blank -%}{{ settings.biz_legal_name }}<br>{%- endif -%}
+          {%- if settings.biz_reg_number != blank -%}Reg. {{ settings.biz_reg_number }}<br>{%- endif -%}
+          {%- if settings.biz_vat_number != blank -%}VAT {{ settings.biz_vat_number }}<br>{%- endif -%}
+          {{ settings.biz_address }}<br>
+          <a href="mailto:{{ settings.biz_email }}">{{ settings.biz_email }}</a><br>
+          <a href="tel:{{ settings.biz_phone | remove: ' ' }}">{{ settings.biz_phone }}</a>
+          {%- if settings.biz_whatsapp != blank -%}<br><a href="https://wa.me/{{ settings.biz_whatsapp }}" rel="noopener">WhatsApp us</a>{%- endif -%}
+        </p>
+        <div class="footer__social">
+          {%- if settings.social_instagram != blank -%}<a class="icon-btn" href="{{ settings.social_instagram }}" rel="noopener" aria-label="Instagram">{% render 'icon', name: 'instagram' %}</a>{%- endif -%}
+          {%- if settings.social_facebook != blank -%}<a class="icon-btn" href="{{ settings.social_facebook }}" rel="noopener" aria-label="Facebook">{% render 'icon', name: 'facebook' %}</a>{%- endif -%}
+          {%- if settings.social_tiktok != blank -%}<a class="icon-btn" href="{{ settings.social_tiktok }}" rel="noopener" aria-label="TikTok">{% render 'icon', name: 'tiktok' %}</a>{%- endif -%}
+          {%- if settings.social_youtube != blank -%}<a class="icon-btn" href="{{ settings.social_youtube }}" rel="noopener" aria-label="YouTube">{% render 'icon', name: 'youtube' %}</a>{%- endif -%}
+        </div>
+      </div>
+      <nav aria-label="Shop">
+        <h2 class="label">Shop</h2>
+        <ul>{%- for link in section.settings.menu_shop.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}</ul>
+      </nav>
+      <nav aria-label="Species">
+        <h2 class="label">Species</h2>
+        <ul>
+          {%- for s in species -%}<li><a href="{{ s.system.url }}">{{ s.common_name.value }}</a></li>{%- endfor -%}
+          <li><a href="/pages/species">All species</a></li>
+          <li><a href="/pages/mushroom-finder">Mushroom Finder</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Help and policies">
+        <h2 class="label">Help</h2>
+        <ul>
+          {%- for link in section.settings.menu_policies.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
+          <li><a href="#" data-open-consent>Cookie settings</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <p class="footer__disclaimer">{{ settings.disclaimer_short }} {{ settings.alcohol_notice }}</p>
+
+    <div class="footer__bottom">
+      <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}. All prices in ZAR and include 15% VAT.{% if settings.enable_easter_egg %} <button class="egg-node" type="button" data-egg-node aria-label="A tiny glowing spore"></button>{% endif %}</span>
+      <span>{{ powered_by_link }}</span>
+    </div>
+  </div>
+</footer>
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "checkbox", "id": "show_newsletter", "label": "Show email capture", "default": true },
+    { "type": "text", "id": "newsletter_heading", "label": "Newsletter heading", "default": "Get the field notes" },
+    { "type": "text", "id": "newsletter_text", "label": "Newsletter text", "default": "One email a month: new species guides, how we make the tinctures, and launch updates. No spam, no miracle claims." },
+    { "type": "link_list", "id": "menu_shop", "label": "Shop menu", "default": "footer" },
+    { "type": "link_list", "id": "menu_policies", "label": "Help and policies menu" }
+  ]
+}
+{% endschema %}

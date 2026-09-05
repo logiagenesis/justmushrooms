@@ -1,0 +1,23 @@
+{%- comment -%} Editorial filler cards used to keep grids balanced. Never a fake product. variant 1..3 cycles. {%- endcomment -%}
+{%- assign vv = variant | default: 1 | modulo: 3 -%}
+<article class="card card--cta">
+  <div class="card__body">
+    {%- case vv -%}
+      {%- when 1 -%}
+        <p class="eyebrow">Not sure where to start?</p>
+        <h3 class="card__title">Find your bottle</h3>
+        <p class="card__text">Four questions. A starting point. Then pick the dropper that belongs on your counter.</p>
+        <div class="card__actions"><a class="btn btn--primary" href="/pages/mushroom-finder">Start the finder</a></div>
+      {%- when 2 -%}
+        <p class="eyebrow">The mushrooms</p>
+        <h3 class="card__title">Meet the eight</h3>
+        <p class="card__text">Kitchen history, flavour, the bottle that carries each one. Start with the mushroom that sounds like your day.</p>
+        <div class="card__actions"><a class="btn btn--secondary" href="/pages/species">Browse species</a></div>
+      {%- else -%}
+        <p class="eyebrow">Compare</p>
+        <h3 class="card__title">Single species or blend?</h3>
+        <p class="card__text">Eight living things, side by side — flavour, form, and which bottle to reach for.</p>
+        <div class="card__actions"><a class="btn btn--secondary" href="/pages/species#compare">Compare species</a></div>
+    {%- endcase -%}
+  </div>
+</article>

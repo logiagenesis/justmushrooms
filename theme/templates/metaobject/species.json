@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "hero": { "type": "species-hero" },
+    "glance": { "type": "species-glance" },
+    "evidence": { "type": "species-evidence" },
+    "compounds": { "type": "species-compounds" },
+    "usage": { "type": "species-usage-safety" },
+    "shop": { "type": "species-shop" },
+    "faq": { "type": "species-faq" },
+    "references": { "type": "species-references" },
+    "related": { "type": "species-related" }
+  },
+  "order": ["hero", "glance", "evidence", "compounds", "usage", "shop", "faq", "references", "related"]
+}

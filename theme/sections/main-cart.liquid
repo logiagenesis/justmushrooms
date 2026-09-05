@@ -1,0 +1,40 @@
+<section class="section section--tight">
+  <div class="page-width">
+    <h1>{{ 'sections.cart.title' | t }}</h1>
+    {%- if cart.item_count == 0 -%}
+      <div class="empty"><p class="lede">{{ 'sections.cart.empty' | t }}</p><a class="btn btn--primary btn--lg" href="{{ routes.all_products_collection_url }}">Shop mushrooms</a></div>
+    {%- else -%}
+    <div class="cart-page">
+      <div>
+        {%- for item in cart.items -%}
+          <div class="line" style="grid-template-columns:96px 1fr">
+            <a href="{{ item.url }}">{% if item.image %}{{ item.image | image_url: width: 192, height: 240, crop: 'center' | image_tag: alt: item.title, loading: 'lazy', style: 'width:96px;height:120px' }}{% endif %}</a>
+            <div>
+              <p class="line__title"><a href="{{ item.url }}" style="text-decoration:none">{{ item.product.title }}</a></p>
+              {%- if item.variant.title != 'Default Title' -%}<p class="small muted">{{ item.variant.title }}</p>{%- endif -%}
+              <p class="small muted">{{ item.final_price | money }} each</p>
+              <div class="line__row">
+                <div class="qty"><button type="button" data-line-qty="minus" data-line="{{ forloop.index }}" aria-label="Decrease">−</button><input type="number" value="{{ item.quantity }}" readonly aria-label="Quantity"><button type="button" data-line-qty="plus" data-line="{{ forloop.index }}" aria-label="Increase">+</button></div>
+                <strong>{{ item.final_line_price | money }}</strong>
+              </div>
+              <button type="button" class="btn btn--ghost small" data-line-remove data-line="{{ forloop.index }}">Remove</button>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+      <aside class="cart-summary">
+        <h2 class="h3">Summary</h2>
+        <div class="cart-summary__row"><span>{{ 'sections.cart.subtotal' | t }}</span><span>{{ cart.total_price | money }}</span></div>
+        <p class="small muted">{{ 'sections.cart.taxes_and_shipping_at_checkout' | t }} {{ settings.shipping_summary }}</p>
+        <form action="{{ routes.cart_url }}" method="post" onsubmit="JM.track('begin_checkout', JM.cartEcommerce())">
+          <button class="btn btn--primary btn--block btn--lg" type="submit" name="checkout">{{ 'sections.cart.checkout' | t }} {% render 'icon', name: 'lock' %}</button>
+        </form>
+        <p class="small muted" style="margin-top:1rem">{% render 'icon', name: 'lock' %} Payment is handled by Shopify's PCI-compliant checkout. We never see your card details.</p>
+      </aside>
+    </div>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{ "name": "Cart", "settings": [] }
+{% endschema %}

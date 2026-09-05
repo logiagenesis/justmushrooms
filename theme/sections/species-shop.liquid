@@ -1,0 +1,17 @@
+{%- liquid
+  assign s = metaobject
+  assign products = s.linked_products.value
+-%}
+<section class="section" id="shop-species">
+  <div class="page-width">
+    <div class="section-header reveal"><div><p class="eyebrow">Shop this species</p><h2>Products containing {{ s.common_name.value }}</h2><p class="lede">Live price and stock from our store. VAT included.</p></div><a class="btn btn--secondary" href="{{ routes.all_products_collection_url }}">All products</a></div>
+    {%- if products.size > 0 -%}
+      {%- render 'balanced-grid', items: products, card: 'product', list_name: 'species_page', species_slug: s.system.handle, fillers: 'auto' -%}
+    {%- else -%}
+      <p class="notice">{% render 'icon', name: 'info' %} No products are linked to this species yet.</p>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{ "name": "Species: shop", "settings": [], "presets": [ { "name": "Species: shop" } ] }
+{% endschema %}

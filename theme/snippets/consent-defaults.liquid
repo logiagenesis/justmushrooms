@@ -1,0 +1,26 @@
+{%- comment -%} Google Consent Mode v2 defaults. Must run before GTM. Stored choice is honoured on every page. {%- endcomment -%}
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+(function(){
+  var def = {{ settings.consent_default_analytics | json }};
+  var stored = null;
+  try { stored = JSON.parse(localStorage.getItem('jm_consent') || 'null'); } catch(e) {}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied', 'ad_user_data': 'denied', 'ad_personalization': 'denied',
+    'analytics_storage': def, 'functionality_storage': 'granted', 'security_storage': 'granted',
+    'wait_for_update': 500
+  });
+  gtag('set', 'ads_data_redaction', true);
+  gtag('set', 'url_passthrough', true);
+  if (stored && stored.v === 1) {
+    gtag('consent', 'update', {
+      'analytics_storage': stored.analytics ? 'granted' : 'denied',
+      'ad_storage': stored.ads ? 'granted' : 'denied',
+      'ad_user_data': stored.ads ? 'granted' : 'denied',
+      'ad_personalization': stored.ads ? 'granted' : 'denied'
+    });
+  }
+  window.JM = window.JM || {}; window.JM.consent = stored;
+})();
+</script>

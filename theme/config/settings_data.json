@@ -1,0 +1,61 @@
+{
+  "current": {
+    "color_ink": "#F4EFE6",
+    "color_ink_2": "#EBE4D6",
+    "color_ink_3": "#FFFCF7",
+    "color_cream": "#1C1916",
+    "color_cream_2": "#5E574E",
+    "color_spore": "#B85C38",
+    "color_forest": "#1C1916",
+    "color_myc": "#8A4B32",
+    "color_danger": "#C45C4A",
+    "type_display_font": "playfair_display_n6",
+    "type_body_font": "work_sans_n4",
+    "type_scale": 100,
+    "page_width": 1360,
+    "card_radius": 18,
+    "four_item_layout": "4",
+    "twelve_item_layout": "3x4",
+    "enable_motion": true,
+    "enable_easter_egg": true,
+    "biz_address": "77 Hoof Road, Plettenberg Bay, Western Cape, 6603, South Africa",
+    "biz_email": "info@justmushrooms.co.za",
+    "biz_phone": "+27 61 548 1969",
+    "gtm_container_id": "",
+    "consent_banner_enabled": true,
+    "consent_default_analytics": "denied",
+    "privacy_policy_url": "/policies/privacy-policy",
+    "cart_type": "drawer",
+    "show_sticky_atc": true,
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "menu": "main-menu",
+          "sticky": true
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "menu_shop": "footer",
+          "menu_species": "species",
+          "menu_policies": "policies"
+        }
+      }
+    },
+    "disclaimer_short": "This product is a complementary health product. It has not been evaluated by SAHPRA and is not intended to diagnose, treat, cure or prevent any disease. Consult a healthcare professional before use, especially if you are pregnant, breastfeeding, taking medication or have a medical condition.",
+    "disclaimer_pets": "For animal use only. Not evaluated by any regulator for safety or efficacy in animals. Consult your veterinarian before use, and do not use as a substitute for veterinary care.",
+    "alcohol_notice": "Contains approximately 30% ethanol by volume. Not suitable for people avoiding alcohol.",
+    "shipping_summary": "Courier delivery across South Africa. Rates and times shown at checkout.",
+    "biz_whatsapp": "27615481969",
+    "biz_legal_name": "",
+    "biz_reg_number": "",
+    "biz_vat_number": "",
+    "biz_info_officer": "",
+    "social_instagram": "",
+    "social_facebook": "",
+    "social_tiktok": "",
+    "social_youtube": ""
+  }
+}

@@ -1,0 +1,20 @@
+{%- liquid
+  assign s = metaobject
+  assign others = '' | split: ''
+  for o in shop.metaobjects.species.values
+    unless o.system.handle == s.system.handle
+      assign others = others | concat: o
+    endunless
+  endfor
+-%}
+{%- if others.size > 0 -%}
+<section class="section section--tight">
+  <div class="page-width">
+    <div class="section-header reveal"><div><p class="eyebrow">Keep exploring</p><h2 class="h3">Other species</h2></div><a class="btn btn--secondary" href="/pages/species">All species</a></div>
+    {%- render 'balanced-grid', items: others, card: 'species', max: 3 -%}
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{ "name": "Species: related", "settings": [], "presets": [ { "name": "Species: related" } ] }
+{% endschema %}

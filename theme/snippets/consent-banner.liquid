@@ -1,0 +1,38 @@
+<div class="consent" id="ConsentBanner" role="dialog" aria-live="polite" aria-label="Cookie preferences" hidden>
+  <p><strong>Cookies, honestly.</strong> We use essential cookies to run the shop and, with your permission, analytics and advertising cookies to understand what works. You can change this any time via “Cookie settings” in the footer. <a href="{{ settings.privacy_policy_url }}">Privacy policy</a>.</p>
+  <div class="consent__prefs" id="ConsentPrefs" hidden>
+    <div><input type="checkbox" id="ConsentEssential" checked disabled><label for="ConsentEssential">Essential (always on)</label></div>
+    <div><input type="checkbox" id="ConsentAnalytics"><label for="ConsentAnalytics">Analytics (Google Analytics 4)</label></div>
+    <div><input type="checkbox" id="ConsentAds"><label for="ConsentAds">Advertising and remarketing (Google Ads)</label></div>
+  </div>
+  <div class="consent__actions">
+    <button class="btn btn--primary" type="button" data-consent="all">Accept all</button>
+    <button class="btn btn--secondary" type="button" data-consent="essential">Essential only</button>
+    <button class="btn btn--ghost" type="button" data-consent="manage">Manage</button>
+    <button class="btn btn--secondary" type="button" data-consent="save" hidden>Save choices</button>
+  </div>
+</div>
+<script>
+(function(){
+  var b = document.getElementById('ConsentBanner'); if (!b) return;
+  var prefs = document.getElementById('ConsentPrefs'), save = b.querySelector('[data-consent="save"]');
+  function show(){ b.hidden = false; }
+  function persist(a, ads){
+    var c = { v: 1, analytics: !!a, ads: !!ads, ts: Date.now() };
+    try { localStorage.setItem('jm_consent', JSON.stringify(c)); } catch(e) {}
+    gtag('consent', 'update', { analytics_storage: a ? 'granted' : 'denied', ad_storage: ads ? 'granted' : 'denied', ad_user_data: ads ? 'granted' : 'denied', ad_personalization: ads ? 'granted' : 'denied' });
+    window.dataLayer.push({ event: 'consent_update', consent_analytics: a ? 'granted' : 'denied', consent_ads: ads ? 'granted' : 'denied' });
+    window.JM.consent = c; b.hidden = true;
+  }
+  b.addEventListener('click', function(e){
+    var t = e.target.closest('[data-consent]'); if (!t) return;
+    var m = t.dataset.consent;
+    if (m === 'all') persist(true, true);
+    else if (m === 'essential') persist(false, false);
+    else if (m === 'manage') { prefs.hidden = false; save.hidden = false; t.hidden = true; }
+    else if (m === 'save') persist(document.getElementById('ConsentAnalytics').checked, document.getElementById('ConsentAds').checked);
+  });
+  document.addEventListener('click', function(e){ if (e.target.closest('[data-open-consent]')) { e.preventDefault(); prefs.hidden = false; save.hidden = false; show(); } });
+  if (!window.JM || !window.JM.consent) show();
+})();
+</script>

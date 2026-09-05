@@ -1,0 +1,32 @@
+<section class="section section--tight">
+  <div class="page-width">
+    <h1>{{ 'templates.search.title' | t }}</h1>
+    <form action="{{ routes.search_url }}" method="get" role="search" style="display:flex;gap:.6rem;max-width:640px;margin-bottom:2rem">
+      <input class="input" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.search' | t }}">
+      <button class="btn btn--primary" type="submit">{{ 'general.search.search' | t }}</button>
+    </form>
+    {%- if search.performed -%}
+      {%- if search.results_count == 0 -%}
+        <p class="lede">{{ 'templates.search.no_results' | t: terms: search.terms }}</p>
+      {%- else -%}
+        <p class="muted">{{ 'general.search.results_with_count' | t: count: search.results_count }}</p>
+        {%- paginate search.results by 12 -%}
+          <h2 class="visually-hidden">Results</h2>
+          <ul class="bgrid" data-count="{{ search.results.size | at_most: 12 }}" data-odd="{% assign o = search.results.size | modulo: 2 %}{% if o == 1 %}true{% else %}false{% endif %}" role="list">
+            {%- for item in search.results -%}
+              <li>
+                {%- if item.object_type == 'product' -%}{% render 'card-product', product: item, index: forloop.index0, list_name: 'search' %}
+                {%- elsif item.object_type == 'article' -%}{% render 'card-article', article: item %}
+                {%- else -%}<article class="card"><div class="card__body"><p class="card__sub">Page</p><h3 class="card__title"><a href="{{ item.url }}">{{ item.title }}</a></h3><p class="card__text">{{ item.content | strip_html | truncate: 140 }}</p></div></article>{%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+          {%- if paginate.pages > 1 -%}<nav class="pagination">{% for part in paginate.parts %}{% if part.is_link %}<a href="{{ part.url }}">{{ part.title }}</a>{% else %}<span {% if part.title == paginate.current_page %}aria-current="page"{% endif %}>{{ part.title }}</span>{% endif %}{% endfor %}</nav>{%- endif -%}
+        {%- endpaginate -%}
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{ "name": "Search", "settings": [] }
+{% endschema %}

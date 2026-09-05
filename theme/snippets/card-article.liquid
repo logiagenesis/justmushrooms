@@ -1,0 +1,10 @@
+{%- assign art_alt = article.image.alt | default: article.title -%}
+<article class="card card--article">
+  <div class="card__media">{% render 'image', image: article.image, sizes: '(min-width:1024px) 30vw, 100vw', alt: art_alt %}</div>
+  <div class="card__body">
+    <p class="card__sub">{{ article.published_at | date: '%d/%m/%Y' }}{% if article.tags.size > 0 %} · {{ article.tags.first }}{% endif %}</p>
+    <h3 class="card__title"><a href="{{ article.url }}">{{ article.title }}</a></h3>
+    <p class="card__text">{{ article.excerpt_or_content | strip_html | truncate: 140 }}</p>
+    <div class="card__actions"><a class="btn btn--ghost" href="{{ article.url }}">Read</a></div>
+  </div>
+</article>

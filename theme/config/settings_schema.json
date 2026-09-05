@@ -1,0 +1,95 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Mycelia",
+    "theme_version": "1.0.0",
+    "theme_author": "Logia Services for Just Mushrooms",
+    "theme_documentation_url": "https://github.com/logiagenesis/justmushrooms/tree/main/docs",
+    "theme_support_url": "https://github.com/logiagenesis/justmushrooms/issues"
+  },
+  {
+    "name": "Brand colours",
+    "settings": [
+      { "type": "color", "id": "color_ink", "label": "Ink (page background)", "default": "#0B0E0C" },
+      { "type": "color", "id": "color_ink_2", "label": "Ink 2 (raised surfaces)", "default": "#131816" },
+      { "type": "color", "id": "color_ink_3", "label": "Ink 3 (cards)", "default": "#1B221E" },
+      { "type": "color", "id": "color_cream", "label": "Mushroom cream (text)", "default": "#F2EAD9" },
+      { "type": "color", "id": "color_cream_2", "label": "Cream 2 (muted text)", "default": "#B9AE97" },
+      { "type": "color", "id": "color_spore", "label": "Spore gold (primary CTA)", "default": "#C9A24A" },
+      { "type": "color", "id": "color_forest", "label": "Forest green", "default": "#2F5D46" },
+      { "type": "color", "id": "color_myc", "label": "Mycelium accent (use sparingly)", "default": "#8FF7C8" },
+      { "type": "color", "id": "color_danger", "label": "Warning", "default": "#E07A5F" }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      { "type": "font_picker", "id": "type_display_font", "label": "Display font", "default": "playfair_display_n6" },
+      { "type": "font_picker", "id": "type_body_font", "label": "Body font", "default": "work_sans_n4" },
+      { "type": "range", "id": "type_scale", "label": "Type scale", "min": 90, "max": 115, "step": 5, "unit": "%", "default": 100 }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      { "type": "range", "id": "page_width", "label": "Page width", "min": 1200, "max": 1600, "step": 40, "unit": "px", "default": 1360 },
+      { "type": "range", "id": "card_radius", "label": "Card corner radius", "min": 0, "max": 32, "step": 2, "unit": "px", "default": 18 },
+      { "type": "select", "id": "four_item_layout", "label": "Four-item grids", "options": [ { "value": "4", "label": "4 in one row" }, { "value": "2x2", "label": "2 + 2" } ], "default": "4" },
+      { "type": "select", "id": "twelve_item_layout", "label": "Twelve-item grids", "options": [ { "value": "4x3", "label": "4 + 4 + 4" }, { "value": "3x4", "label": "3 + 3 + 3 + 3" } ], "default": "3x4" },
+      { "type": "checkbox", "id": "enable_motion", "label": "Enable scroll reveals and micro-interactions (always off for reduced-motion users)", "default": true },
+      { "type": "checkbox", "id": "enable_easter_egg", "label": "Enable the hidden mycelium Easter egg", "default": true }
+    ]
+  },
+  {
+    "name": "Business information (ECTA s43 / POPIA)",
+    "settings": [
+      { "type": "text", "id": "biz_legal_name", "label": "Registered legal name", "info": "NEEDS CLIENT INPUT — must be the registered entity that sells the goods." },
+      { "type": "text", "id": "biz_reg_number", "label": "Company registration number", "info": "NEEDS CLIENT INPUT" },
+      { "type": "text", "id": "biz_vat_number", "label": "VAT number (if registered)", "info": "NEEDS CLIENT INPUT" },
+      { "type": "text", "id": "biz_address", "label": "Physical address", "default": "77 Hoof Road, Plettenberg Bay, Western Cape, 6603, South Africa" },
+      { "type": "text", "id": "biz_email", "label": "Contact email", "default": "info@justmushrooms.co.za" },
+      { "type": "text", "id": "biz_phone", "label": "Contact phone", "default": "+27 61 548 1969" },
+      { "type": "text", "id": "biz_whatsapp", "label": "WhatsApp number (digits only, e.g. 27615481969)", "info": "Leave blank to hide the WhatsApp link." },
+      { "type": "text", "id": "biz_info_officer", "label": "POPIA Information Officer name", "info": "NEEDS CLIENT INPUT" }
+    ]
+  },
+  {
+    "name": "Social links",
+    "settings": [
+      { "type": "url", "id": "social_instagram", "label": "Instagram" },
+      { "type": "url", "id": "social_facebook", "label": "Facebook" },
+      { "type": "url", "id": "social_tiktok", "label": "TikTok" },
+      { "type": "url", "id": "social_youtube", "label": "YouTube" }
+    ]
+  },
+  {
+    "name": "Analytics and consent",
+    "settings": [
+      { "type": "paragraph", "content": "One tagging strategy only: Google Tag Manager in the theme + the Shopify Customer Events pixel for checkout. Do not add GA4 or Ads tags anywhere else, and turn off GA4 auto-tagging inside the Shopify Google & YouTube channel." },
+      { "type": "text", "id": "gtm_container_id", "label": "GTM container ID (GTM-XXXXXXX)", "info": "Leave blank until the container in analytics/gtm-container.json has been imported and published." },
+      { "type": "checkbox", "id": "consent_banner_enabled", "label": "Show POPIA cookie consent banner (Consent Mode v2)", "default": true },
+      { "type": "select", "id": "consent_default_analytics", "label": "Default analytics consent before choice", "options": [ { "value": "denied", "label": "Denied (recommended)" }, { "value": "granted", "label": "Granted" } ], "default": "denied" },
+      { "type": "url", "id": "privacy_policy_url", "label": "Privacy policy URL", "default": "/policies/privacy-policy" }
+    ]
+  },
+  {
+    "name": "Compliance copy",
+    "settings": [
+      { "type": "textarea", "id": "disclaimer_short", "label": "Short disclaimer (shown on every product and species page)", "default": "This product is a complementary health product. It has not been evaluated by SAHPRA and is not intended to diagnose, treat, cure or prevent any disease. Consult a healthcare professional before use, especially if you are pregnant, breastfeeding, taking medication or have a medical condition." },
+      { "type": "textarea", "id": "disclaimer_pets", "label": "Pet product disclaimer", "default": "For animal use only. Not evaluated by any regulator for safety or efficacy in animals. Consult your veterinarian before use, and do not use as a substitute for veterinary care." },
+      { "type": "text", "id": "alcohol_notice", "label": "Alcohol notice", "default": "Contains approximately 30% ethanol by volume. Not suitable for people avoiding alcohol." }
+    ]
+  },
+  {
+    "name": "Cart and shipping",
+    "settings": [
+      { "type": "select", "id": "cart_type", "label": "Cart type", "options": [ { "value": "drawer", "label": "Drawer" }, { "value": "page", "label": "Page" } ], "default": "drawer" },
+      { "type": "text", "id": "shipping_summary", "label": "Shipping summary line", "default": "Courier delivery across South Africa. Rates and times shown at checkout." , "info": "NEEDS CLIENT INPUT — replace with actual rates/thresholds once confirmed." },
+      { "type": "checkbox", "id": "show_sticky_atc", "label": "Sticky add-to-cart on product pages", "default": true }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [ { "type": "image_picker", "id": "favicon", "label": "Favicon (512×512 recommended)" } ]
+  }
+]

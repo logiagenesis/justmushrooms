@@ -1,0 +1,12 @@
+{%- comment -%} Fun facts are pulled from the species metaobjects (fun_facts JSON: [{text, source, url}]) — verified, cited, non-medical. {%- endcomment -%}
+<script type="application/json" id="egg-facts">[
+{%- assign first = true -%}
+{%- for s in shop.metaobjects.species.values -%}
+  {%- if s.fun_facts.value -%}
+    {%- for f in s.fun_facts.value -%}
+      {%- unless first -%},{%- endunless -%}{"text":{{ f.text | json }},"source":{{ f.source | json }},"url":{{ f.url | json }}}{%- assign first = false -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}
+]</script>
+<script src="{{ 'easter-egg.js' | asset_url }}" defer></script>

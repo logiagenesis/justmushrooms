@@ -1,0 +1,6 @@
+extends: theme-check:recommended
+ignore:
+  - node_modules/**
+MissingTemplate:
+  ignore_missing:
+    - snippets/apps-*.liquid

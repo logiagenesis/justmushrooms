@@ -1,0 +1,16 @@
+<section class="section section--tight"><div class="page-width">
+  <div class="section-header"><div><p class="eyebrow">{{ 'customer.account.title' | t }}</p><h1 class="h2">{{ customer.name | default: customer.email }}</h1></div><a class="btn btn--ghost" href="{{ routes.account_logout_url }}">{{ 'customer.log_out' | t }}</a></div>
+  <div class="account">
+    <aside class="split__panel"><h2 class="h4">{{ 'customer.account.details' | t }}</h2><p class="small muted">{{ customer.email }}</p>{%- if customer.default_address -%}<p class="small">{{ customer.default_address | format_address }}</p>{%- endif -%}<a class="btn btn--secondary" href="{{ routes.account_addresses_url }}">{{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})</a></aside>
+    <div>
+      <h2 class="h3">{{ 'customer.orders.title' | t }}</h2>
+      {%- paginate customer.orders by 20 -%}
+        {%- if customer.orders.size > 0 -%}
+          <table class="spec"><thead><tr><th>{{ 'customer.orders.order_number' | t }}</th><th>{{ 'customer.orders.date' | t }}</th><th>{{ 'customer.orders.payment_status' | t }}</th><th>{{ 'customer.orders.fulfillment_status' | t }}</th><th>{{ 'customer.orders.total' | t }}</th></tr></thead>
+          <tbody>{%- for order in customer.orders -%}<tr><td><a href="{{ order.customer_url }}">{{ order.name }}</a></td><td>{{ order.created_at | date: '%d/%m/%Y' }}</td><td>{{ order.financial_status_label }}</td><td>{{ order.fulfillment_status_label }}</td><td>{{ order.total_price | money }}</td></tr>{%- endfor -%}</tbody></table>
+        {%- else -%}<p class="muted">{{ 'customer.orders.none' | t }}</p>{%- endif -%}
+      {%- endpaginate -%}
+    </div>
+  </div>
+</div></section>
+{% schema %}{ "name": "Account", "settings": [] }{% endschema %}

@@ -1,0 +1,19 @@
+{%- assign s = metaobject -%}
+<section class="section section--tight">
+  <div class="page-width">
+    <div class="glance reveal">
+      <div class="glance__item"><p class="label">Form sold</p><p>{{ s.form_sold.value | default: 'Tincture (spring water + ~30% ethanol)' }}</p></div>
+      <div class="glance__item"><p class="label">Flavour / profile</p><p>{{ s.flavour_profile.value | default: 'Follow product label' }}</p></div>
+      <div class="glance__item"><p class="label">Traditional use</p><p>{{ s.traditional_use_short.value | default: 'See below' }}</p></div>
+      <div class="glance__item"><p class="label">Evidence level</p><p>{% render 'badge-evidence', level: s.evidence_level.value %}</p></div>
+    </div>
+    {%- if s.linked_products.value.size > 0 -%}
+      <p class="small muted" style="margin-top:1rem">Best-fit products:
+        {%- for p in s.linked_products.value limit: 4 -%}<a href="{{ p.url }}">{{ p.title }}</a>{% unless forloop.last %}, {% endunless %}{%- endfor -%}
+      </p>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{ "name": "Species: at a glance", "settings": [], "presets": [ { "name": "Species: at a glance" } ] }
+{% endschema %}

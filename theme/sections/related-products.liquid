@@ -1,0 +1,22 @@
+<section class="section section--tight" id="related">
+  <div class="page-width">
+    <div class="section-header reveal"><div><p class="eyebrow">Pairs well</p><h2 class="h3">{{ section.settings.heading }}</h2></div></div>
+    <div data-recommendations data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.limit }}&intent=related">
+      {%- if recommendations.performed and recommendations.products_count > 0 -%}
+        {%- render 'balanced-grid', items: recommendations.products, card: 'product', list_name: 'related_products', max: section.settings.limit -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+<script>
+(function(){var w=document.querySelector('#shopify-section-{{ section.id }} [data-recommendations]');if(!w||w.children.length)return;fetch(w.dataset.url).then(r=>r.text()).then(h=>{var d=new DOMParser().parseFromString(h,'text/html');var n=d.querySelector('[data-recommendations]');if(n&&n.children.length){w.innerHTML=n.innerHTML;w.querySelectorAll('.reveal').forEach(e=>e.classList.add('is-visible'));}else{w.closest('section').hidden=true;}}).catch(()=>{w.closest('section').hidden=true;});})();
+</script>
+{% schema %}
+{
+  "name": "Related products",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "You may also like" },
+    { "type": "range", "id": "limit", "label": "Number of products (3, 4, 6 or 8 keep rows balanced)", "min": 2, "max": 8, "step": 1, "default": 3 }
+  ]
+}
+{% endschema %}

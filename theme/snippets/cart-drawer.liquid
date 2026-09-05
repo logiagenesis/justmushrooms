@@ -1,0 +1,42 @@
+<div class="drawer" id="CartDrawer" aria-hidden="true" role="dialog" aria-labelledby="CartDrawerTitle">
+  <div class="drawer__scrim" data-close-drawer="CartDrawer"></div>
+  <div class="drawer__panel">
+    <div class="drawer__head">
+      <h2 class="h3" id="CartDrawerTitle" style="margin:0">Your cart {% if cart.item_count > 0 %}<span class="muted small">({{ cart.item_count }})</span>{% endif %}</h2>
+      <button class="icon-btn" type="button" data-close-drawer="CartDrawer" aria-label="Close cart" data-autofocus>{% render 'icon', name: 'close' %}</button>
+    </div>
+    <div class="drawer__body">
+      {%- if cart.item_count == 0 -%}
+        <p class="muted">Your cart is empty.</p>
+        <a class="btn btn--primary" href="{{ routes.all_products_collection_url }}">Shop mushrooms</a>
+      {%- else -%}
+        {%- for item in cart.items -%}
+          <div class="line">
+            <a href="{{ item.url }}">{% if item.image %}{{ item.image | image_url: width: 144, height: 180, crop: 'center' | image_tag: alt: item.title, loading: 'lazy' }}{% endif %}</a>
+            <div>
+              <p class="line__title"><a href="{{ item.url }}" style="text-decoration:none">{{ item.product.title }}</a></p>
+              {%- if item.variant.title != 'Default Title' -%}<p class="small muted" style="margin:0">{{ item.variant.title }}</p>{%- endif -%}
+              <div class="line__row">
+                <div class="qty" aria-label="Quantity for {{ item.product.title | escape }}">
+                  <button type="button" data-line-qty="minus" data-line="{{ forloop.index }}" aria-label="Decrease quantity">−</button>
+                  <input type="number" value="{{ item.quantity }}" min="0" aria-label="Quantity" readonly>
+                  <button type="button" data-line-qty="plus" data-line="{{ forloop.index }}" aria-label="Increase quantity">+</button>
+                </div>
+                <strong>{{ item.final_line_price | money }}</strong>
+              </div>
+              <button type="button" class="btn btn--ghost small" data-line-remove data-line="{{ forloop.index }}">Remove</button>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+    {%- if cart.item_count > 0 -%}
+    <div class="drawer__foot">
+      <div class="cart-summary__row"><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></div>
+      <p class="small muted">VAT included. Shipping calculated at checkout. {{ settings.shipping_summary }}</p>
+      <a class="btn btn--primary btn--block btn--lg" href="{{ routes.cart_url }}/checkout" onclick="JM.track('begin_checkout', JM.cartEcommerce())">Checkout {% render 'icon', name: 'lock' %}</a>
+      <a class="btn btn--ghost" href="{{ routes.cart_url }}" style="margin-top:.8rem">View cart</a>
+    </div>
+    {%- endif -%}
+  </div>
+</div>

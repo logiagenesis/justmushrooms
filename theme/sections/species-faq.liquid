@@ -1,0 +1,13 @@
+{%- assign s = metaobject -%}
+{%- if s.faq.value -%}
+<section class="section section--tight">
+  <div class="page-width page-width--narrow">
+    <p class="eyebrow">Questions</p>
+    <h2>{{ s.common_name.value }} FAQ</h2>
+    {%- render 'faq-accordion', items: s.faq.value, open_first: true -%}
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{ "name": "Species: FAQ", "settings": [], "presets": [ { "name": "Species: FAQ" } ] }
+{% endschema %}

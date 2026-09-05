@@ -1,0 +1,57 @@
+/* Mycelia — balanced grid engine
+   Layout is chosen purely by item count (data-count). No ragged rows.
+   1 → single centred feature · 2 → 2 · 3 → 3 · 4 → 4 (or 2+2) · 5 → 1 feature + 4
+   6 → 3+3 · 7 → 1 feature + 3+3 · 8 → 4+4 · 9 → 3+3+3 · 10 → 2 feature + 4+4
+   11 → 2 feature + 3+3+3 · 12 → 4+4+4 (or 3+3+3+3) · >12 → 3-col with editorial fillers to a multiple of 3
+*/
+.bgrid{display:grid;gap:var(--gap);grid-template-columns:repeat(12,minmax(0,1fr));align-items:stretch}
+.bgrid > *{grid-column:span 12;min-width:0;display:flex}
+.bgrid > * > *{flex:1 1 auto;width:100%}
+/* desktop ≥1024 */
+@media (min-width:1024px){
+  .bgrid[data-count="1"]{grid-template-columns:repeat(12,minmax(0,1fr))}
+  .bgrid[data-count="1"] > *{grid-column:3 / span 8}
+  .bgrid[data-count="2"] > *{grid-column:span 6}
+  .bgrid[data-count="3"] > *{grid-column:span 4}
+  .bgrid[data-count="4"] > *{grid-column:span 3}
+  .bgrid[data-count="4"][data-four="2x2"] > *{grid-column:span 6}
+  .bgrid[data-count="5"] > *{grid-column:span 3}
+  .bgrid[data-count="5"] > :first-child{grid-column:span 12}
+  .bgrid[data-count="6"] > *{grid-column:span 4}
+  .bgrid[data-count="7"] > *{grid-column:span 4}
+  .bgrid[data-count="7"] > :first-child{grid-column:span 12}
+  .bgrid[data-count="8"] > *{grid-column:span 3}
+  .bgrid[data-count="9"] > *{grid-column:span 4}
+  .bgrid[data-count="10"] > *{grid-column:span 3}
+  .bgrid[data-count="10"] > :nth-child(-n+2){grid-column:span 6}
+  .bgrid[data-count="11"] > *{grid-column:span 4}
+  .bgrid[data-count="11"] > :nth-child(-n+2){grid-column:span 6}
+  .bgrid[data-count="12"] > *{grid-column:span 4}
+  .bgrid[data-count="12"][data-twelve="4x3"] > *{grid-column:span 3}
+  .bgrid[data-count="n3"] > *{grid-column:span 4}
+  /* feature cards (full-row) go horizontal */
+  .bgrid[data-count="5"] > :first-child .card,
+  .bgrid[data-count="7"] > :first-child .card{flex-direction:row}
+  .bgrid[data-count="5"] > :first-child .card__media,
+  .bgrid[data-count="7"] > :first-child .card__media{width:50%;flex:0 0 50%;aspect-ratio:auto}
+  .bgrid[data-count="5"] > :first-child .card__body,
+  .bgrid[data-count="7"] > :first-child .card__body{justify-content:center;padding:clamp(28px,3vw,48px)}
+  .bgrid[data-count="10"] > :nth-child(-n+2) .card,
+  .bgrid[data-count="11"] > :nth-child(-n+2) .card{flex-direction:row}
+  .bgrid[data-count="10"] > :nth-child(-n+2) .card__media,
+  .bgrid[data-count="11"] > :nth-child(-n+2) .card__media{width:46%;flex:0 0 46%;aspect-ratio:auto}
+}
+/* tablet 768–1023: 2 columns; when count is odd, first card spans both */
+@media (min-width:768px) and (max-width:1023px){
+  .bgrid > *{grid-column:span 6}
+  .bgrid[data-odd="true"] > :first-child{grid-column:span 12}
+  .bgrid[data-odd="true"] > :first-child .card{flex-direction:row}
+  .bgrid[data-odd="true"] > :first-child .card__media{width:48%;flex:0 0 48%;aspect-ratio:auto}
+  .bgrid[data-count="1"] > *{grid-column:2 / span 10}
+}
+/* mobile: 1 column */
+@media (max-width:767px){.bgrid > *{grid-column:span 12}}
+/* carousel variant (for 5 items when preferred) */
+.bcarousel{display:grid;grid-auto-flow:column;grid-auto-columns:min(78vw,360px);gap:var(--gap);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;scrollbar-width:thin}
+.bcarousel > *{scroll-snap-align:start;display:flex}
+@media (min-width:1024px){.bcarousel{grid-auto-columns:calc((100% - var(--gap) * 3) / 4)}}

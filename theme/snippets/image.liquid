@@ -1,0 +1,12 @@
+{%- comment -%} Responsive image. Params: image (image object), sizes, widths (string), class, loading ('eager' for LCP), aspect (e.g. '4/5'), alt override, preload (bool) {%- endcomment -%}
+{%- liquid
+  assign w = widths | default: '360,540,720,900,1200,1600,2000'
+  assign l = loading | default: 'lazy'
+  assign a = alt | default: image.alt | default: ''
+  assign s = sizes | default: '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw'
+-%}
+{%- if image -%}
+  {%- if preload -%}{{ image | image_url: width: 2000 | image_tag: widths: w, sizes: s, class: class, loading: l, alt: a, fetchpriority: fetchpriority, preload: true }}{%- else -%}{{ image | image_url: width: 2000 | image_tag: widths: w, sizes: s, class: class, loading: l, alt: a, fetchpriority: fetchpriority }}{%- endif -%}
+{%- else -%}
+  <div class="card__media--placeholder {{ class }}" role="img" aria-label="{{ a | default: 'Image coming soon' }}">{% render 'icon', name: 'mushroom' %}</div>
+{%- endif -%}

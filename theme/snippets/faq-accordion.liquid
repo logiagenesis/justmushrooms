@@ -1,0 +1,12 @@
+{%- comment -%} items: array of objects with .question and .answer (from metaobject/metafield JSON or section blocks). Renders visible accordion + FAQPage schema. {%- endcomment -%}
+{%- if items and items.size > 0 -%}
+<div class="acc" {% if id %}id="{{ id }}"{% endif %}>
+  {%- for i in items -%}
+    <details class="acc__item"{% if forloop.first and open_first %} open{% endif %}>
+      <summary>{{ i.question }}</summary>
+      <div class="acc__body rte">{{ i.answer }}</div>
+    </details>
+  {%- endfor -%}
+</div>
+{%- render 'schema-faq', items: items -%}
+{%- endif -%}
