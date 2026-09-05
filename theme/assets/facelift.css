@@ -14,8 +14,12 @@
 .finder__opt:hover,.finder__opt[aria-pressed="true"]{border-color:var(--c-spore);background:rgba(184,92,56,.08)}
 .newsletter{background:var(--c-ink-2)!important}
 .split__panel--not{border-color:var(--c-line)!important}
-.btn--primary:hover{background:#9a4a2c;color:#F4EFE6}
-.badge{background:rgba(28,25,22,.06)}
+.btn--primary{background:#9A4A2C!important;color:#F4EFE6!important}
+.btn--primary:hover{background:#7E3C24!important;color:#F4EFE6!important}
+.badge{background:rgba(28,25,22,.08);color:#3A322C;border-color:rgba(28,25,22,.22)}
+.badge--strong,.badge--limited,.badge--animal,.badge--traditional,.badge--label,.badge--botanical,.badge--pets{color:#3A322C}
+.badge--sale{background:#9A4A2C;color:#F4EFE6;border-color:#9A4A2C}
+.count-bubble{background:#9A4A2C;color:#F4EFE6}
 .card:hover,.card:focus-within{box-shadow:0 24px 48px -28px rgba(28,25,22,.28)}
 .card--cta{background:var(--c-ink-3)!important;border-color:var(--c-line-strong)!important}
 .sticky-atc{background:rgba(244,239,230,.94)!important;color:var(--c-cream)}
