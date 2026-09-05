@@ -29,6 +29,22 @@ jobs:
           gdown --folder "https://drive.google.com/drive/folders/1km7x5KEJfA0gVvq9mxRZiEhmBVCW8fut" -O /tmp/drive/bundle || true
           python3 scripts/preview/flatten-drive-images.py /tmp/drive preview/assets/img
           ls preview/assets/img | wc -l
+      - name: Fetch brand logo
+        run: |
+          mkdir -p theme/assets
+          curl -fsSL "https://justmushrooms.co.za/cdn/shop/files/logoclicked.png?v=1730131869" -o /tmp/logoclicked.png
+          pip install -q pillow
+          python3 - <<'PY'
+from PIL import Image
+src = Image.open('/tmp/logoclicked.png').convert('RGBA')
+src.resize((320,320), Image.Resampling.LANCZOS).save('theme/assets/logo.png', 'PNG', optimize=True)
+src.resize((32,32), Image.Resampling.LANCZOS).save('theme/assets/favicon-32.png', 'PNG', optimize=True)
+src.resize((64,64), Image.Resampling.LANCZOS).save('theme/assets/favicon-64.png', 'PNG', optimize=True)
+src.resize((180,180), Image.Resampling.LANCZOS).save('theme/assets/apple-touch.png', 'PNG', optimize=True)
+src.resize((512,512), Image.Resampling.LANCZOS).save('theme/assets/favicon.png', 'PNG', optimize=True)
+PY
+          curl -fsSL "https://justmushrooms.co.za/cdn/shop/files/316955697_121928927392695_8890572885037283047_n.jpg?v=1730046342" -o theme/assets/og-image.jpg
+          ls -la theme/assets/logo.png theme/assets/favicon-32.png theme/assets/og-image.jpg
       - name: Install and render
         working-directory: preview
         run: |
