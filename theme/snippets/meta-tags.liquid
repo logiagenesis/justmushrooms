@@ -56,6 +56,9 @@
   assign brand_og = 'https://justmushrooms.co.za/cdn/shop/files/316955697_121928927392695_8890572885037283047_n.jpg?v=1730046342'
   if og_image
     assign og_src = og_image | image_url: width: 1200, height: 630, crop: 'center'
+    unless og_src contains 'https:'
+      assign og_src = og_src | prepend: 'https:'
+    endunless
   else
     assign og_src = brand_og
   endif
