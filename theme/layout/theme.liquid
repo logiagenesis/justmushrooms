@@ -14,7 +14,6 @@
 
   {%- render 'meta-tags' -%}
 
-  {%- comment -%} Fonts: preload only the two faces actually used above the fold {%- endcomment -%}
   {{ settings.type_display_font | font_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
   {{ settings.type_body_font | font_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
   <style>
@@ -26,8 +25,8 @@
   {{ 'grid.css' | asset_url | stylesheet_tag }}
   {{ 'components.css' | asset_url | stylesheet_tag }}
   {{ 'sections.css' | asset_url | stylesheet_tag }}
+  {{ 'facelift.css' | asset_url | stylesheet_tag }}
 
-  {%- comment -%} Consent Mode v2 defaults MUST load before GTM {%- endcomment -%}
   {%- render 'consent-defaults' -%}
   {%- render 'gtm-head' -%}
   {%- render 'datalayer' -%}
