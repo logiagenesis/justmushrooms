@@ -88,8 +88,14 @@ jobs:
           gdown --folder "https://drive.google.com/drive/folders/1km7x5KEJfA0gVvq9mxRZiEhmBVCW8fut" -O /tmp/drive/bundle \
             || echo "::warning::Drive 'bundle' folder unavailable; falling back to committed images"
           python3 scripts/preview/flatten-drive-images.py /tmp/drive preview/assets/img
-      # A silently degraded image set used to deploy anyway. Fail instead: the committed set
-      # is the floor, so this only trips if images went missing rather than Drive being down.
+      # The 23 product photographs are derived from data/live-product-images rather than
+      # committed (L5), and the inventory check below runs before render.mjs would do it.
+      # Without this the floor check depends on the Drive download having succeeded, which
+      # is exactly the case the warnings above say is survivable.
+      - name: Materialise derived product images
+        run: node scripts/preview/sync-product-images.mjs
+      # A silently degraded image set used to deploy anyway. Fail instead: with the derived
+      # images materialised, this trips only if images really went missing.
       - name: Check image inventory
         run: |
           set -euo pipefail
