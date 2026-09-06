@@ -10,7 +10,7 @@
 {%- if others.size > 0 -%}
 <section class="section section--tight">
   <div class="page-width">
-    <div class="section-header reveal"><div><p class="eyebrow">Keep exploring</p><h2 class="h3">Other species</h2></div><a class="btn btn--secondary" href="/pages/species">All species</a></div>
+    <div class="section-header reveal"><div><p class="eyebrow">Keep exploring</p><h2 class="h3">Other species</h2></div><a class="btn btn--secondary" href="{{ settings.route_species | default: '/pages/species' }}">All species</a></div>
     {%- render 'balanced-grid', items: others, card: 'species', max: 3 -%}
   </div>
 </section>

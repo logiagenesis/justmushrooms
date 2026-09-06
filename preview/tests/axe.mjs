@@ -1,14 +1,33 @@
 // axe-core accessibility audit across every rendered page, driven by Playwright/Chromium.
 import fs from 'node:fs'; import path from 'node:path'; import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
-const TOOLS = process.env.JM_TOOLS || '/tmp/claude-0/-home-user-justmushrooms/c0067de6-8042-5e50-8705-a8ff053016a9/scratchpad/tools/node_modules';
-const { chromium } = require(path.join(TOOLS, 'playwright-core'));
-const axeSource = fs.readFileSync(path.join(TOOLS, 'axe-core/axe.min.js'), 'utf8');
+// playwright-core and axe-core are devDependencies of preview/package.json, so `npm ci` in
+// preview/ is the only setup this needs. JM_TOOLS stays supported as an override for
+// environments that keep a shared browser/tooling directory outside the repo.
+const resolveTool = (name) => {
+  const tools = process.env.JM_TOOLS;
+  if (tools) return path.join(tools, name);
+  return require.resolve(name);
+};
+const { chromium } = require(resolveTool('playwright-core'));
+const axeSource = fs.readFileSync(resolveTool('axe-core/axe.min.js'), 'utf8');
 const BASE = process.env.BASE || 'http://127.0.0.1:4173';
 const DIST = path.resolve(new URL('.', import.meta.url).pathname, '../dist');
 const pages = [];
 (function walk(d) { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const p = path.join(d, e.name); if (e.isDirectory()) { if (e.name !== 'assets') walk(p); } else if (e.name.endsWith('.html')) pages.push('/' + path.relative(DIST, p).replace(/index\.html$/, '').replace(/\.html$/, '')); } })(DIST);
-const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--no-sandbox', '--disable-dev-shm-usage'] });
+// Prefer an explicit CHROME_PATH, then playwright-core's own resolution, then any
+// chromium-<rev> already unpacked under PLAYWRIGHT_BROWSERS_PATH (the pinned revision
+// need not match the installed playwright-core), then a system Chromium.
+const browsersRoot = process.env.PLAYWRIGHT_BROWSERS_PATH;
+const unpacked = browsersRoot && fs.existsSync(browsersRoot)
+  ? fs.readdirSync(browsersRoot).filter(d => d.startsWith('chromium-')).sort()
+      .map(d => path.join(browsersRoot, d, 'chrome-linux', 'chrome'))
+  : [];
+const chromePath = process.env.CHROME_PATH
+  || [chromium.executablePath(), ...unpacked, '/usr/bin/chromium', '/usr/bin/chromium-browser', '/usr/bin/google-chrome']
+       .find(p => p && fs.existsSync(p));
+if (!chromePath) throw new Error('No Chromium found. Set CHROME_PATH, or run `npx playwright install chromium`.');
+const browser = await chromium.launch({ executablePath: chromePath, args: ['--no-sandbox', '--disable-dev-shm-usage'] });
 let total = 0; const report = [];
 for (const viewport of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'tablet', width: 834, height: 1112 }, { name: 'mobile', width: 390, height: 844 }]) {
   // reducedMotion: scroll-reveal elements settle instantly, so axe measures the resting state

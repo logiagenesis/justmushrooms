@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="{{ settings.color_ink }}">
+  <meta name="theme-color" content="{{ settings.color_surface }}">
   <link rel="canonical" href="{{ canonical_url }}">
   <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
   {%- if settings.favicon != blank -%}
@@ -28,7 +28,6 @@
   {{ 'grid.css' | asset_url | stylesheet_tag }}
   {{ 'components.css' | asset_url | stylesheet_tag }}
   {{ 'sections.css' | asset_url | stylesheet_tag }}
-  {{ 'facelift.css' | asset_url | stylesheet_tag }}
 
   {%- render 'consent-defaults' -%}
   {%- render 'gtm-head' -%}

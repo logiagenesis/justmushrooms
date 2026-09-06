@@ -17,8 +17,8 @@
               </div>
               <div class="mega__col">
                 <p class="label">Start here</p>
-                <a href="/pages/species">All species</a>
-                <a href="/pages/mushroom-finder">Mushroom Finder</a>
+                <a href="{{ settings.route_species | default: '/pages/species' }}">All species</a>
+                <a href="{{ settings.route_finder | default: '/pages/mushroom-finder' }}">Mushroom Finder</a>
                 <a href="/pages/species#compare">Compare species</a>
                 <a href="/blogs/learn">Learn</a>
               </div>
@@ -38,7 +38,8 @@
       {%- if section.settings.logo != blank -%}
         {{ section.settings.logo | image_url: width: 320 | image_tag: alt: shop.name, loading: 'eager', width: 72, height: 72 }}
       {%- else -%}
-        <img src="https://justmushrooms.co.za/cdn/shop/files/logoclicked.png?v=1730131869&amp;width=160" srcset="https://justmushrooms.co.za/cdn/shop/files/logoclicked.png?v=1730131869&amp;width=80 80w, https://justmushrooms.co.za/cdn/shop/files/logoclicked.png?v=1730131869&amp;width=160 160w, https://justmushrooms.co.za/cdn/shop/files/logoclicked.png?v=1730131869&amp;width=240 240w" sizes="56px" alt="{{ shop.name }}" width="72" height="72" loading="eager" decoding="async">
+        {%- comment -%} Fallback mark ships with the theme; the merchant overrides it with the Logo picker above. {%- endcomment -%}
+        <img src="{{ 'logo.svg' | asset_url }}" alt="{{ shop.name }}" width="72" height="72" loading="eager" decoding="async">
       {%- endif -%}
     </a>
     <div class="header__actions">
@@ -52,11 +53,11 @@
 <div class="drawer menu-drawer" id="MenuDrawer" aria-hidden="true" role="dialog" aria-label="Menu">
   <div class="drawer__scrim" data-close-drawer="MenuDrawer"></div>
   <div class="drawer__panel">
-    <div class="drawer__head"><a class="header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }} home"><img src="https://justmushrooms.co.za/cdn/shop/files/logoclicked.png?v=1730131869&amp;width=160" alt="{{ shop.name }}" width="56" height="56"></a><button class="icon-btn" type="button" data-close-drawer="MenuDrawer" aria-label="Close menu" data-autofocus>{% render 'icon', name: 'close' %}</button></div>
+    <div class="drawer__head"><a class="header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }} home">{% if section.settings.logo != blank %}{{ section.settings.logo | image_url: width: 160 | image_tag: alt: shop.name, width: 56, height: 56 }}{% else %}<img src="{{ 'logo.svg' | asset_url }}" alt="{{ shop.name }}" width="56" height="56">{% endif %}</a><button class="icon-btn" type="button" data-close-drawer="MenuDrawer" aria-label="Close menu" data-autofocus>{% render 'icon', name: 'close' %}</button></div>
     <nav class="drawer__body" aria-label="Mobile">
       {%- for link in menu.links -%}
         {%- if link.title == 'Species' and species.size > 0 -%}
-          <details><summary>{{ link.title }}</summary><div class="sub"><a href="/pages/species">All species</a>{%- for s in species -%}<a href="{{ s.system.url }}">{{ s.common_name.value }}</a>{%- endfor -%}<a href="/pages/mushroom-finder">Mushroom Finder</a></div></details>
+          <details><summary>{{ link.title }}</summary><div class="sub"><a href="{{ settings.route_species | default: '/pages/species' }}">All species</a>{%- for s in species -%}<a href="{{ s.system.url }}">{{ s.common_name.value }}</a>{%- endfor -%}<a href="{{ settings.route_finder | default: '/pages/mushroom-finder' }}">Mushroom Finder</a></div></details>
         {%- elsif link.links.size > 0 -%}
           <details><summary>{{ link.title }}</summary><div class="sub">{%- for c in link.links -%}<a href="{{ c.url }}">{{ c.title }}</a>{%- endfor -%}</div></details>
         {%- else -%}

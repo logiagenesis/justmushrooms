@@ -34,7 +34,16 @@
   function toast() {
     const f = facts.length ? facts[Math.floor(Math.random() * facts.length)] : null;
     const el = document.createElement('div'); el.className = 'egg-toast'; el.setAttribute('role', 'status');
-    el.innerHTML = '<strong>The underground is alive.</strong>' + (f ? '<span>' + f.text + '</span><small>Source: <a href="' + f.url + '" rel="noopener" target="_blank">' + f.source + '</a></small>' : '');
+    // Fact text and source names come from metaobjects — set them as text, not markup.
+    const strong = document.createElement('strong'); strong.textContent = 'The underground is alive.';
+    el.appendChild(strong);
+    if (f) {
+      const span = document.createElement('span'); span.textContent = f.text;
+      const small = document.createElement('small'); small.textContent = 'Source: ';
+      const a = document.createElement('a'); a.href = f.url; a.rel = 'noopener'; a.target = '_blank'; a.textContent = f.source;
+      small.appendChild(a);
+      el.append(span, small);
+    }
     document.body.appendChild(el); requestAnimationFrame(() => el.classList.add('is-on')); setTimeout(() => { el.classList.remove('is-on'); setTimeout(() => el.remove(), 800); }, 11000);
   }
   function end() { cancelAnimationFrame(raf); canvas.classList.remove('is-on'); setTimeout(() => { canvas.remove(); active = false; }, 1300); window.removeEventListener('resize', resize); }

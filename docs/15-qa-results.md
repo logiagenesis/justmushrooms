@@ -1,34 +1,97 @@
-# 15 — Phase 14: QA results (triple audit)
+# 15 — QA results
 
-Run 02/09/2026 against the theme as committed. Every item is `PASS`, `FAIL` or `BLOCKED (reason)`. Nothing is ticked without evidence, and "blocked" means exactly that — it is not a quiet pass.
+Run **06/09/2026** against the theme as committed, in a clean container. Every item is
+`PASS`, `FAIL` or `BLOCKED (reason)`. Nothing is ticked without evidence, and "blocked"
+means exactly that — it is not a quiet pass.
 
-**How the automated checks run:** the theme has no store to render against, so `preview/` renders the real Liquid templates with LiquidJS plus Shopify filter shims, using live product data and the generated species/product content. That produces static HTML that Lighthouse, axe and the assertion suite can drive. Commands: `node preview/render.mjs`, `node preview/tests/run.mjs`, `node preview/tests/axe.mjs`, `shopify theme check --path theme`.
+> **Why this document was rewritten.** The audit GT-AUD-JM-2026-09-05 (finding H2) found
+> the previous version of this file describing code that was no longer committed: it
+> claimed 0 theme-check offences against a theme with 3 errors, 510/510 assertions against
+> a suite that had grown to 1,382 and had a failure in it, and 0 axe violations against a
+> build with 1,556 colour-contrast failures. The cause was a colour "facelift" applied
+> after QA, with QA never re-run. The figures below were reproduced on the current commit,
+> and the first four now run in CI with the deploy gated on them, so they cannot drift
+> again. Where something is no longer measured, it says so rather than quoting an old
+> number.
+
+**How the automated checks run:** the theme has no store to render against, so `preview/`
+renders the real Liquid templates with LiquidJS plus Shopify filter shims, using live
+product data and the generated species/product content. That produces static HTML that
+axe and the assertion suite can drive. `preview/` declares `playwright-core` and
+`axe-core` as devDependencies, so `npm ci` in that directory is the only setup needed —
+neither the accessibility runner nor the screenshot script points at one contributor's
+scratchpad any more.
+
+`preview/reports/axe.json` is committed: it is the evidence for the 0-violations figure
+above, and it is two bytes when the run is clean. `preview/reports/shots/` is not — the
+design-review screenshots came to 54 MB regenerated, which would have given back more than
+the 24.6 MB of duplicated photography removed under L5. Regenerate them with
+`node preview/tests/shots.mjs` against a running `node preview/serve.mjs`.
 
 ## Summary
 
 | Check | Result |
 |---|---|
-| `shopify theme check` (3.29.0) | **0 offences** — 0 errors, 0 warnings |
-| Assertion suite (`preview/tests/run.mjs`) | **510 passed, 0 failed** |
-| axe-core, WCAG 2.0/2.1/2.2 A + AA + best practice | **0 violations** across 20 pages × 3 viewports |
-| Lighthouse desktop, 9 pages | **100 / 100 / 100 / 100** on all but the cart's SEO score |
+| `shopify theme check --path theme` | **0 offences** — 112 files, 0 errors, 0 warnings |
+| Assertion suite (`node preview/tests/run.mjs`) | **1544 passed, 0 failed** |
+| axe-core 4, WCAG 2.x A + AA + best practice | **0 violations** across 55 pages × 3 viewports |
+| `python3 scripts/build-seo-metadata.py --check` | **PASS** — data pack matches the approved §5.2 metadata for all 23 products |
+| Rendered `<title>` budget | **PASS** — 0 of 55 over 60 chars, 0 duplicates, 0 doubled brands |
+| Preview indexability | **PASS** — 55/55 pages `noindex,nofollow`, `robots.txt` disallows all |
 | Grid balance, counts 1–12 and 23 | **No ragged rows** at desktop, tablet or mobile |
 
-### Lighthouse detail
+### Lighthouse
 
-| Page | Perf | A11y | Best practices | SEO | LCP | CLS | TBT |
-|---|---:|---:|---:|---:|---|---|---|
-| `home` | 100 | 100 | 100 | 100 | 0.5 s | 0 | 0 ms |
-| `collections/all` | 100 | 100 | 100 | 100 | 0.5 s | 0 | 0 ms |
-| `products/lions-mane-mushroom-tincture-50ml` | 100 | 100 | 100 | 100 | 0.5 s | 0 | 0 ms |
-| `species/lions-mane` | 100 | 100 | 100 | 100 | 0.4 s | 0 | 0 ms |
-| `pages/species` | 100 | 100 | 100 | 100 | 0.5 s | 0 | 0 ms |
-| `pages/mushroom-finder` | 100 | 100 | 100 | 100 | 0.5 s | 0 | 0 ms |
-| `pages/faq` | 100 | 100 | 100 | 100 | 0.4 s | 0 | 0 ms |
-| `blogs/learn` | 100 | 100 | 100 | 100 | 0.4 s | 0 | 0 ms |
-| `cart` | 100 | 100 | 100 | **63** | 0.5 s | 0 | 0 ms |
+**Not currently measured.** The previous version of this document reported
+100/100/100/100 across nine pages, but `preview/reports/lh-*.json` was git-ignored and
+absent, so the claim could not be checked against anything. The git-ignore has been
+removed; until a run is committed under `preview/reports/`, treat performance as
+unmeasured rather than perfect. The performance *patterns* the theme uses are listed
+under "Performance" below and are verifiable by reading the templates — that is not the
+same as a score.
 
-The cart's SEO score is Lighthouse penalising `noindex`, which is deliberate on a cart page. Targets in the brief were LCP < 2.5 s, CLS < 0.1, INP < 200 ms, mobile performance ≥ 85, accessibility ≥ 95, SEO ≥ 95 — all met, though note these numbers come from a local static render, not the production Shopify CDN. **Production Lighthouse is `BLOCKED` until the theme is deployed**; the numbers to beat are recorded in `docs/17-launch-checklist.md`.
+### Colour contrast
+
+The contrast failures in H1 are fixed at the source rather than overridden. Ratios below
+are computed from the committed token values (WCAG 2.x relative luminance):
+
+| Token / use | Foreground | Background | Ratio | Required |
+|---|---|---|---:|---:|
+| `--c-accent-strong` — primary button, sale badge, count bubble | `#F4EFE6` | `#9A4A2C` | 5.41 : 1 | 4.5 : 1 |
+| `--c-accent-strong-hover` | `#F4EFE6` | `#7E3C24` | 7.17 : 1 | 4.5 : 1 |
+| `--c-badge-text` on `--c-surface-2` | `#3A322C` | `#EBE4D6` | 9.93 : 1 | 4.5 : 1 |
+| `--c-text-muted` on `--c-surface` | `#5E574E` | `#F4EFE6` | 6.22 : 1 | 4.5 : 1 |
+| `--c-text` on `--c-surface` | `#1C1916` | `#F4EFE6` | 15.28 : 1 | 4.5 : 1 |
+| `--c-on-deep` on `--c-deep` — announcement bar | `#F4EFE6` | `#1C1916` | 15.28 : 1 | 4.5 : 1 |
+
+`--c-accent` (`#B85C38`, 3.96 : 1) is **decorative only** — borders, badge dots, icons and
+large display text. It must never sit under small text or carry it. `--c-accent-strong` is
+the accent for anything with text on it. Changing either in the theme editor without
+re-running axe is how H1 happened the first time.
+
+## Outstanding — cannot be closed in code
+
+These are the audit findings that no amount of engineering resolves. They are launch
+blockers and are not marked PASS anywhere in this document.
+
+`python3 scripts/check-launch-readiness.py` enumerates them from the repository on every
+CI run and writes them to the job summary, so they stay visible instead of failing
+quietly — the footer renders its statutory identifiers conditionally, so blank settings
+produced no footer text rather than an obviously incomplete one, and nothing in the build
+noticed. It reports, and does not gate the preview deploy; `--strict` exits non-zero and
+is the gate to use before deploying the real store.
+
+| ID | Item | Owner |
+|---|---|---|
+| H3 | Compliance brief is a 370-byte stub marked UNVERIFIED; the whole regulatory position rests on it | Regulatory advisor |
+| H3 | Disclaimer uses US DSHEA wording, not the statement the Medicines Act General Regulations prescribe for unregistered complementary medicines | Regulatory advisor |
+| H3 | Product photography shows label claims ("SUPPORTS … ADHD", "BRAIN") that the copy removed — label reprint and re-shoot required, or the copy work is cosmetic | Client |
+| H3 | Five product names that make disease claims await confirmation of the proposed renames | Client |
+| M5 | 48 open client-input flags across 23 products; six blends render fallback text where ingredients belong | Client |
+| M6 | ECTA s43 / POPIA identifiers blank: legal name, registration number, VAT number, information officer. The footer renders them conditionally, so it currently shows none | Client |
+| M8 | "What it does not do" fields name diseases in negated form on product pages — an implied-claim risk under SA advertising practice regardless of the negation | Regulatory advisor |
+
+Targets in the brief were LCP < 2.5 s, CLS < 0.1, INP < 200 ms, mobile performance ≥ 85, accessibility ≥ 95, SEO ≥ 95. **Whether they are met is currently unmeasured** — see the Lighthouse note above. Accessibility is independently covered by the axe run; performance and SEO scores are not. **Production Lighthouse is `BLOCKED` until the theme is deployed**; the numbers to beat are recorded in `docs/17-launch-checklist.md`.
 
 ### Measured grid rows at 1440px (from `/grid-test`)
 
@@ -103,10 +166,10 @@ The cart's SEO score is Lighthouse penalising `noindex`, which is deliberate on 
 | Purchase value and currency correct | **PASS** in the pixel code (ZAR, tax and shipping split out); **BLOCKED** live |
 | Consent mode works | **PASS** — defaults deny before choice, stored choice replays, banner updates; asserted |
 | GSC verified | **BLOCKED** |
-| Page speed tested | **PASS** locally (table above); production **BLOCKED** |
-| Accessibility tested | **PASS** — axe 0 violations, 20 pages × 3 viewports; Lighthouse a11y 100 |
+| Page speed tested | **UNVERIFIED** — no committed Lighthouse run; production **BLOCKED** |
+| Accessibility tested | **PASS** — axe-core 4, 0 violations across 55 pages × 3 viewports |
 | Mobile tested | **PASS** — emulated at 390px; real-device testing **BLOCKED** |
-| No console errors | **PASS** — Lighthouse `errors-in-console` clean on every page |
+| No console errors | **UNVERIFIED** — previously evidenced by a Lighthouse run that is no longer available; not re-measured |
 | No duplicate tags | **PASS** in the theme; the live store's UA tag must be removed at deployment |
 | No broken tracking | **PASS** in the harness |
 
@@ -118,8 +181,30 @@ The cart's SEO score is Lighthouse penalising `noindex`, which is deliberate on 
 | 2 | Reference entries without a URL rendered an empty `<a>` — 9 axe "link-name" violations. Liquid treats `''` as truthy, so `{% if r.url %}` did not guard it | `{% if r.url != blank %}` |
 | 3 | Consent, marketing and address checkboxes relied on implicit label wrapping | Explicit `for`/`id` pairs |
 | 4 | Heading hierarchy skipped levels — data labels and nav group labels were marked up as `<h4>` | Converted to `<p class="label">`; added visually-hidden `<h2>`s before card grids on collection, search, species-index and blog templates |
-| 5 | 404 numeral used a hairline stroke on ink and failed contrast | Solid `--c-cream-2` |
+| 5 | 404 numeral used a hairline stroke on ink and failed contrast | Solid `--c-text-muted` (named `--c-cream-2` at the time) |
 | 6 | 4 theme-check errors (filters on `render` arguments, an unsupported gift-card filter) and 9 warnings | All cleared; theme-check is now clean |
 | 7 | Product cards did not link to species on collection pages because the cleanup CSV was read with `\r\n` line endings, so the last column key never matched | Harness now strips `\r` |
 
 Items 1–6 are defects in the delivered theme and are fixed in it. Item 7 was a harness bug, and it is the reason the harness exists: it caught a data-mapping failure that would have shipped as silently missing cross-links.
+
+## Defects fixed in response to GT-AUD-JM-2026-09-05
+
+| ID | Defect | Fix |
+|---|---|---|
+| H1, M7 | Colour settings held a dark palette's values under a dark palette's names (`color_ink` held cream, `color_cream` held near-black), with `facelift.css` appended to compensate. 1,556 axe colour-contrast violations. | Settings and CSS variables renamed to their role (`surface`/`text`/`accent`/`deep`); `facelift.css` folded into the base files and deleted; dark-theme literals replaced; `--c-accent-strong` introduced as the only accent allowed under text |
+| H2 | This document and the README described code that was not committed | Both rewritten from a reproduced run; the checks now gate the deploy in CI |
+| H4 | Header logo and OG image hot-linked the live store's CDN with a version query string; five referenced assets were absent from the theme | `logo.svg` and a generated `og-image.jpg` committed and wired up, with theme-editor pickers as overrides; CI no longer downloads the live logo |
+| M1 | `og:image` emitted protocol-relative | Prefix-aware normalisation — `https:` for `//cdn.shopify.com/…`, `shop.url` for root-relative paths |
+| M2 | Mushroom Finder question 2 mapped every answer to an empty rule array, so it could not change the result | Rules populated; verified in a browser that the ranking differs between "one species" and "a house blend" |
+| M3 | Product SEO titles were the live store's, so the theme's brand suffix doubled the brand and the Lion's Mane 30 ml / 50 ml titles collided | Approved §5.2 metadata applied from the SEO doc by `scripts/build-seo-metadata.py`; suffix appended only when absent and within budget; title length, uniqueness and brand-count now asserted |
+| M4 | Public preview deployed the whole catalogue with no `noindex`, and suppressed build-input failures | `noindex,nofollow` forced on every page (cart and search previously kept `follow`), disallow-all `robots.txt`, both asserted in CI; missing inputs now warn or fail rather than deploying silently |
+| L1 | axe runner hard-coded a path to one contributor's scratchpad; Playwright and axe-core undeclared | Both declared as devDependencies and resolved normally; browser discovery falls back sensibly; `preview/reports/` no longer git-ignored |
+| L2 | 21 hard-coded internal links across 14 files | `routes.all_products_collection_url` plus three "Key page links" settings |
+| L3 | Organization schema assigned an unused variable and looped over a string; its comma logic would have emitted invalid JSON if Instagram were unset but Facebook set | Rewritten as a join-and-split that drops blanks |
+| L4 | `innerHTML` built from metaobject strings in the Finder and Easter-egg scripts — also a correctness bug, since every result card is titled "Lion's Mane" | Nodes built individually with `textContent` |
+| L5 | 23 product photographs committed twice — `preview/assets/img/product-<handle>.jpg` was byte-identical to `data/live-product-images/<handle>.jpg`, 24.6 MB of pure duplication | The preview copies are a pure rename of the source, so they are now derived at build time by `scripts/preview/sync-product-images.mjs` (called from `shims.mjs` before it scans for available photographs) and git-ignored |
+
+Verified for L5: deleting `preview/assets/img/product-*.jpg` and re-running `node
+preview/render.mjs` restores all 23 and the suite still passes. Note this removes the
+duplication from the working tree going forward; the blobs remain in git history, which
+only a history rewrite would reclaim — not worth doing on a shared branch.
