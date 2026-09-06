@@ -19,7 +19,14 @@ renders the real Liquid templates with LiquidJS plus Shopify filter shims, using
 product data and the generated species/product content. That produces static HTML that
 axe and the assertion suite can drive. `preview/` declares `playwright-core` and
 `axe-core` as devDependencies, so `npm ci` in that directory is the only setup needed —
-the accessibility runner no longer points at one contributor's scratchpad.
+neither the accessibility runner nor the screenshot script points at one contributor's
+scratchpad any more.
+
+`preview/reports/axe.json` is committed: it is the evidence for the 0-violations figure
+above, and it is two bytes when the run is clean. `preview/reports/shots/` is not — the
+design-review screenshots came to 54 MB regenerated, which would have given back more than
+the 24.6 MB of duplicated photography removed under L5. Regenerate them with
+`node preview/tests/shots.mjs` against a running `node preview/serve.mjs`.
 
 ## Summary
 

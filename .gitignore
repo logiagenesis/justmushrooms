@@ -3,3 +3,4 @@ preview/dist/
 *.log
 .DS_Store
 preview/assets/img/product-*.jpg
+preview/reports/shots/

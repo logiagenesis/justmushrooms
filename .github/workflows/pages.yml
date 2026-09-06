@@ -1,15 +1,19 @@
 name: Preview Pages
 on:
   push:
-    branches: [claude/just-mushrooms-rebuild-q3a9e4, claude/gallant-cerf-4728h5, main]
+    branches: [claude/just-mushrooms-rebuild-q3a9e4, main]
   pull_request:
   workflow_dispatch:
 permissions:
   contents: read
   pages: write
   id-token: write
+# A single "pages" group meant a PR run cancelled the push run for the same commit, and the
+# cancelled jobs then showed on the PR as if they had failed. Keep one stream per PR and one
+# per branch instead; the deploy job below carries its own serialised group, since only the
+# actual Pages deployment needs to be exclusive.
 concurrency:
-  group: pages
+  group: pages-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 jobs:
   # Gate the deploy on the checks the README quotes, so its figures cannot drift from the
@@ -58,6 +62,9 @@ jobs:
 
   build:
     needs: qa
+    # PRs get the QA gate but never publish: the Pages site is shared, and a PR build would
+    # overwrite the branch preview with unreviewed content.
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -119,7 +126,13 @@ jobs:
           path: _site
   deploy:
     needs: build
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
+    # Only the deployment itself needs to be exclusive across branches, and it queues rather
+    # than cancelling — a half-applied Pages deployment is worse than a slow one.
+    concurrency:
+      group: pages-deploy
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
