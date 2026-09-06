@@ -48,8 +48,16 @@ def blockers():
     found = []
     cur = settings()
 
+    # A statutory setting is only useful if some template actually renders it. biz_info_officer
+    # was declared in settings_schema.json and referenced by nothing, so filling it in changed
+    # nothing on the site — a gap the "is it empty?" check alone would never have caught.
+    liquid = '\n'.join(f.read_text(encoding='utf-8')
+                       for f in (ROOT / 'theme').rglob('*.liquid'))
     for key, label in STATUTORY.items():
-        if not str(cur.get(key, '')).strip():
+        if key not in liquid:
+            found.append(('M6', f'{label} — "{key}" is declared in settings_schema.json but no '
+                                'template renders it, so setting it would have no effect'))
+        elif not str(cur.get(key, '')).strip():
             found.append(('M6', f'{label} — settings_data.json "{key}" is empty; '
                                 'the footer renders it conditionally, so it shows nothing'))
 

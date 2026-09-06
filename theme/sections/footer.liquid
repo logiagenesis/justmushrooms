@@ -26,6 +26,11 @@
           {%- if settings.biz_legal_name != blank -%}{{ settings.biz_legal_name }}<br>{%- endif -%}
           {%- if settings.biz_reg_number != blank -%}Reg. {{ settings.biz_reg_number }}<br>{%- endif -%}
           {%- if settings.biz_vat_number != blank -%}VAT {{ settings.biz_vat_number }}<br>{%- endif -%}
+          {%- comment -%}
+            POPIA requires the information officer to be identifiable. The setting existed but
+            was referenced by no template, so filling it in changed nothing on the site.
+          {%- endcomment -%}
+          {%- if settings.biz_info_officer != blank -%}Information officer: {{ settings.biz_info_officer }}<br>{%- endif -%}
           {{ settings.biz_address }}<br>
           <a href="mailto:{{ settings.biz_email }}">{{ settings.biz_email }}</a><br>
           <a href="tel:{{ settings.biz_phone | remove: ' ' }}">{{ settings.biz_phone }}</a>
