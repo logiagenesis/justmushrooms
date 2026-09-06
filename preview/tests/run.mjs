@@ -45,6 +45,9 @@ for (const n of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]) {
 const s23 = gt.split('data-grid-test="23"')[1] || '';
 ok('grid-test/23 pads to a multiple of 3 with editorial cards', /data-count="n3"/.test(s23) && /data-total="24"/.test(s23), (/data-total="(\d+)"/.exec(s23) || [])[1]);
 
+// Titles/descriptions are escaped in the source; measure what a search engine renders.
+const decode = (v) => v.replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<')
+  .replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 // ---------- 2. SEO ----------
 const titles = new Map();
 for (const p of pages) {
@@ -52,11 +55,17 @@ for (const p of pages) {
   const h = read(p);
   const h1 = h.match(/<h1[^>]*>/g) || [];
   ok(`seo/${p} has exactly one H1`, h1.length === 1, `${h1.length} found`);
-  const t = (h.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
-  ok(`seo/${p} has a title`, t.length > 10 && t.length < 90, `${t.length} chars: ${t}`);
+  const t = decode((h.match(/<title>([^<]*)<\/title>/) || [])[1] || '');
+  ok(`seo/${p} has a title`, t.length > 10, `${t.length} chars: ${t}`);
+  // The SEO plan budgets 60 characters for a title and 155 for a description; the theme
+  // appends its brand suffix only when that budget allows. Asserted so a metafield edit
+  // cannot quietly reintroduce the truncated, brand-doubled titles from the live store.
+  ok(`seo/${p} title is within 60 chars`, t.length <= 60, `${t.length} chars: ${t}`);
+  ok(`seo/${p} title carries the brand once at most`, (t.split('Just Mushrooms').length - 1) <= 1, t);
   if (t) { ok(`seo/${p} title is unique`, !titles.has(t), `duplicate of ${titles.get(t)}`); titles.set(t, p); }
-  const d = (h.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '';
+  const d = decode((h.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '');
   ok(`seo/${p} has a meta description`, d.length > 30, `${d.length} chars`);
+  ok(`seo/${p} meta description is within 155 chars`, d.length <= 155, `${d.length} chars: ${d}`);
   ok(`seo/${p} has a canonical`, /rel="canonical" href="https/.test(h));
   ok(`seo/${p} has og:image or is a utility page`, /og:image/.test(h) || /404|cart|search/.test(p));
 }

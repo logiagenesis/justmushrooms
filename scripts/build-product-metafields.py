@@ -6,9 +6,16 @@ Every ingredient, dose and volume below is transcribed from the live product lab
 what replaces it is a description of the product plus a pointer to the graded species
 pages. See docs/09-content-drafts.md for the removal log.
 """
-import json, os, re
+import json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'scripts'))
+# Titles and descriptions come from the signed-off table in
+# docs/research/seo-keyword-research.md §5.2 rather than being derived from the live store's
+# titles, which doubled the brand against the theme suffix and collided on the Lion's Mane
+# 30 ml / 50 ml pages. See scripts/build-seo-metadata.py.
+import importlib
+SEO = importlib.import_module('build-seo-metadata').products()
 live = {p['handle']: p for p in json.load(open(os.path.join(ROOT, 'data/live-snapshot/products.json')))['products']}
 
 SP = {'lions-mane': ("Lion's Mane", 'Hericium erinaceus'), 'reishi': ('Reishi', 'Ganoderma lucidum'),
@@ -148,8 +155,8 @@ def build(handle, cfg):
         'what_it_does_not_do': ul(nots),
         'faq': faq,
         'primary_benefit_tags': cfg['tags'],
-        'seo_title': (seo_name + ' | Just Mushrooms SA')[:60],
-        'seo_description': ('%s Made in Plettenberg Bay. Ships across South Africa.' % cfg['promise'])[:155],
+        'seo_title': SEO[handle]['seo_title'],
+        'seo_description': SEO[handle]['seo_description'],
         'seo_focus_keyword': (names[0] + ' tincture South Africa').lower() if len(names) == 1 else 'mushroom tincture South Africa',
       },
       'flags': flags,

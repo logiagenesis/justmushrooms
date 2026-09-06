@@ -35,7 +35,18 @@
   if current_page != 1
     assign t = t | append: ' — Page ' | append: current_page
   endif
-  assign t = t | append: site_suffix
+  # Product and metaobject SEO titles are authored with the brand already in them
+  # (docs/research/seo-keyword-research.md §5), so appending the suffix unconditionally
+  # produced "... | Just Mushrooms SA | Just Mushrooms". Append it only when the brand is
+  # absent AND it still fits the 60-character budget the SEO plan sets — a few approved
+  # titles spend those characters on keywords instead and are complete without it.
+  unless t contains 'Just Mushrooms'
+    assign t_branded = t | append: site_suffix
+    assign t_branded_size = t_branded | size
+    if t_branded_size <= 60
+      assign t = t_branded
+    endif
+  endunless
   assign og_image = page_image
   if request.page_type == 'index'
     assign og_image = nil
