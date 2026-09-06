@@ -1,12 +1,16 @@
 // Shopify Liquid shims for LiquidJS. Approximate, deterministic, good enough for layout/SEO/a11y/perf QA.
 import fs from 'node:fs';
 import path from 'node:path';
+import { syncProductImages } from '../scripts/preview/sync-product-images.mjs';
 const kw = (args) => { const o = {}; for (const a of args) { if (Array.isArray(a) && a.length === 2) o[a[0]] = a[1]; } return o; };
 const money = (c) => 'R ' + (Number(c || 0) / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
 // Slugs with a real photograph in preview/assets/img. Anything not in here keeps the generated
 // placeholder, so a half-finished image set degrades slot by slot instead of breaking the render.
 export const ASSET_DIR = path.join(path.dirname(new URL(import.meta.url).pathname), 'assets/img');
+// The product photographs are derived from data/live-product-images rather than committed
+// twice (L5), so materialise them before scanning — realSlugs is evaluated at import time.
+syncProductImages({ quiet: true });
 export const realSlugs = new Set(
   fs.existsSync(ASSET_DIR) ? fs.readdirSync(ASSET_DIR).filter((f) => f.endsWith('.jpg')).map((f) => f.slice(0, -4)) : []
 );

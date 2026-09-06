@@ -27,7 +27,7 @@ npx @shopify/cli theme check --path theme
 node preview/render.mjs        # 20 pages + a grid stress-test page
 node preview/tests/run.mjs     # 510 assertions: grids, SEO, schema, a11y, dataLayer, compliance
 node preview/serve.mjs &       # http://127.0.0.1:4173
-node preview/tests/axe.mjs     # axe-core, 20 pages x 3 viewports
+node preview/tests/axe.mjs     # axe-core, 55 pages x 3 viewports
 node preview/tests/shots.mjs   # screenshots into preview/reports/shots/
 
 # regenerate content from the evidence matrices
@@ -35,7 +35,19 @@ python3 scripts/build-species-entries.py
 python3 scripts/build-product-metafields.py
 ```
 
-Current results: **theme-check 0 offences · 510/510 assertions · axe 0 violations · Lighthouse 100/100/100/100** on home, shop, product, species, species index, finder, FAQ and blog.
+Current results, reproduced on the committed code — see [`docs/15-qa-results.md`](docs/15-qa-results.md)
+for what was run and what is not covered:
+
+| Check | Result |
+|---|---|
+| `shopify theme check --path theme` | 112 files, **0 offences** |
+| `node preview/tests/run.mjs` | **1544 passed, 0 failed** |
+| `node preview/tests/axe.mjs` | 55 pages x 3 viewports, **0 violations** |
+| `python3 scripts/build-seo-metadata.py --check` | data pack matches the approved metadata (23 products) |
+| Lighthouse | **not currently measured** — see docs/15-qa-results.md |
+
+The first four run in CI on every push and the deploy is gated on them, so these
+figures cannot drift from the committed code again.
 
 ## The three rules this build runs on
 
@@ -45,4 +57,13 @@ Current results: **theme-check 0 offences · 510/510 assertions · axe 0 violati
 
 ## Status
 
-The theme, content, data and analytics configuration are complete and tested. Deployment, the Google stack and live commerce testing are **blocked pending client access** — see [`docs/17-launch-checklist.md`](docs/17-launch-checklist.md).
+The theme, content, data and analytics configuration are complete and tested. Deployment,
+the Google stack and live commerce testing are **blocked pending client access** — see
+[`docs/17-launch-checklist.md`](docs/17-launch-checklist.md).
+
+**Not launch-ready on the regulatory side.** The compliance brief
+([`docs/research/sa-regulatory-compliance.md`](docs/research/sa-regulatory-compliance.md))
+is still an unwritten stub, the disclaimer wording has not been confirmed against the
+Medicines Act General Regulations, and the product photography still shows label claims
+the copy removed. None of these can be closed in code. They are tracked as H3 and M8 in
+[`docs/15-qa-results.md`](docs/15-qa-results.md).

@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
+// shims.mjs materialises the derived product photographs before it scans for them.
 import { registerFilters, placeholderSvg, realSlugs } from './shims.mjs';
 import { buildContext } from './fixtures.mjs';
 const require = createRequire(import.meta.url);
