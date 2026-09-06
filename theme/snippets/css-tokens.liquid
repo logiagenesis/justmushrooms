@@ -1,18 +1,35 @@
-{%- comment -%} Design tokens generated from theme settings. Rendered inline in <head>. {%- endcomment -%}
+{%- comment -%}
+  Design tokens generated from theme settings. Rendered inline in <head>.
+
+  Names describe the ROLE, not the colour, so re-skinning the theme is a settings change
+  and never an inversion: --c-surface is always the page behind the text, --c-text is
+  always the text on it. --c-accent-strong is the only accent allowed under --c-on-accent
+  text; it must stay dark enough for 4.5:1 against it (see docs/15-qa-results.md).
+{%- endcomment -%}
 :root{
-  --c-ink:{{ settings.color_ink }};
-  --c-ink-2:{{ settings.color_ink_2 }};
-  --c-ink-3:{{ settings.color_ink_3 }};
-  --c-cream:{{ settings.color_cream }};
-  --c-cream-2:{{ settings.color_cream_2 }};
-  --c-spore:{{ settings.color_spore }};
-  --c-forest:{{ settings.color_forest }};
-  --c-myc:{{ settings.color_myc }};
+  --c-surface:{{ settings.color_surface }};
+  --c-surface-2:{{ settings.color_surface_2 }};
+  --c-surface-3:{{ settings.color_surface_3 }};
+  --c-text:{{ settings.color_text }};
+  --c-text-muted:{{ settings.color_text_muted }};
+  --c-accent:{{ settings.color_accent }};
+  --c-accent-strong:{{ settings.color_accent_strong }};
+  --c-accent-strong-hover:#7E3C24;
+  --c-on-accent:#F4EFE6;
+  --c-deep:{{ settings.color_deep }};
+  --c-on-deep:#F4EFE6;
+  --c-highlight:{{ settings.color_highlight }};
   --c-danger:{{ settings.color_danger }};
   --c-line:rgba(28,25,22,.10);
   --c-line-strong:rgba(28,25,22,.20);
   --c-paper:#F4EFE6;
   --c-on-photo:#F4EFE6;
+  --c-media-bg:{{ settings.color_surface_2 }};
+  --shadow-card:0 24px 48px -28px rgba(28,25,22,.28);
+  --shadow-pop:0 30px 60px -30px rgba(28,25,22,.35);
+  --c-badge-bg:rgba(28,25,22,.06);
+  --c-badge-text:#3A322C;
+  --c-badge-line:rgba(28,25,22,.22);
   --font-display:{{ settings.type_display_font.family }},{{ settings.type_display_font.fallback_families }};
   --font-display-weight:{{ settings.type_display_font.weight }};
   --font-body:{{ settings.type_body_font.family }},{{ settings.type_body_font.fallback_families }};

@@ -2,4 +2,3 @@ node_modules/
 preview/dist/
 *.log
 .DS_Store
-preview/reports/lh-*.json
