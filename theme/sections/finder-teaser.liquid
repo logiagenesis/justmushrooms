@@ -5,7 +5,7 @@
         <p class="eyebrow">Mushroom Finder</p>
         <h2>{{ section.settings.heading }}</h2>
         <p class="lede">{{ section.settings.text }}</p>
-        <a class="btn btn--primary btn--lg" href="/pages/mushroom-finder" onclick="JM.track('mushroom_finder_start',{source:'home_teaser'})">Find your bottle</a>
+        <a class="btn btn--primary btn--lg" href="{{ settings.route_finder | default: '/pages/mushroom-finder' }}" onclick="JM.track('mushroom_finder_start',{source:'home_teaser'})">Find your bottle</a>
       </div>
       <ul class="tier-list" aria-label="How it works">
         <li><span class="badge">1</span><span>Say what you want from the morning</span></li>

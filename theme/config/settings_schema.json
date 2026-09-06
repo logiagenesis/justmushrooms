@@ -73,6 +73,33 @@
     ]
   },
   {
+    "name": "Key page links",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Where the theme links to its own content pages. Change these if you rename a page handle, rather than editing the section files."
+      },
+      {
+        "type": "url",
+        "id": "route_species",
+        "label": "Species library",
+        "default": "/pages/species"
+      },
+      {
+        "type": "url",
+        "id": "route_finder",
+        "label": "Mushroom Finder",
+        "default": "/pages/mushroom-finder"
+      },
+      {
+        "type": "url",
+        "id": "route_disclaimer",
+        "label": "Disclaimer",
+        "default": "/pages/disclaimer"
+      }
+    ]
+  },
+  {
     "name": "Typography",
     "settings": [
       {

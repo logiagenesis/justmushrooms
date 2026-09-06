@@ -25,13 +25,29 @@
     Object.keys(answers).forEach(k => { const rule = (data.rules[k] || {})[answers[k]] || []; rule.forEach((slug, i) => { scores[slug] = (scores[slug] || 0) + (3 - Math.min(i, 2)); }); });
     const ranked = Object.entries(scores).sort((a, b) => b[1] - a[1]).map(x => x[0]).filter(s => data.species[s]).slice(0, 3);
     const list = result.querySelector('[data-finder-species]'); list.innerHTML = '';
+    // Built node by node with textContent rather than concatenated into innerHTML: the
+    // values come from metaobjects, so an apostrophe or an ampersand in a species name is
+    // enough to corrupt the markup, quite apart from the injection surface.
+    const el = (tag, cls, text) => {
+      const n = document.createElement(tag);
+      if (cls) n.className = cls;
+      if (text != null) n.textContent = text;
+      return n;
+    };
+    const link = (cls, href, text) => { const a = el('a', cls, text); a.href = href; return a; };
     ranked.forEach(slug => {
       const sp = data.species[slug];
-      const shop = sp.product_url
-        ? '<a class="btn btn--primary" href="' + sp.product_url + '">Shop ' + (sp.name || '') + '</a>'
-        : '';
+      const card = el('div', 'card card--species');
+      const body = el('div', 'card__body');
+      const title = el('h3', 'card__title');
+      title.appendChild(link('', sp.product_url || sp.url, sp.name));
+      const actions = el('div', 'card__actions');
+      if (sp.product_url) actions.appendChild(link('btn btn--primary', sp.product_url, 'Shop ' + (sp.name || '')));
+      actions.appendChild(link('btn btn--secondary', sp.url, 'Meet the mushroom'));
+      body.append(title, el('p', 'card__sub sci', sp.sci), el('p', 'card__text', sp.blurb || ''), actions);
+      card.appendChild(body);
       const li = document.createElement('li');
-      li.innerHTML = '<div class="card card--species"><div class="card__body"><h3 class="card__title"><a href="' + (sp.product_url || sp.url) + '">' + sp.name + '</a></h3><p class="card__sub sci">' + sp.sci + '</p><p class="card__text">' + (sp.blurb || '') + '</p><div class="card__actions">' + shop + '<a class="btn btn--secondary" href="' + sp.url + '">Meet the mushroom</a></div></div></div>';
+      li.appendChild(card);
       list.appendChild(li);
     });
     const grid = list.closest('.bgrid'); if (grid) { grid.dataset.count = String(ranked.length); grid.dataset.odd = String(ranked.length % 2 === 1); }

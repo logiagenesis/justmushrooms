@@ -46,8 +46,8 @@
         <h2 class="label">Species</h2>
         <ul>
           {%- for s in species -%}<li><a href="{{ s.system.url }}">{{ s.common_name.value }}</a></li>{%- endfor -%}
-          <li><a href="/pages/species">All species</a></li>
-          <li><a href="/pages/mushroom-finder">Mushroom Finder</a></li>
+          <li><a href="{{ settings.route_species | default: '/pages/species' }}">All species</a></li>
+          <li><a href="{{ settings.route_finder | default: '/pages/mushroom-finder' }}">Mushroom Finder</a></li>
         </ul>
       </nav>
       <nav aria-label="Help and policies">

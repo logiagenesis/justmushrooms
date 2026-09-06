@@ -8,7 +8,7 @@
         <h1>{{ section.settings.heading | default: page.title }}</h1>
         <p class="lede">{{ section.settings.text }}</p>
       </div>
-      <a class="btn btn--primary" href="/pages/mushroom-finder">Not sure? Try the finder</a>
+      <a class="btn btn--primary" href="{{ settings.route_finder | default: '/pages/mushroom-finder' }}">Not sure? Try the finder</a>
     </div>
     {%- if species.size > 0 -%}
       <h2 class="visually-hidden">All species</h2>

@@ -57,6 +57,9 @@
     "social_instagram": "",
     "social_facebook": "",
     "social_tiktok": "",
-    "social_youtube": ""
+    "social_youtube": "",
+    "route_species": "/pages/species",
+    "route_finder": "/pages/mushroom-finder",
+    "route_disclaimer": "/pages/disclaimer"
   }
 }

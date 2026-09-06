@@ -17,8 +17,8 @@
               </div>
               <div class="mega__col">
                 <p class="label">Start here</p>
-                <a href="/pages/species">All species</a>
-                <a href="/pages/mushroom-finder">Mushroom Finder</a>
+                <a href="{{ settings.route_species | default: '/pages/species' }}">All species</a>
+                <a href="{{ settings.route_finder | default: '/pages/mushroom-finder' }}">Mushroom Finder</a>
                 <a href="/pages/species#compare">Compare species</a>
                 <a href="/blogs/learn">Learn</a>
               </div>
@@ -57,7 +57,7 @@
     <nav class="drawer__body" aria-label="Mobile">
       {%- for link in menu.links -%}
         {%- if link.title == 'Species' and species.size > 0 -%}
-          <details><summary>{{ link.title }}</summary><div class="sub"><a href="/pages/species">All species</a>{%- for s in species -%}<a href="{{ s.system.url }}">{{ s.common_name.value }}</a>{%- endfor -%}<a href="/pages/mushroom-finder">Mushroom Finder</a></div></details>
+          <details><summary>{{ link.title }}</summary><div class="sub"><a href="{{ settings.route_species | default: '/pages/species' }}">All species</a>{%- for s in species -%}<a href="{{ s.system.url }}">{{ s.common_name.value }}</a>{%- endfor -%}<a href="{{ settings.route_finder | default: '/pages/mushroom-finder' }}">Mushroom Finder</a></div></details>
         {%- elsif link.links.size > 0 -%}
           <details><summary>{{ link.title }}</summary><div class="sub">{%- for c in link.links -%}<a href="{{ c.url }}">{{ c.title }}</a>{%- endfor -%}</div></details>
         {%- else -%}

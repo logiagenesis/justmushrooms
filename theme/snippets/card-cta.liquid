@@ -7,12 +7,12 @@
         <p class="eyebrow">Not sure where to start?</p>
         <h3 class="card__title">Find your bottle</h3>
         <p class="card__text">Four questions. A starting point. Then pick the dropper that belongs on your counter.</p>
-        <div class="card__actions"><a class="btn btn--primary" href="/pages/mushroom-finder">Start the finder</a></div>
+        <div class="card__actions"><a class="btn btn--primary" href="{{ settings.route_finder | default: '/pages/mushroom-finder' }}">Start the finder</a></div>
       {%- when 2 -%}
         <p class="eyebrow">The mushrooms</p>
         <h3 class="card__title">Meet the eight</h3>
         <p class="card__text">Kitchen history, flavour, the bottle that carries each one. Start with the mushroom that sounds like your day.</p>
-        <div class="card__actions"><a class="btn btn--secondary" href="/pages/species">Browse species</a></div>
+        <div class="card__actions"><a class="btn btn--secondary" href="{{ settings.route_species | default: '/pages/species' }}">Browse species</a></div>
       {%- else -%}
         <p class="eyebrow">Compare</p>
         <h3 class="card__title">Single species or blend?</h3>

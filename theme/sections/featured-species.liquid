@@ -19,7 +19,7 @@
         <h2>{{ section.settings.heading }}</h2>
         <p class="lede">{{ section.settings.text }}</p>
       </div>
-      <a class="btn btn--secondary" href="/pages/species">All species {% render 'icon', name: 'arrow' %}</a>
+      <a class="btn btn--secondary" href="{{ settings.route_species | default: '/pages/species' }}">All species {% render 'icon', name: 'arrow' %}</a>
     </div>
     {%- if picked.size > 0 -%}
       {%- render 'balanced-grid', items: picked, card: 'species', max: limit -%}
