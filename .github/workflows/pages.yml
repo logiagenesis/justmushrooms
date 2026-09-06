@@ -27,6 +27,11 @@ jobs:
           python-version: '3.12'
       - name: Data pack matches the approved SEO metadata
         run: python3 scripts/build-seo-metadata.py --check
+      # Reports the regulatory and client-input blockers that cannot be closed in code.
+      # Deliberately non-gating: these must stay visible on every run without stopping the
+      # preview from deploying. Use --strict as a pre-deployment gate for the real store.
+      - name: Launch blockers still outstanding
+        run: python3 scripts/check-launch-readiness.py | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Install
         working-directory: preview
         run: npm ci

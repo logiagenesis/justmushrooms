@@ -67,6 +67,13 @@ re-running axe is how H1 happened the first time.
 These are the audit findings that no amount of engineering resolves. They are launch
 blockers and are not marked PASS anywhere in this document.
 
+`python3 scripts/check-launch-readiness.py` enumerates them from the repository on every
+CI run and writes them to the job summary, so they stay visible instead of failing
+quietly — the footer renders its statutory identifiers conditionally, so blank settings
+produced no footer text rather than an obviously incomplete one, and nothing in the build
+noticed. It reports, and does not gate the preview deploy; `--strict` exits non-zero and
+is the gate to use before deploying the real store.
+
 | ID | Item | Owner |
 |---|---|---|
 | H3 | Compliance brief is a 370-byte stub marked UNVERIFIED; the whole regulatory position rests on it | Regulatory advisor |
