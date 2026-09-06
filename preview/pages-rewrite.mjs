@@ -29,8 +29,14 @@ const prefixAbs = (t) => {
 for (const p of files) {
   if (!/\.(html|css|js)$/.test(p)) continue;
   let t = prefixAbs(fs.readFileSync(p, 'utf8'));
-  if (p.endsWith('.html') && !/name="robots"/.test(t)) {
-    t = t.replace('<head>', '<head>\n  <meta name="robots" content="noindex,nofollow">');
+  if (p.endsWith('.html')) {
+    // This build is a public copy of the whole catalogue on github.io, so it must not be
+    // indexed and crawlers must not follow links out of it either. The theme's own robots
+    // policy (cart and search ship "noindex,follow") is replaced rather than skipped —
+    // previously those two pages were the only ones left without nofollow.
+    t = /name="robots"/.test(t)
+      ? t.replace(/<meta name="robots" content="[^"]*">/g, '<meta name="robots" content="noindex,nofollow">')
+      : t.replace('<head>', '<head>\n  <meta name="robots" content="noindex,nofollow">');
   }
   fs.writeFileSync(p, t);
 }

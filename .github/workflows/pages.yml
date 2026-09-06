@@ -1,7 +1,8 @@
 name: Preview Pages
 on:
   push:
-    branches: [claude/just-mushrooms-rebuild-q3a9e4, main]
+    branches: [claude/just-mushrooms-rebuild-q3a9e4, claude/gallant-cerf-4728h5, main]
+  pull_request:
   workflow_dispatch:
 permissions:
   contents: read
@@ -11,7 +12,10 @@ concurrency:
   group: pages
   cancel-in-progress: true
 jobs:
-  build:
+  # Gate the deploy on the checks the README quotes, so its figures cannot drift from the
+  # committed code again (GT-AUD-JM-2026-09-05 H2). The reports these produce are committed
+  # under preview/reports/ and re-uploaded here for the run that generated them.
+  qa:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,36 +25,85 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Data pack matches the approved SEO metadata
+        run: python3 scripts/build-seo-metadata.py --check
+      - name: Install
+        working-directory: preview
+        run: npm ci
+      - name: Render
+        working-directory: preview
+        run: node render.mjs
+      - name: Assertion suite
+        working-directory: preview
+        run: node tests/run.mjs
+      - name: Install Chromium for axe
+        working-directory: preview
+        run: npx playwright install --with-deps chromium
+      - name: Serve and run axe
+        working-directory: preview
+        run: |
+          node serve.mjs &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          node tests/axe.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: axe-report
+          path: preview/reports/axe.json
+
+  build:
+    needs: qa
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # Product photography is refreshed from Drive when it is reachable. The theme's own
+      # brand assets are committed under theme/assets/ and are never fetched here — CI used
+      # to download the live store's logo and overwrite og-image.jpg, which is exactly the
+      # hot-link the audit flagged.
       - name: Pull Drive images
         run: |
+          set -euo pipefail
           pip install -q gdown
           mkdir -p /tmp/drive
-          gdown --folder "https://drive.google.com/drive/folders/1YXnsT47PMXUNkULeuG1jWII37UcwKsWW" -O /tmp/drive/rerun || true
-          gdown --folder "https://drive.google.com/drive/folders/1km7x5KEJfA0gVvq9mxRZiEhmBVCW8fut" -O /tmp/drive/bundle || true
+          gdown --folder "https://drive.google.com/drive/folders/1YXnsT47PMXUNkULeuG1jWII37UcwKsWW" -O /tmp/drive/rerun \
+            || echo "::warning::Drive 'rerun' folder unavailable; falling back to committed images"
+          gdown --folder "https://drive.google.com/drive/folders/1km7x5KEJfA0gVvq9mxRZiEhmBVCW8fut" -O /tmp/drive/bundle \
+            || echo "::warning::Drive 'bundle' folder unavailable; falling back to committed images"
           python3 scripts/preview/flatten-drive-images.py /tmp/drive preview/assets/img
-          ls preview/assets/img | wc -l
-      - name: Fetch brand logo
+      # A silently degraded image set used to deploy anyway. Fail instead: the committed set
+      # is the floor, so this only trips if images went missing rather than Drive being down.
+      - name: Check image inventory
         run: |
-          mkdir -p theme/assets
-          curl -fsSL "https://justmushrooms.co.za/cdn/shop/files/logoclicked.png?v=1730131869" -o /tmp/logoclicked.png
-          pip install -q pillow
-          python3 - <<'PY'
-from PIL import Image
-src = Image.open('/tmp/logoclicked.png').convert('RGBA')
-src.resize((320,320), Image.Resampling.LANCZOS).save('theme/assets/logo.png', 'PNG', optimize=True)
-src.resize((32,32), Image.Resampling.LANCZOS).save('theme/assets/favicon-32.png', 'PNG', optimize=True)
-src.resize((64,64), Image.Resampling.LANCZOS).save('theme/assets/favicon-64.png', 'PNG', optimize=True)
-src.resize((180,180), Image.Resampling.LANCZOS).save('theme/assets/apple-touch.png', 'PNG', optimize=True)
-src.resize((512,512), Image.Resampling.LANCZOS).save('theme/assets/favicon.png', 'PNG', optimize=True)
-PY
-          curl -fsSL "https://justmushrooms.co.za/cdn/shop/files/316955697_121928927392695_8890572885037283047_n.jpg?v=1730046342" -o theme/assets/og-image.jpg
-          ls -la theme/assets/logo.png theme/assets/favicon-32.png theme/assets/og-image.jpg
+          set -euo pipefail
+          count=$(ls preview/assets/img | wc -l)
+          echo "preview/assets/img: $count files"
+          if [ "$count" -lt 52 ]; then
+            echo "::error::Expected at least 52 preview images, found $count."
+            exit 1
+          fi
       - name: Install and render
         working-directory: preview
         run: |
-          npm install
+          set -euo pipefail
+          npm ci
           node render.mjs
           node pages-rewrite.mjs
+      # pages-rewrite.mjs injects noindex,nofollow and writes a disallow-all robots.txt.
+      # Assert it rather than trusting it: this is a public copy of the whole catalogue.
+      - name: Verify the preview is not indexable
+        run: |
+          set -euo pipefail
+          test -f preview/dist/robots.txt
+          grep -q 'Disallow: /' preview/dist/robots.txt
+          missing=$(grep -rL 'name="robots" content="noindex,nofollow"' preview/dist --include='*.html' | wc -l)
+          echo "pages without noindex: $missing"
+          test "$missing" -eq 0
       - name: Stage Pages root
         run: |
           mkdir -p _site
