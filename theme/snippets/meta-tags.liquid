@@ -53,14 +53,26 @@
 <meta property="og:type" content="{% if request.page_type == 'product' %}product{% elsif request.page_type == 'article' %}article{% else %}website{% endif %}">
 <meta property="og:description" content="{{ d | escape }}">
 {%- liquid
-  assign brand_og = 'https://justmushrooms.co.za/cdn/shop/files/316955697_121928927392695_8890572885037283047_n.jpg?v=1730046342'
+  # Social scrapers need a fully absolute URL. Shopify's image_url/asset_url return a
+  # protocol-relative '//cdn.shopify.com/...', and the local render harness returns a
+  # root-relative '/assets/...', so normalise both rather than blindly prepending.
+  #
+  # Brand fallback ships with the theme (theme/assets/og-image.jpg, 1200x630) rather than
+  # hot-linking the live store's CDN, where re-uploading the file would break every share
+  # card. settings.social_share_image stays the merchant-facing override.
   if og_image
     assign og_src = og_image | image_url: width: 1200, height: 630, crop: 'center'
-    unless og_src contains 'https:'
-      assign og_src = og_src | prepend: 'https:'
-    endunless
+  elsif settings.social_share_image != blank
+    assign og_src = settings.social_share_image | image_url: width: 1200, height: 630, crop: 'center'
   else
-    assign og_src = brand_og
+    assign og_src = 'og-image.jpg' | asset_url
+  endif
+  assign og_head2 = og_src | slice: 0, 2
+  assign og_head1 = og_src | slice: 0, 1
+  if og_head2 == '//'
+    assign og_src = og_src | prepend: 'https:'
+  elsif og_head1 == '/'
+    assign og_src = og_src | prepend: shop.url
   endif
 -%}
 <meta property="og:image" content="{{ og_src }}">

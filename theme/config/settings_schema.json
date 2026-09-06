@@ -347,12 +347,18 @@
     ]
   },
   {
-    "name": "Favicon",
+    "name": "Brand images",
     "settings": [
       {
         "type": "image_picker",
         "id": "favicon",
         "label": "Favicon (512×512 recommended)"
+      },
+      {
+        "type": "image_picker",
+        "id": "social_share_image",
+        "label": "Social share image (1200×630)",
+        "info": "Overrides the theme’s built-in og-image.jpg on pages with no image of their own."
       }
     ]
   }
